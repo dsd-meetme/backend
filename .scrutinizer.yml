@@ -10,6 +10,7 @@ build:
         php: '5.5.0'
     dependencies:
         before:
+            - composer install
             - mysql -uroot -e "create database IF NOT EXISTS meetme;"
             - mysql -uroot -e "CREATE USER 'meetme'@'localhost' IDENTIFIED BY 'Lj5Fvj8K';"
             - mysql -uroot -e "GRANT ALL ON meetme.* TO 'meetme'@'localhost';"
