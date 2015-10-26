@@ -1,0 +1,40 @@
+# Required to run your project under the correct environment.
+language: php
+
+# Versions of PHP you want your project run with.
+php:
+  - 5.5
+  - 5.6
+  - 7.0
+  - hhvm
+
+
+# optionally specify a list of environments, for example to test different RDBMS
+env:
+  - DB=mysql
+
+# Commands to be run before your environment runs.
+before_script:
+  - composer self-update
+  - composer install --prefer-source --no-interaction
+  - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS meetme;" -uroot; fi
+  - if [[ "$DB" == "mysql" ]]; then mysql -e "CREATE USER 'meetme'@'localhost' IDENTIFIED BY 'Lj5Fvj8K';" -uroot; fi
+  - if [[ "$DB" == "mysql" ]]; then mysql -e "GRANT ALL ON meetme.* TO 'meetme'@'localhost';" -uroot; fi
+  - if [[ "$DB" == "mysql" ]]; then php artisan db:migrate fi
+
+# Commands you want to run that will verify your build.
+script: phpunit
+
+# allow_failures: Allow this build to fail under the specified environments.
+# fast_finish: If your build fails do not continue trying to build, just stop.
+matrix:
+  allow_failures:
+    - php: 7.0
+    - php: hhvm
+
+
+# Customize when the notification emails are sent.
+notifications:
+    on_success: never
+    on_failure: always
+    slack: dsd-meetme:5i37RkHD5zeWsbrzfMJiwy42
