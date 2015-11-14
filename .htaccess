@@ -1,0 +1,15 @@
+
+##GIT START
+
+<Files "git.sh">
+Order Allow,Deny
+deny from all
+</Files>
+
+<Files ".gitignore">
+Order Allow,Deny
+deny from all
+</Files>
+
+##GIT END
+

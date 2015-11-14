@@ -103,7 +103,6 @@ crashlytics-build.properties
 
 
 
-
 ### Composer ###
 composer.phar
 composer.lock
@@ -114,11 +113,7 @@ composer.lock
 coverage.xml
 
 
-### gulp ###
-node_modules/
-npm-debug.log
-public/css
+### DEPLOYING ###
+.git_utility
 
-### laravel ide helper ###
-.phpstorm.meta.php
-_ide_helper.php
+
