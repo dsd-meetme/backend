@@ -112,6 +112,15 @@ composer.lock
 ### tests ###
 coverage.xml
 
+### gulp ###
+node_modules/
+npm-debug.log
+public/css
+ 
+### laravel ide helper ###
+.phpstorm.meta.php
+_ide_helper.php
+
 
 ### DEPLOYING ###
 .git_utility
