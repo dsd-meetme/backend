@@ -13,3 +13,10 @@ deny from all
 
 ##GIT END
 
+RewriteEngine On
+
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !git_receiver.php
+RewriteCond %{REQUEST_FILENAME} !update.php
+RewriteRule ^ public/ [L]
