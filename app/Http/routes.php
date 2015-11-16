@@ -15,11 +15,23 @@
     return view('welcome');
 });*/
 
-Route::group(['namespace' => 'Auth', 'prefix' => 'auth'], function() {
-// Authentication routes...
-    Route::post('login', 'AuthController@postLogin');
-    Route::get('logout', 'AuthController@getLogout');
+Route::group(['namespace' => 'Auth'], function() {
 
-    // Registration routes...
-    Route::post('register', 'AuthController@postRegister');
+    Route::group(['prefix' => 'auth'], function() {
+        // Authentication routes...
+        Route::post('login', 'AuthController@postLogin');
+        Route::get('logout', 'AuthController@getLogout');
+
+        // Registration routes...
+        Route::post('register', 'AuthController@postRegister');
+
+    });
+
+    Route::group(['prefix' => 'password'], function() {
+        // Password reset link request routes...
+        Route::post('email', 'PasswordController@postEmail');
+
+        // Password reset routes...
+        Route::post('reset', 'PasswordController@postReset');
+    });
 });
