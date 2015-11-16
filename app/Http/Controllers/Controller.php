@@ -1,6 +1,6 @@
 <?php
 
-namespace Meetme\Http\Controllers;
+namespace plunner\Http\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;

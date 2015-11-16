@@ -1,6 +1,6 @@
 <?php
 
-namespace Meetme\Console;
+namespace plunner\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \Meetme\Console\Commands\Inspire::class,
+        \plunner\Console\Commands\Inspire::class,
     ];
 
     /**

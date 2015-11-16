@@ -1,6 +1,6 @@
 <?php
 
-namespace Meetme\Providers;
+namespace plunner\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

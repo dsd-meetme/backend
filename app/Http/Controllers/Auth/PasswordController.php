@@ -1,8 +1,8 @@
 <?php
 
-namespace Meetme\Http\Controllers\Auth;
+namespace plunner\Http\Controllers\Auth;
 
-use Meetme\Http\Controllers\Controller;
+use plunner\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 
 class PasswordController extends Controller

@@ -11,7 +11,7 @@
 |
 */
 
-$factory->define(Meetme\User::class, function (Faker\Generator $faker) {
+$factory->define(plunner\User::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->email,

@@ -1,6 +1,6 @@
 <?php
 
-namespace Meetme\Http\Requests;
+namespace plunner\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace Meetme\Http\Controllers\Auth;
+namespace plunner\Http\Controllers\Auth;
 
-use Meetme\User;
+use plunner\User;
 use Validator;
-use Meetme\Http\Controllers\Controller;
+use plunner\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
@@ -22,6 +22,8 @@ class AuthController extends Controller
     */
 
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+
+    protected $redirectPath = "/";
 
     /**
      * Create a new authentication controller instance.

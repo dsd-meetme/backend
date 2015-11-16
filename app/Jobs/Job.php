@@ -1,6 +1,6 @@
 <?php
 
-namespace Meetme\Jobs;
+namespace plunner\Jobs;
 
 use Illuminate\Bus\Queueable;
 

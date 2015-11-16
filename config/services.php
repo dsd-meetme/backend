@@ -30,7 +30,7 @@ return [
     ],
 
     'stripe' => [
-        'model'  => Meetme\User::class,
+        'model'  => plunner\User::class,
         'key'    => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],

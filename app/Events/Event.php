@@ -1,6 +1,6 @@
 <?php
 
-namespace Meetme\Events;
+namespace plunner\Events;
 
 abstract class Event
 {

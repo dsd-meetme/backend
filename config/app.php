@@ -140,10 +140,10 @@ return [
         /*
          * Application Service Providers...
          */
-        Meetme\Providers\AppServiceProvider::class,
-        Meetme\Providers\AuthServiceProvider::class,
-        Meetme\Providers\EventServiceProvider::class,
-        Meetme\Providers\RouteServiceProvider::class,
+        plunner\Providers\AppServiceProvider::class,
+        plunner\Providers\AuthServiceProvider::class,
+        plunner\Providers\EventServiceProvider::class,
+        plunner\Providers\RouteServiceProvider::class,
 
         /*
          * helper

@@ -1,6 +1,6 @@
 <?php
 
-namespace Meetme\Http\Middleware;
+namespace plunner\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;

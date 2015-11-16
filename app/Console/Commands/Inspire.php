@@ -1,6 +1,6 @@
 <?php
 
-namespace Meetme\Console\Commands;
+namespace plunner\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Inspiring;

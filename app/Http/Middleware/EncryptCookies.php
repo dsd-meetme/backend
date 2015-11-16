@@ -1,6 +1,6 @@
 <?php
 
-namespace Meetme\Http\Middleware;
+namespace plunner\Http\Middleware;
 
 use Illuminate\Cookie\Middleware\EncryptCookies as BaseEncrypter;
 

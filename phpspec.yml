@@ -1,5 +1,5 @@
 suites:
     main:
-        namespace: Meetme
-        psr4_prefix: Meetme
+        namespace: plunner
+        psr4_prefix: plunner
         src_path: app
