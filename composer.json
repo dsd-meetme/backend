@@ -1,9 +1,16 @@
 {
     "name": "dsd-meetme/backend",
-    "description": "Meetme SCORE project.",
-    "keywords": ["meetme", "score"],
+    "description": "A meeting planner for companies with efficiency and simplicity in mind",
+    "keywords": ["meeting", "planner", "companies", "efficiency", "plunner"],
     "license": "GPL-2.0",
     "type": "project",
+    "authors": [
+        {
+            "name": "claudio cardinale",
+            "email": "cardi@thecsea.it",
+            "homepage": "http://thecsea.it"
+        }
+    ],
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
