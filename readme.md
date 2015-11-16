@@ -25,3 +25,6 @@ After cloning and installing repository:
 # How to test with phpstorm
 * Use phunit 4.* not 5
 * execute as test phpunit.xml
+
+# Notes
+You should insert your name as author in composer file
