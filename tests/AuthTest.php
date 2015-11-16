@@ -34,13 +34,13 @@ class AuthTest extends TestCase
     {
         $response = $this->post('/auth/login', ['email'=>'testInit@test.com', 'password'=>'test'], ['Accept'=>'application/json']);
         $response->seeStatusCode(302);
-        $this->assertEquals($this->baseUrl, $response->response->headers->get('location'));
+        $this->assertRedirectedTo($this->baseUrl);
     }
 
     public function testErrorLogin()
     {
         $response = $this->post('/auth/login', ['email'=>'testInit@test.com', 'password'=>'atest'], ['Accept'=>'application/json']);
         $response->seeStatusCode(302);
-        $this->assertEquals($this->baseUrl.'/auth/login', $response->response->headers->get('location'));
+        $this->assertRedirectedTo($this->baseUrl.'/auth/login');
     }
 }
