@@ -24,7 +24,7 @@ class PasswordController extends Controller
 
     use ResetsPasswords{
         postEmail as postEmailTrait;
-        postReset as postResetTreait;
+        postReset as postResetTrait;
     }
 
     protected $redirectTo = '/';
