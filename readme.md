@@ -21,3 +21,7 @@ After cloning and installing repository:
 1. Run `php artisan ide-helper:generate` and `php artisan ide-helper:meta`, so you create meta files for autocomplete in the IDE.
 1. Run `php artisan ide-helper:models` each time models are updated (not in other case) and only if models are updated.
 1. Install [laravel plugin](https://github.com/Haehnchen/idea-php-laravel-plugin)
+ 
+# How to test with phpstorm
+* Use phunit 4.* not 5
+* execute as test phpunit.xml
