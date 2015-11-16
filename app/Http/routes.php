@@ -11,13 +11,15 @@
 |
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
-});
+});*/
 
+Route::group(['namespace' => 'Auth', 'prefix' => 'auth'], function() {
 // Authentication routes...
-Route::post('auth/login', 'Auth\AuthController@postLogin');
-Route::get('auth/logout', 'Auth\AuthController@getLogout');
+    Route::post('login', 'AuthController@postLogin');
+    Route::get('logout', 'AuthController@getLogout');
 
-// Registration routes...
-Route::post('auth/register', 'Auth\AuthController@postRegister');
+    // Registration routes...
+    Route::post('register', 'AuthController@postRegister');
+});
