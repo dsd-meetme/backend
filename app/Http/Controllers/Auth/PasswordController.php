@@ -2,11 +2,6 @@
 
 namespace plunner\Http\Controllers\Auth;
 
-use Illuminate\Foundation\Auth\ResetsPasswords;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Mail\Message;
-use Illuminate\Support\Facades\Password;
 use plunner\Http\Controllers\Controller;
 
 class PasswordController extends Controller
