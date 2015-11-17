@@ -15,7 +15,7 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
         "barryvdh/laravel-ide-helper": "^2.1",
-        "thecsea/laravel-noredirect-traits": "*"
+        "thecsea/laravel-noredirect-traits": "1.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
