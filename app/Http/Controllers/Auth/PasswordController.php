@@ -22,10 +22,7 @@ class PasswordController extends Controller
     |
     */
 
-    use ResetsPasswords{
-        postEmail as postEmailTrait;
-        postReset as postResetTrait;
-    }
+    use \it\thecsea\laravel\noredirect_traits\ResetsPasswords;
 
     protected $redirectTo = '/';
 
@@ -37,59 +34,5 @@ class PasswordController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
-    }
-
-    /**
-     * Send a reset link to the given user.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function postEmail(Request $request)
-    {
-        $this->validate($request, ['email' => 'required|email']);
-
-        $response = Password::sendResetLink($request->only('email'), function (Message $message) {
-            $message->subject($this->getEmailSubject());
-        });
-
-        switch ($response) {
-            case Password::RESET_LINK_SENT:
-                return new JsonResponse('', 200);
-
-            case Password::INVALID_USER:
-                return new JsonResponse(['error' => trans($response)],422);
-        }
-    }
-
-    /**
-     * Reset the given user's password.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function postReset(Request $request)
-    {
-        $this->validate($request, [
-            'token' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|confirmed|min:6',
-        ]);
-
-        $credentials = $request->only(
-            'email', 'password', 'password_confirmation', 'token'
-        );
-
-        $response = Password::reset($credentials, function ($user, $password) {
-            $this->resetPassword($user, $password);
-        });
-
-        switch ($response) {
-            case Password::PASSWORD_RESET:
-                return new JsonResponse('', 200);
-
-            default:
-                return new JsonResponse(['error' => trans($response)],422);
-        }
     }
 }
