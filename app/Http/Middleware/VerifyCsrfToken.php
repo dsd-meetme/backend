@@ -17,7 +17,6 @@ class VerifyCsrfToken extends BaseVerifier
 
     protected function tokensMatch($request)
     {
-        Log::info('Showing user profile for user: '.$id);
 
         // Don't validate CSRF when testing.
         if(env('APP_ENV') === 'testing') {
