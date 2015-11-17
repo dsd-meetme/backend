@@ -26,6 +26,7 @@ class VerifyCsrfToken extends BaseVerifier
             return true;
         }
 
+        Log::info('Request: '.implode(',',$request->all()));
 
         $token = $request->input('_token') ?: $request->header('X-CSRF-TOKEN');
 
