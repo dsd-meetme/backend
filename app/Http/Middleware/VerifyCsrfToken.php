@@ -17,11 +17,25 @@ class VerifyCsrfToken extends BaseVerifier
 
     protected function tokensMatch($request)
     {
+        Log::info('Showing user profile for user: '.$id);
+
         // Don't validate CSRF when testing.
         if(env('APP_ENV') === 'testing') {
             return true;
         }
 
-        return parent::tokensMatch($request);
+
+        $token = $request->input('_token') ?: $request->header('X-CSRF-TOKEN');
+
+        if (! $token && $header = $request->header('X-XSRF-TOKEN')) {
+            $token = $this->encrypter->decrypt($header);
+        }
+
+        Log::info('Sent token: '.$token);
+        Log::info('Stored token: '.$request->session()->token());
+
+        return Str::equals($request->session()->token(), $token);
+
+        //return parent::tokensMatch($request);
     }
 }
