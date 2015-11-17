@@ -28,3 +28,9 @@ After cloning and installing repository:
 
 # Notes
 You should insert your name as author in composer file
+
+# Credits
+* [laravel framework](http://laravel.com/)
+* [laravel ide helper](https://github.com/barryvdh/laravel-ide-helper)
+* [laravel phpstorm plugin](https://github.com/Haehnchen/idea-php-laravel-plugin)
+* [laravel noredirect traits](https://github.com/thecsea/laravel-noredirect-traits)
