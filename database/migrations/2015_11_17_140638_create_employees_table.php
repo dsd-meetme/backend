@@ -17,8 +17,8 @@ class CreateEmployeesTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password', 60);
-            $table->integer('employee_id')->unsigned();
-            $table->foreign('employee_id')->references('id')->on('users');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->rememberToken();
             $table->timestamps();
         });
