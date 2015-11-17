@@ -32,6 +32,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
+        config(['auth.model' => \plunner\User::class]);
         $this->middleware('guest', ['except' => 'getLogout']);
     }
 
