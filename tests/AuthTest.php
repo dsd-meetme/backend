@@ -10,7 +10,7 @@ class AuthTest extends TestCase
     public function testNewUser()
     {
         $response = $this->json('POST','/auth/register', ['name'=>'test', 'email'=>'test@test.com', 'password_confirmation'=>'testtest', 'password'=>'testtest']);
-        $response->seeStatusCode(302);
+        $response->seeStatusCode(200);
         $this->seeInDatabase("users", ['name'=>'test', 'email'=>'test@test.com']);
 
         //already logged (redirect to main page)
@@ -33,15 +33,13 @@ class AuthTest extends TestCase
     public function testLogin()
     {
         $response = $this->json('POST','/auth/login', ['email'=>'testInit@test.com', 'password'=>'test']);
-        $response->seeStatusCode(302);
-        $this->assertRedirectedTo($this->baseUrl);
+        $response->seeStatusCode(200);
     }
 
     public function testErrorLogin()
     {
         $response = $this->json('POST', '/auth/login', ['email'=>'testInit@test.com', 'password'=>'atest']);
-        $response->seeStatusCode(302);
-        $this->assertRedirectedTo($this->baseUrl.'/auth/login');
+        $response->seeStatusCode(422);
     }
 
     public function testLogout()
@@ -49,8 +47,7 @@ class AuthTest extends TestCase
         $this->json('POST','/auth/login', ['email'=>'testInit@test.com', 'password'=>'test']);
         $this->json('GET','/auth/logout');
         $response = $this->json('POST','/auth/login', ['email'=>'testInit@test.com', 'password'=>'atest']);
-        $response->seeStatusCode(302);
-        $this->assertRedirectedTo($this->baseUrl.'/auth/login');
+        $response->seeStatusCode(422);
     }
 
     public function testResetPassword()
@@ -71,11 +68,9 @@ class AuthTest extends TestCase
         $response->seeStatusCode(200);
         $this->json('GET','/auth/logout');
         $response = $this->json('POST','/auth/login', ['email'=>'testInit@test.com', 'password'=>'test']);
-        $response->seeStatusCode(302);
-        $this->assertRedirectedTo($this->baseUrl.'/auth/login');
+        $response->seeStatusCode(422);
         $response = $this->json('POST','/auth/login', ['email'=>'testInit@test.com', 'password'=>'testtest']);
-        $response->seeStatusCode(302);
-        $this->assertRedirectedTo($this->baseUrl);
+        $response->seeStatusCode(200);
     }
 
     public function testErrorResetPassword()
@@ -84,4 +79,6 @@ class AuthTest extends TestCase
         $response = $this->json('POST', '/password/email', ['email' => 'AtestInit@test.com']);
         $response->seeStatusCode(422);
     }
+
+    //TODO test throttlesLogins
 }

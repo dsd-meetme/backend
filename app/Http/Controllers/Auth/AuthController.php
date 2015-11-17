@@ -6,7 +6,7 @@ use plunner\User;
 use Validator;
 use plunner\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use it\thecsea\laravel\noredirect_traits\AuthenticatesAndRegistersUsers;
 
 class AuthController extends Controller
 {
