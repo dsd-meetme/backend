@@ -3,6 +3,7 @@
 namespace plunner\Http\Middleware;
 
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as BaseVerifier;
+use Log;
 
 class VerifyCsrfToken extends BaseVerifier
 {
