@@ -5,8 +5,8 @@ namespace plunner\Http\Controllers\Auth;
 use plunner\User;
 use Validator;
 use plunner\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\ThrottlesLogins;
 use it\thecsea\laravel\noredirect_traits\AuthenticatesAndRegistersUsers;
+use it\thecsea\laravel\noredirect_traits\ThrottlesLogins;
 
 class AuthController extends Controller
 {
