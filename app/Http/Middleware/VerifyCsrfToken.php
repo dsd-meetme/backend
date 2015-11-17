@@ -27,11 +27,12 @@ class VerifyCsrfToken extends BaseVerifier
 
         $token = $request->input('_token') ?: $request->header('X-CSRF-TOKEN');
 
+        Log::info('Sent token 1: '.$token);
         if (! $token && $header = $request->header('X-XSRF-TOKEN')) {
             $token = $this->encrypter->decrypt($header);
         }
 
-        Log::info('Sent token: '.$token);
+        Log::info('Sent token 2: '.$token);
         Log::info('Stored token: '.$request->session()->token());
 
         return Str::equals($request->session()->token(), $token);
