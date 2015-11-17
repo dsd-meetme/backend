@@ -35,3 +35,6 @@ Route::group(['namespace' => 'Auth'], function() {
         Route::post('reset', 'PasswordController@postReset');
     });
 });
+
+Route::resource('auth.employees', 'EmployeesController');
+Route::resource('auth.groups', 'GroupsController');
