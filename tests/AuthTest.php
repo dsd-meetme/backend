@@ -22,14 +22,6 @@ class AuthTest extends TestCase
         $this->assertEquals('test@test.com', $user->email);
     }
 
-    public function testT()
-    {
-
-        $token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjIxMiwiaXNzIjoiaHR0cDpcL1wvYXBpLnBsdW5uZXIuY29tXC9hdXRoXC9yZWdpc3RlciIsImlhdCI6IjE0NDc4Njk5ODciLCJleHAiOiIxNDQ3ODczNTg3IiwibmJmIjoiMTQ0Nzg2OTk4NyIsImp0aSI6IjYwODAzODlhOGUzZDQ5NzMzOTNkNWM5YzUzNDMwZjY2In0.RRGmdaaTOxCvhSHa-Yd_VW9K6Nl9-AL_pqcq8HYI2hw";
-        $user = JWTAuth::getPayload($token);
-        $this->assertEquals('test@test.com', $user->email);
-    }
-
     public function testErrorNewUser()
     {
         $response = $this->json('POST', '/auth/register', ['name' => 'test', 'email' => 'test@test.com', 'password_confirmation' => 'atesttest', 'password' => 'testtest']);
