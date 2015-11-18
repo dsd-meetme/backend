@@ -3,6 +3,7 @@
 namespace plunner\Http\Controllers\Auth;
 
 use plunner\Http\Controllers\Controller;
+use Tymon\JWTAuth\Support\auth\ResetsPasswords;
 
 class PasswordController extends Controller
 {
@@ -17,7 +18,7 @@ class PasswordController extends Controller
     |
     */
 
-    use \it\thecsea\laravel\noredirect_traits\ResetsPasswords;
+    use ResetsPasswords;
 
     protected $redirectTo = '/';
 
@@ -29,6 +30,6 @@ class PasswordController extends Controller
     public function __construct()
     {
         config(['auth.model' => \plunner\User::class]);
-        $this->middleware('guest');
+        config(['jwt.user' => \plunner\User::class]);
     }
 }

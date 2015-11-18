@@ -5,8 +5,8 @@ namespace plunner\Http\Controllers\Auth;
 use plunner\User;
 use Validator;
 use plunner\Http\Controllers\Controller;
-use it\thecsea\laravel\noredirect_traits\AuthenticatesAndRegistersUsers;
-use it\thecsea\laravel\noredirect_traits\ThrottlesLogins;
+use Tymon\JWTAuth\Support\auth\AuthenticatesAndRegistersUsers;
+use Tymon\JWTAuth\Support\auth\ThrottlesLogins;
 
 class AuthController extends Controller
 {
@@ -33,7 +33,8 @@ class AuthController extends Controller
     public function __construct()
     {
         config(['auth.model' => \plunner\User::class]);
-        $this->middleware('guest', ['except' => 'getLogout']);
+        config(['jwt.user' => \plunner\User::class]);
+
     }
 
     /**

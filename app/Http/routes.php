@@ -20,7 +20,6 @@ Route::group(['namespace' => 'Auth'], function() {
     Route::group(['prefix' => 'auth'], function() {
         // Authentication routes...
         Route::post('login', 'AuthController@postLogin');
-        Route::get('logout', 'AuthController@getLogout');
 
         // Registration routes...
         Route::post('register', 'AuthController@postRegister');
