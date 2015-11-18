@@ -26,7 +26,8 @@
     },
     "autoload": {
         "classmap": [
-            "database"
+            "database",
+            "services"
         ],
         "psr-4": {
             "plunner\\": "app/"

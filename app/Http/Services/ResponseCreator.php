@@ -8,5 +8,5 @@
  */
 interface ResponseCreator
 {
-
+    public function respond($data, $code);
 }

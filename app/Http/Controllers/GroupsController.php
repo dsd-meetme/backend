@@ -9,6 +9,13 @@ use plunner\Http\Controllers\Controller;
 
 class GroupsController extends Controller
 {
+    private $responder;
+
+    public function __create(ReponseCreator $responder)
+    {
+        $this->responder = $responder;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -71,7 +78,49 @@ class GroupsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $input = $request->all();
+        if (array_key_exists('employee_name', $input)
+            && array_key_exists('group_name', $input))
+        {
+            try
+            {
+                $employee = Employee::findOrFail($input['employee_name']);
+            }
+            catch (ModelNotFoundException $e)
+            {
+                return $responder::respond(
+                    [
+                        'message' => 'Employee not found',
+                        'employee_name' => $input['employee_name']
+                    ],
+                    404
+                );
+            }
+            try
+            {
+                $group = Group::findOrFail($input['group_name']);
+            }
+            catch (ModelNotFoundException $e)
+            {
+                return $responder::respond(
+                    [
+                        'message' => 'Group not found',
+                        'group_name' => $input['group_name']
+                    ],
+                    404
+                );
+            }
+            $group->addEmployee($employee);
+        }
+        else
+        {
+            return $responder::respond(
+            [
+                'message' => 'Specify both name and group'
+            ],
+            400
+        );
+        }
     }
 
     /**

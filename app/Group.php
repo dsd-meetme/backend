@@ -24,4 +24,9 @@ class Group extends Model
     {
         return $this->belongsToMany('App\Employee', 'employee_groups');
     }
+
+    public function addEmployee($employee)
+    {
+        $this->employees()->attach($employee->id);
+    }
 }

@@ -10,26 +10,55 @@ class GroupTest extends TestCase
 
     public function addAnEmployeeToAGroup()
     {
-        $response = $this->json(
+        $employee = 'Miha Vinko';
+        $group = 'Group1';
+
+        $request = $this->json(
             'POST', '/auth/groups',
             [
-                'group_name' => 'Group1',
-                ['first_employee_name' => 'Miha Vinko'],
+                'group_name' => $group,
+                ['first_employee_name' => $employee],
             ]
         );
-        $response->seeStatusCode(200);
 
-        Employee::from('employees as e')
-            ->join('employee_groups as eg', 'e.id', '=', 'eg.business_id')
-            ->join('groups as g', 'g.id', '=', 'eg.category_id')
-            ->where('g.name', '=', "Group1")
-            ->where('e.name', '=', "Miha Vinko")
-            ->get(['g.id', 'e.id']);
+        $results = Employee::from('employees as e')
+            ->join('employee_groups as eg', 'e.id', '=', 'eg.employee_id')
+            ->join('groups as g', 'g.id', '=', 'eg.group_id')
+            ->where('g.name', '=', $group)
+            ->where('e.name', '=', $employee);
 
-        $this->seeInDatabase("employee_groups", ['group_id' => 'test', 'employee_id' => 'test@test.com']);
+        assertNotEmpty($results);
+    }
 
-        //already logged (redirect to main page)
-        $response = $this->json('POST', '/auth/register', []);
-        $response->seeStatusCode(302);
+    public function addTwoEmployeesToAGroup()
+    {
+        $first_employee = 'Miha Vinko';
+        $second_employee = 'Emil Sila';
+        $group = 'Group1';
+
+        $request = $this->json(
+            'POST', '/auth/groups',
+            [
+                'group_name' => $group,
+                ['first_employee_name' => $first_employee],
+            ]
+        );
+
+        $results = Employee::from('employees as e')
+            ->join('employee_groups as eg', 'e.id', '=', 'eg.employee_id')
+            ->join('groups as g', 'g.id', '=', 'eg.group_id')
+            ->where('g.name', '=', $group)
+            ->where(function($query, $first_employee, $second_employee)
+            {
+                $query->where('e.name', '=', $first_employee)
+                    ->orWhere('e.name', '=', $second_employee);
+            });
+
+        assertEquals(2, length($results));
+        /*assertEquals($first_employee, $results->get(0)->name);
+        assertEquals($second_employee, $results->get(1)->name);*/
+        assertEquals($group, $results->get(0)->group);
+        assertEquals($group, $results->get(1)->group);
+
     }
 }
