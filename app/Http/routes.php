@@ -15,7 +15,10 @@
     return view('welcome');
 });*/
 
-Route::group(['namespace' => 'Auth'], function() {
+/**
+ * Companies
+ */
+Route::group(['namespace' => 'Companies\Auth', 'prefix' => 'companies'], function() {
 
     Route::group(['prefix' => 'auth'], function() {
         // Authentication routes...
@@ -35,5 +38,9 @@ Route::group(['namespace' => 'Auth'], function() {
     });
 });
 
+
+/**
+ * Users
+ */
 Route::resource('auth.employees', 'EmployeesController');
 Route::resource('auth.groups', 'GroupsController');

@@ -19,7 +19,7 @@
     ],
     "require": {
         "php": ">=5.5.9",
-        "tymon/jwt-auth": "dev-standard-traits",
+        "tymon/jwt-auth": "dev-master",
         "laravel/framework": "5.1.*",
         "barryvdh/laravel-ide-helper": "^2.1"
     },

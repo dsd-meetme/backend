@@ -1,6 +1,6 @@
 <?php
 
-namespace plunner\Http\Controllers\Auth;
+namespace plunner\Http\Controllers\Companies\Auth;
 
 use plunner\Http\Controllers\Controller;
 use Tymon\JWTAuth\Support\auth\ResetsPasswords;

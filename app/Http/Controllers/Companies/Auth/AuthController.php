@@ -1,6 +1,6 @@
 <?php
 
-namespace plunner\Http\Controllers\Auth;
+namespace plunner\Http\Controllers\Companies\Auth;
 
 use plunner\User;
 use Validator;
