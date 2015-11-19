@@ -40,7 +40,9 @@ Route::group(['namespace' => 'Companies\Auth', 'prefix' => 'companies'], functio
 
 
 /**
- * Users
+ * Employees
  */
-Route::resource('auth.employees', 'EmployeesController');
-Route::resource('auth.groups', 'GroupsController');
+Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
+    Route::resource('employees', 'EmployeesController');
+    Route::resource('groups', 'GroupsController');
+});

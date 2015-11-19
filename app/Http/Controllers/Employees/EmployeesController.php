@@ -1,13 +1,13 @@
 <?php
 
-namespace plunner\Http\Controllers;
+namespace plunner\Http\Controllers\Employees;
 
 use Illuminate\Http\Request;
 
 use plunner\Http\Requests;
 use plunner\Http\Controllers\Controller;
 
-class GroupsController extends Controller
+class EmployeesController extends Controller
 {
     /**
      * Display a listing of the resource.
