@@ -26,6 +26,12 @@ class AuthController extends Controller
     protected $redirectPath = "/";
 
     /**
+     * cn = company normal
+     * @var array
+     */
+    protected $custom = ['mode'=>'cn'];
+
+    /**
      * Create a new authentication controller instance.
      *
      * @return void
@@ -34,7 +40,6 @@ class AuthController extends Controller
     {
         config(['auth.model' => \plunner\User::class]);
         config(['jwt.user' => \plunner\User::class]);
-
     }
 
     /**

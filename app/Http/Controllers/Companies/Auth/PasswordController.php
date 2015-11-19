@@ -20,6 +20,12 @@ class PasswordController extends Controller
 
     use ResetsPasswords;
 
+    /**
+     * cn = company normal
+     * @var array
+     */
+    protected $custom = ['mode'=>'cn'];
+
     protected $redirectTo = '/';
 
     /**
