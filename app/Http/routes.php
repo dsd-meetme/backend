@@ -18,24 +18,31 @@
 /**
  * Companies
  */
-Route::group(['namespace' => 'Companies\Auth', 'prefix' => 'companies'], function() {
+Route::group(['namespace' => 'Companies', 'prefix' => 'companies'], function() {
 
-    Route::group(['prefix' => 'auth'], function() {
-        // Authentication routes...
-        Route::post('login', 'AuthController@postLogin');
+    //\Auth
 
-        // Registration routes...
-        Route::post('register', 'AuthController@postRegister');
+    Route::group(['namespace' => 'Auth'], function() {
+        Route::group(['prefix' => 'auth'], function () {
+            // Authentication routes...
+            Route::post('login', 'AuthController@postLogin');
 
+            // Registration routes...
+            Route::post('register', 'AuthController@postRegister');
+
+        });
+
+        Route::group(['prefix' => 'password'], function () {
+            // Password reset link request routes...
+            Route::post('email', 'PasswordController@postEmail');
+
+            // Password reset routes...
+            Route::post('reset', 'PasswordController@postReset');
+        });
     });
 
-    Route::group(['prefix' => 'password'], function() {
-        // Password reset link request routes...
-        Route::post('email', 'PasswordController@postEmail');
-
-        // Password reset routes...
-        Route::post('reset', 'PasswordController@postReset');
-    });
+    //example
+    Route::resource('example', 'ExampleController', ['except' => ['create', 'edit']]);
 });
 
 
