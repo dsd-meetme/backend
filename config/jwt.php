@@ -56,11 +56,11 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | User Model namespace
+    | Company Model namespace
     |--------------------------------------------------------------------------
     |
-    | Specify the full namespace to your User model.
-    | e.g. 'Acme\Entities\User'
+    | Specify the full namespace to your Company model.
+    | e.g. 'Acme\Entities\Company'
     |
     */
 
@@ -68,7 +68,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | User identifier
+    | Company identifier
     |--------------------------------------------------------------------------
     |
     | Specify a unique property of the user that will be added as the 'sub'
@@ -116,7 +116,7 @@ return [
 
         /*
         |--------------------------------------------------------------------------
-        | User Provider
+        | Company Provider
         |--------------------------------------------------------------------------
         |
         | Specify the provider that is used to find the user based

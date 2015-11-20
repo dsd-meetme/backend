@@ -4,29 +4,29 @@
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class AuthTest extends TestCase
+class CompaniesAuthTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testNewUser()
+    public function testNewCompany()
     {
         $response = $this->json('POST', '/companies/auth/register', ['name' => 'test', 'email' => 'test@test.com', 'password_confirmation' => 'testtest', 'password' => 'testtest']);
         $response->seeStatusCode(200);
-        $this->seeInDatabase("users", ['name' => 'test', 'email' => 'test@test.com']);
+        $this->seeInDatabase("companies", ['name' => 'test', 'email' => 'test@test.com']);
         $token = json_decode($response->response->content(),true);
         $token = $token['token'];
         /**
-         * @var $user \plunner\User
+         * @var $company \plunner\Company
          */
-        $user = JWTAuth::authenticate($token);
-        $this->assertEquals('test@test.com', $user->email);
+        $company = JWTAuth::authenticate($token);
+        $this->assertEquals('test@test.com', $company->email);
     }
 
-    public function testErrorNewUser()
+    public function testErrorNewCompany()
     {
         $response = $this->json('POST', '/companies/auth/register', ['name' => 'test', 'email' => 'test@test.com', 'password_confirmation' => 'atesttest', 'password' => 'testtest']);
         $response->seeStatusCode(422);
-        $this->notSeeInDatabase("users", ['name' => 'test', 'email' => 'test@test.com']);
+        $this->notSeeInDatabase("companies", ['name' => 'test', 'email' => 'test@test.com']);
 
     }
 
@@ -49,7 +49,7 @@ class AuthTest extends TestCase
         $response->seeStatusCode(200);
 
         //get the token
-        $token = DB::table('password_resets')->where('email', 'testInit@test.com')->value('token');
+        $token = DB::table('password_resets_companies')->where('email', 'testInit@test.com')->value('token');
 
         //perform reset with error
         $response = $this->json('POST', '/companies/password/reset', ['email' => 'testInit@test.com', 'password_confirmation' => 'testtest', 'password' => 'testtest', 'token' => 're' . $token]);

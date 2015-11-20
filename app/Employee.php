@@ -11,6 +11,28 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 
+/**
+ * plunner\Employee
+ *
+ * @property integer $id
+ * @property string $name
+ * @property string $email
+ * @property string $password
+ * @property integer $company_id
+ * @property string $remember_token
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property-read \plunner\Company $company
+ * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Group[] $groups
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereEmail($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Employee wherePassword($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereCompanyId($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereRememberToken($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereUpdatedAt($value)
+ */
 class Employee extends Model implements AuthenticatableContract,
                                         AuthorizableContract,
                                         CanResetPasswordContract
@@ -22,7 +44,7 @@ class Employee extends Model implements AuthenticatableContract,
      *
      * @var string
      */
-    protected $table = 'employees';
+    //protected $table = 'employees';
 
     /**
      * The attributes that are mass assignable.
@@ -38,13 +60,13 @@ class Employee extends Model implements AuthenticatableContract,
      */
     protected $hidden = ['password', 'remember_token'];
 
-    public function user()
+    public function company()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('plunner\Company');
     }
 
     public function groups()
     {
-        return $this->belongsToMany('App\Group', 'employee_groups');
+        return $this->belongsToMany('plunner\Group', 'employee_groups');
     }
 }

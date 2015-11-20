@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Claudio Cardinale <cardi@thecsea.it>
+ * Company: Claudio Cardinale <cardi@thecsea.it>
  * Date: 16/11/15
  * Time: 14.21
  * This program is free software; you can redistribute it and/or

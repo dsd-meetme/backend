@@ -1,6 +1,6 @@
 <?php
 
-namespace plunner\Http\Controllers\Companies\Auth;
+namespace plunner\Http\Controllers\Employees\Auth;
 
 use plunner\Company;
 use Validator;
@@ -26,10 +26,10 @@ class AuthController extends Controller
     protected $redirectPath = "/";
 
     /**
-     * cn = company normal
+     * en = employ normal
      * @var array
      */
-    protected $custom = ['mode'=>'cn'];
+    protected $custom = ['mode'=>'en'];
 
     /**
      * Create a new authentication controller instance.
@@ -52,7 +52,7 @@ class AuthController extends Controller
     {
         return Validator::make($data, [
             'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:companies',
+            'email' => 'required|email|max:255|unique:users',
             'password' => 'required|confirmed|min:6',
         ]);
     }

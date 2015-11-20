@@ -11,10 +11,10 @@ class ExampleControllerTest extends TestCase
 
     public function testIndex()
     {
-        config(['auth.model' => \plunner\User::class]);
-        config(['jwt.user' => \plunner\User::class]);
-        $user = \plunner\User::findOrFail(1);
-        $response = $this->actingAs($user)->json('GET', '/companies/example');
+        config(['auth.model' => \plunner\Company::class]);
+        config(['jwt.user' => \plunner\Company::class]);
+        $company = \plunner\Company::findOrFail(1);
+        $response = $this->actingAs($company)->json('GET', '/companies/example');
         $response->seeStatusCode(200);
     }
 }

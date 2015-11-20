@@ -12,21 +12,29 @@ class InitSeeder extends Seeder
     public function run()
     {
         //
-        self::user();
-        $user = [
+        self::company();
+        $company = [
             'name' => 'testInit',
             'email' => 'testInit@test.com',
             'password' => bcrypt('test'),
             'remember_token' => str_random(10),
         ];
-        plunner\User::create($user);
+        $company = plunner\Company::create($company);
+        self::employees($company);
 
     }
 
-    static private function user()
+    static private function company()
     {
-        factory(plunner\User::class, 50)->create()->each(function ($u) {
-            return ;
+        factory(plunner\Company::class, 10)->create()->each(function ($company) {
+            self::employees($company);
+        });
+    }
+
+    static private function employees($company)
+    {
+        factory(plunner\Employee::class, 3)->make()->each(function ($employee) use($company){
+            $company->employees()->save($employee);
         });
     }
 }

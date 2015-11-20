@@ -1,6 +1,6 @@
 <?php
 
-namespace plunner\Http\Controllers\Companies\Auth;
+namespace plunner\Http\Controllers\Employees\Auth;
 
 use plunner\Http\Controllers\Controller;
 use Tymon\JWTAuth\Support\auth\ResetsPasswords;
@@ -21,10 +21,10 @@ class PasswordController extends Controller
     use ResetsPasswords;
 
     /**
-     * cn = company normal
+     * en = employ normal
      * @var array
      */
-    protected $custom = ['mode'=>'cn'];
+    protected $custom = ['mode'=>'en'];
 
     protected $redirectTo = '/';
 
@@ -37,6 +37,5 @@ class PasswordController extends Controller
     {
         config(['auth.model' => \plunner\Company::class]);
         config(['jwt.user' => \plunner\Company::class]);
-        config(['auth.password.table' => 'password_resets_companies']);
     }
 }

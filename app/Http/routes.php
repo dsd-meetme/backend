@@ -50,6 +50,27 @@ Route::group(['namespace' => 'Companies', 'prefix' => 'companies'], function() {
  * Employees
  */
 Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
+    //\Auth
+
+    Route::group(['namespace' => 'Auth'], function() {
+        Route::group(['prefix' => 'auth'], function () {
+            // Authentication routes...
+            Route::post('login', 'AuthController@postLogin');
+
+            // Registration routes...
+            Route::post('register', 'AuthController@postRegister');
+
+        });
+
+        Route::group(['prefix' => 'password'], function () {
+            // Password reset link request routes...
+            Route::post('email', 'PasswordController@postEmail');
+
+            // Password reset routes...
+            Route::post('reset', 'PasswordController@postReset');
+        });
+    });
+
     Route::resource('employees', 'EmployeesController');
     Route::resource('groups', 'GroupsController');
 });

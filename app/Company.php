@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 
 /**
- * plunner\User
+ * plunner\Company
  *
  * @property integer $id
  * @property string $name
@@ -21,19 +21,20 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
  * @property string $remember_token
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\plunner\User whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\User whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\User whereEmail($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\User wherePassword($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\User whereRememberToken($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\User whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereEmail($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Company wherePassword($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereRememberToken($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereUpdatedAt($value)
  * @property string $deleted_at
  * @property boolean $verified
- * @method static \Illuminate\Database\Query\Builder|\plunner\User whereDeletedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\User whereVerified($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereDeletedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereVerified($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Employee[] $employees
  */
-class User extends Model implements AuthenticatableContract,
+class Company extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
                                     CanResetPasswordContract
 {
@@ -44,7 +45,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var string
      */
-    protected $table = 'users';
+    //protected $table = 'users';
 
     /**
      * The attributes that are mass assignable.
@@ -62,6 +63,6 @@ class User extends Model implements AuthenticatableContract,
 
     public function employees()
     {
-        return $this->hasMany('App\Employee');
+        return $this->hasMany('plunner\Employee');
     }
 }
