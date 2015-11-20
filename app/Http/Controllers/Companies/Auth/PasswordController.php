@@ -26,7 +26,6 @@ class PasswordController extends Controller
      */
     protected $custom = ['mode'=>'cn'];
 
-    protected $redirectTo = '/';
 
     /**
      * Create a new password controller instance.

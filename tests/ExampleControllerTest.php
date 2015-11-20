@@ -17,4 +17,12 @@ class ExampleControllerTest extends TestCase
         $response = $this->actingAs($company)->json('GET', '/companies/example');
         $response->seeStatusCode(200);
     }
+
+    public function testErrorIndex()
+    {
+        config(['auth.model' => \plunner\Company::class]);
+        config(['jwt.user' => \plunner\Company::class]);
+        $response = $this->json('GET', '/companies/example');
+        $response->seeStatusCode(401);
+    }
 }

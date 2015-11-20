@@ -21,6 +21,13 @@ class InitSeeder extends Seeder
         ];
         $company = plunner\Company::create($company);
         self::employees($company);
+        $employee = new \plunner\Employee([
+            'name' => 'testEmp',
+            'email' => 'testEmp@test.com',
+            'password' => bcrypt('test'),
+            'remember_token' => str_random(10),
+        ]);
+        $company->employees()->save($employee);
 
     }
 

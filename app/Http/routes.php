@@ -58,7 +58,7 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
             Route::post('login', 'AuthController@postLogin');
 
             // Registration routes...
-            Route::post('register', 'AuthController@postRegister');
+            //Route::post('register', 'AuthController@postRegister'); //the registration is managed by the company
 
         });
 

@@ -2,8 +2,11 @@
 
 namespace plunner\Http\Controllers\Employees\Auth;
 
+use Illuminate\Http\Request;
 use plunner\Http\Controllers\Controller;
 use Tymon\JWTAuth\Support\auth\ResetsPasswords;
+use \plunner\Company;
+use \plunner\Employee;
 
 class PasswordController extends Controller
 {
@@ -18,15 +21,19 @@ class PasswordController extends Controller
     |
     */
 
-    use ResetsPasswords;
+    use ResetsPasswords
+    {
+        postEmail as postEmailOriginal;
+        postReset as postResetOriginal;
+    }
 
     /**
-     * en = employ normal
+     * en = employee normal
      * @var array
      */
     protected $custom = ['mode'=>'en'];
 
-    protected $redirectTo = '/';
+    protected $username = ['email', 'company_id'];
 
     /**
      * Create a new password controller instance.
@@ -35,7 +42,26 @@ class PasswordController extends Controller
      */
     public function __construct()
     {
-        config(['auth.model' => \plunner\Company::class]);
-        config(['jwt.user' => \plunner\Company::class]);
+        config(['auth.model' => \plunner\Employee::class]);
+        config(['jwt.user' => \plunner\Employee::class]);
+        config(['auth.password.table' => 'password_resets_employees']);
     }
+
+    public function postEmail(Request $request)
+    {
+        $this->validate($request, ['company' => 'required|exists:companies,name']);
+        $this->company = Company::whereName($request->input('company'))->firstOrFail();
+        $request->merge(['company_id' => $this->company->id]);
+        return $this->postEmailOriginal($request);
+    }
+
+    public function postReset(Request $request)
+    {
+        $this->validate($request, ['company' => 'required|exists:companies,name']);
+        $this->company = Company::whereName($request->input('company'))->firstOrFail();
+        $request->merge(['company_id' => $this->company->id]);
+        return $this->postResetOriginal($request);
+    }
+
+
 }
