@@ -15,7 +15,6 @@ class AddAdditionalInformantionToUsers extends Migration
         //
         Schema::table('users', function($table)
         {
-            $table->softDeletes();
             $table->boolean('verified');
         });
     }
