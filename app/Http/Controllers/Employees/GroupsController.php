@@ -1,6 +1,6 @@
 <?php
 
-namespace plunner\Http\Controllers;
+namespace plunner\Http\Controllers\Employees;
 
 use Illuminate\Http\Request;
 

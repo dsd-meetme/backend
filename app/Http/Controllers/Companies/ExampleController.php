@@ -1,14 +1,31 @@
 <?php
 
-namespace plunner\Http\Controllers;
+namespace plunner\Http\Controllers\Companies;
 
 use Illuminate\Http\Request;
 
 use plunner\Http\Requests;
 use plunner\Http\Controllers\Controller;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
-class EmployeesController extends Controller
+class ExampleController extends Controller
 {
+    /**
+     * @var \plunner\User
+     */
+    private $user;
+
+    /**
+     * ExampleController constructor.
+     */
+    public function __construct()
+    {
+        config(['auth.model' => \plunner\User::class]);
+        config(['jwt.user' => \plunner\User::class]);
+        $this->middleware('jwt.authandrefresh:mode-cn');
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -17,16 +34,7 @@ class EmployeesController extends Controller
     public function index()
     {
         //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return JWTAuth::getUserModel();
     }
 
     /**
@@ -47,17 +55,6 @@ class EmployeesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
     {
         //
     }

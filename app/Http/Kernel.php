@@ -17,7 +17,7 @@ class Kernel extends HttpKernel
         \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-        \plunner\Http\Middleware\VerifyCsrfToken::class,
+        //\plunner\Http\Middleware\VerifyCsrfToken::class,
         \plunner\Http\Middleware\HttpHeaders::class,
     ];
 
@@ -30,5 +30,6 @@ class Kernel extends HttpKernel
         'auth' => \plunner\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \plunner\Http\Middleware\RedirectIfAuthenticated::class,
+        'jwt.authandrefresh' => 'Tymon\JWTAuth\Middleware\GetUserAndRefresh',
     ];
 }

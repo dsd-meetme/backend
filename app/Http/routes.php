@@ -15,26 +15,41 @@
     return view('welcome');
 });*/
 
-Route::group(['namespace' => 'Auth'], function() {
+/**
+ * Companies
+ */
+Route::group(['namespace' => 'Companies', 'prefix' => 'companies'], function() {
 
-    Route::group(['prefix' => 'auth'], function() {
-        // Authentication routes...
-        Route::post('login', 'AuthController@postLogin');
-        Route::get('logout', 'AuthController@getLogout');
+    //\Auth
 
-        // Registration routes...
-        Route::post('register', 'AuthController@postRegister');
+    Route::group(['namespace' => 'Auth'], function() {
+        Route::group(['prefix' => 'auth'], function () {
+            // Authentication routes...
+            Route::post('login', 'AuthController@postLogin');
 
+            // Registration routes...
+            Route::post('register', 'AuthController@postRegister');
+
+        });
+
+        Route::group(['prefix' => 'password'], function () {
+            // Password reset link request routes...
+            Route::post('email', 'PasswordController@postEmail');
+
+            // Password reset routes...
+            Route::post('reset', 'PasswordController@postReset');
+        });
     });
 
-    Route::group(['prefix' => 'password'], function() {
-        // Password reset link request routes...
-        Route::post('email', 'PasswordController@postEmail');
-
-        // Password reset routes...
-        Route::post('reset', 'PasswordController@postReset');
-    });
+    //example
+    Route::resource('example', 'ExampleController', ['except' => ['create', 'edit']]);
 });
 
-Route::resource('auth.employees', 'EmployeesController');
-Route::resource('auth.groups', 'GroupsController');
+
+/**
+ * Employees
+ */
+Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
+    Route::resource('employees', 'EmployeesController');
+    Route::resource('groups', 'GroupsController');
+});
