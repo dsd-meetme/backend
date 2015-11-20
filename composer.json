@@ -4,6 +4,7 @@
     "keywords": ["meeting", "planner", "companies", "efficiency", "plunner"],
     "license": "GPL-2.0",
     "type": "project",
+    "homepage": "https://github.com/dsd-meetme/backend",
     "authors": [
         {
             "name": "claudio cardinale",
@@ -21,7 +22,8 @@
         "php": ">=5.5.9",
         "tymon/jwt-auth": "dev-master",
         "laravel/framework": "5.1.*",
-        "barryvdh/laravel-ide-helper": "^2.1"
+        "barryvdh/laravel-ide-helper": "^2.1",
+        "barryvdh/laravel-cors": "0.7.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
