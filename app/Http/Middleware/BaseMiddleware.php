@@ -1,6 +1,6 @@
 <?php
 
-namespace Tymon\JWTAuth\Middleware;
+namespace plunner\Http\Middleware;
 
 use Tymon\JWTAuth\JWTAuth;
 use Illuminate\Events\Dispatcher;
