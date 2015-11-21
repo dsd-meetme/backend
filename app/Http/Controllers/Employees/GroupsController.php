@@ -88,7 +88,7 @@ class GroupsController extends Controller
             }
             catch (ModelNotFoundException $e)
             {
-                return $responder::respond(
+                return $this->responder->respond(
                     [
                         'message' => 'Employee not found',
                         'employee_name' => $input['employee_name']
@@ -102,7 +102,7 @@ class GroupsController extends Controller
             }
             catch (ModelNotFoundException $e)
             {
-                return $responder::respond(
+                return $this->responder->respond(
                     [
                         'message' => 'Group not found',
                         'group_name' => $input['group_name']
@@ -114,7 +114,7 @@ class GroupsController extends Controller
         }
         else
         {
-            return $responder::respond(
+            return $this->responder->respond(
             [
                 'message' => 'Specify both name and group'
             ],
