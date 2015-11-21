@@ -7,7 +7,7 @@
  * Time: 19:45
  */
 
-namespace services\serviceCreator;
+namespace Services\ResponseCreator;
 
 
 class JsonResponseCreator implements ResponseCreator

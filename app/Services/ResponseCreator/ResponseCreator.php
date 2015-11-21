@@ -7,7 +7,7 @@
  * Time: 19:44
  */
 
-namespace services\serviceCreator;
+namespace Services\ResponseCreator;
 
 interface ResponseCreator
 {

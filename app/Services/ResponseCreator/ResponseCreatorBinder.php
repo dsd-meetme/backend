@@ -7,7 +7,7 @@
  * Time: 15:43
  */
 
-namespace services\serviceCreator;
+namespace Services\ResponseCreator;
 
 use Illuminate\Support\ServiceProvider;
 
