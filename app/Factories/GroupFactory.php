@@ -10,6 +10,6 @@ class GroupFactory
 {
     public static function createGroup($employees, $planner, $description)
     {
-        
+
     }
 }
