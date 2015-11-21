@@ -21,7 +21,7 @@ class GetUserAndRefresh extends BaseMiddleware
     public function handle($request, \Closure $next, $custom = '')
     {
         $custom = $this->convertToArray($custom);
-        Log::info('headers: '.implode('-',$request->all()));
+        Log::info('headers: '.implode('-',$request->input->all()));
         if($token = $this->auth->setRequest($request)->getToken()) {
         }else if ($this->auth->getUserModel()){
             $token = $this->auth->fromUser($this->auth->getUserModel(), $custom);
