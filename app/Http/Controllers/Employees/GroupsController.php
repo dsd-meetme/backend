@@ -45,6 +45,7 @@ class GroupsController extends Controller
     public function store(Request $request)
     {
         $this->validateGroupUpdates($request);
+        // validate planner
         $input = $request->all();
 
         $g = Group::create([

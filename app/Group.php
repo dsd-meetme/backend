@@ -35,11 +35,16 @@ class Group extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'description'];
+    protected $fillable = ['name', 'description', 'planner'];
 
     public function employees()
     {
         return $this->belongsToMany('plunner\Employee', 'employee_groups');
+    }
+
+    public function planner()
+    {
+        return $this->hasOne('plunner\Planner');
     }
 
     public function addEmployees($employees)
@@ -48,5 +53,10 @@ class Group extends Model
         {
             return $employee->id;
         }), $employees);
+    }
+
+    public function choosePlanner($employee)
+    {
+        $this->planner()->save(new Planner($employee));
     }
 }
