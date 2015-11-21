@@ -49,7 +49,7 @@ class GroupsController extends Controller
 
         $g = Group::create([
             'name' => $input['group_name'],
-            'description' => $input['description'] ? $input['description'] : ''
+            'description' => isset($input['description']) ? $input['description'] : ''
         ]);
         $employees = Employee::whereIn('name', $input['employees'])->get();
 
