@@ -15,7 +15,7 @@ return [
     'allowedOrigins' => ['*'],
     'allowedHeaders' => ['*'],
     'allowedMethods' => ['GET', 'POST', 'PUT',  'DELETE'],
-    'exposedHeaders' => [],
+    'exposedHeaders' => ['authorization'],
     'maxAge' => 0,
     'hosts' => [],
 ];
