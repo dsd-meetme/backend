@@ -33,7 +33,8 @@
     "autoload": {
         "classmap": [
             "database",
-            "services"
+            "services",
+            "services/serviceCreator"
         ],
         "psr-4": {
             "plunner\\": "app/"
