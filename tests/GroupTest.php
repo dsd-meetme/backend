@@ -9,6 +9,7 @@ class GroupTest extends TestCase
 {
     use DatabaseTransactions;
 
+    // this is waiting for employee registration implementation
     /*public function testAddAnEmployeeToAGroup()
     {
         $employee = 'Miha Vinko';
