@@ -22,8 +22,8 @@ class GetUserAndRefresh extends BaseMiddleware
     {
         $custom = $this->convertToArray($custom);
         $headers = $request->headers->all();
-        foreach($headers as $header)
-            Log::info('header: '.implode('-',$header));
+        foreach($headers as $key=>$header)
+            Log::info($key.': '.implode('-',$header));
 
         if($token = $this->auth->setRequest($request)->getToken()) {
         }else if ($this->auth->getUserModel()){
