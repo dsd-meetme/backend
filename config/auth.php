@@ -24,7 +24,7 @@ return [
     |
     | When using the "Eloquent" authentication driver, we need to know which
     | Eloquent model should be used to retrieve your users. Of course, it
-    | is often just the "User" model but you may use whatever you like.
+    | is often just the "Company" model but you may use whatever you like.
     |
     */
 
@@ -60,7 +60,7 @@ return [
 
     'password' => [
         'email' => 'emails.password',
-        'table' => 'password_resets',
+        'table' => 'null',
         'expire' => 60,
     ],
 

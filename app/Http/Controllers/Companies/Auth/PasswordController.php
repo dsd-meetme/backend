@@ -26,7 +26,6 @@ class PasswordController extends Controller
      */
     protected $custom = ['mode'=>'cn'];
 
-    protected $redirectTo = '/';
 
     /**
      * Create a new password controller instance.
@@ -35,7 +34,8 @@ class PasswordController extends Controller
      */
     public function __construct()
     {
-        config(['auth.model' => \plunner\User::class]);
-        config(['jwt.user' => \plunner\User::class]);
+        config(['auth.model' => \plunner\Company::class]);
+        config(['jwt.user' => \plunner\Company::class]);
+        config(['auth.password.table' => 'password_resets_companies']);
     }
 }

@@ -4,6 +4,7 @@
     "keywords": ["meeting", "planner", "companies", "efficiency", "plunner"],
     "license": "GPL-2.0",
     "type": "project",
+    "homepage": "https://github.com/dsd-meetme/backend",
     "authors": [
         {
             "name": "claudio cardinale",
@@ -11,17 +12,12 @@
             "homepage": "http://thecsea.it"
         }
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/thecsea/jwt-auth"
-        }
-    ],
     "require": {
         "php": ">=5.5.9",
-        "tymon/jwt-auth": "dev-master",
         "laravel/framework": "5.1.*",
-        "barryvdh/laravel-ide-helper": "^2.1"
+        "barryvdh/laravel-ide-helper": "^2.1",
+        "thecsea/jwt-auth": "0.5.6",
+        "barryvdh/laravel-cors": "0.7.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

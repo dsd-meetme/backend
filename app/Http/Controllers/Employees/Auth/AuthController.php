@@ -1,12 +1,15 @@
 <?php
 
-namespace plunner\Http\Controllers\Companies\Auth;
+namespace plunner\Http\Controllers\Employees\Auth;
 
+use Illuminate\Http\Request;
 use plunner\Company;
+use plunner\employee;
 use Validator;
 use plunner\Http\Controllers\Controller;
 use Tymon\JWTAuth\Support\auth\AuthenticatesAndRegistersUsers;
 use Tymon\JWTAuth\Support\auth\ThrottlesLogins;
+use Log;
 
 class AuthController extends Controller
 {
@@ -21,15 +24,24 @@ class AuthController extends Controller
     |
     */
 
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+    use AuthenticatesAndRegistersUsers{
+        postRegister as postRegisterOriginal;
+        postLogin as postLoginOriginal;
+    }
+    use ThrottlesLogins;
 
     protected $redirectPath = "/";
 
     /**
-     * cn = company normal
+     * en = employee normal
      * @var array
      */
-    protected $custom = ['mode'=>'cn'];
+    protected $custom = ['mode'=>'en'];
+
+    /**
+     * @var company
+     */
+    private $company = null;
 
     /**
      * Create a new authentication controller instance.
@@ -38,8 +50,8 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        config(['auth.model' => \plunner\Company::class]);
-        config(['jwt.user' => \plunner\Company::class]);
+        config(['auth.model' => \plunner\Employee::class]);
+        config(['jwt.user' => \plunner\Employee::class]);
     }
 
     /**
@@ -52,7 +64,7 @@ class AuthController extends Controller
     {
         return Validator::make($data, [
             'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:companies',
+            'email' => 'required|email|max:255|unique:employees,email,NULL,id,company_id,'.$this->company->id,
             'password' => 'required|confirmed|min:6',
         ]);
     }
@@ -65,10 +77,28 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
-        return Company::create([
+        return $this->company->save(new employee([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-        ]);
+        ]));
     }
+
+    public function postRegister(Request $request)
+    {
+        $this->validate($request, ['company' => 'required|exists:companies,name']);
+        $this->company = Company::whereName($request->input('company'))->firstOrFail();
+        return $this->postRegisterOriginal($request);
+    }
+
+
+    public function postLogin(Request $request)
+    {
+        $this->validate($request, ['company' => 'required|exists:companies,name']);
+        $this->company = Company::whereName($request->input('company'))->firstOrFail();
+        $request->merge(['company_id' => $this->company->id]);
+        return $this->postLoginOriginal($request);
+    }
+
+
 }

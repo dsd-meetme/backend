@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddAdditionalInformantionToUsers extends Migration
+class CreatePasswordResetsCompaniesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,10 @@ class AddAdditionalInformantionToUsers extends Migration
      */
     public function up()
     {
-        //
-        Schema::table('users', function($table)
-        {
-            $table->boolean('verified');
+        Schema::create('password_resets_companies', function (Blueprint $table) {
+            $table->string('email')->index();
+            $table->string('token')->index();
+            $table->timestamp('created_at');
         });
     }
 
@@ -26,6 +26,6 @@ class AddAdditionalInformantionToUsers extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('password_resets_companies');
     }
 }

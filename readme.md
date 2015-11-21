@@ -34,3 +34,4 @@ You should insert your name as author in composer file
 * [laravel ide helper](https://github.com/barryvdh/laravel-ide-helper)
 * [laravel phpstorm plugin](https://github.com/Haehnchen/idea-php-laravel-plugin)
 * [laravel noredirect traits for JWT](https://github.com/thecsea/jwt-auth)
+* [laravel cors library](https://github.com/barryvdh/laravel-cors)

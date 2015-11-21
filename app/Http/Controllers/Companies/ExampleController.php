@@ -11,7 +11,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class ExampleController extends Controller
 {
     /**
-     * @var \plunner\User
+     * @var \plunner\Company
      */
     private $user;
 
@@ -20,8 +20,8 @@ class ExampleController extends Controller
      */
     public function __construct()
     {
-        config(['auth.model' => \plunner\User::class]);
-        config(['jwt.user' => \plunner\User::class]);
+        config(['auth.model' => \plunner\Company::class]);
+        config(['jwt.user' => \plunner\Company::class]);
         $this->middleware('jwt.authandrefresh:mode-cn');
     }
 
