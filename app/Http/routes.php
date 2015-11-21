@@ -25,19 +25,19 @@ Route::group(['namespace' => 'Companies', 'prefix' => 'companies'], function() {
     Route::group(['namespace' => 'Auth'], function() {
         Route::group(['prefix' => 'auth'], function () {
             // Authentication routes...
-            Route::post('login', 'AuthController@postLogin');
+            Route::post('login', ['as' => 'companies.auth.login','uses'=>'AuthController@postLogin']);
 
             // Registration routes...
-            Route::post('register', 'AuthController@postRegister');
+            Route::post('register', ['as' => 'companies.auth.register', 'uses'=>'AuthController@postRegister']);
 
         });
 
         Route::group(['prefix' => 'password'], function () {
             // Password reset link request routes...
-            Route::post('email', 'PasswordController@postEmail');
+            Route::post('email', ['as' => 'companies.auth.email', 'uses'=>'PasswordController@postEmail']);
 
             // Password reset routes...
-            Route::post('reset', 'PasswordController@postReset');
+            Route::post('reset', ['as' => 'companies.auth.reset', 'uses'=>'PasswordController@postReset']);
         });
     });
 
@@ -57,19 +57,19 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
     Route::group(['namespace' => 'Auth'], function() {
         Route::group(['prefix' => 'auth'], function () {
             // Authentication routes...
-            Route::post('login', 'AuthController@postLogin');
+            Route::post('login', ['as' => 'companies.auth.login', 'uses'=>'AuthController@postLogin']);
 
             // Registration routes...
-            //Route::post('register', 'AuthController@postRegister'); //the registration is managed by the company
+            //Route::post('register', ['as' => 'companies.auth.register', 'uses'=>'AuthController@postRegister']); //the registration is managed by the company
 
         });
 
         Route::group(['prefix' => 'password'], function () {
             // Password reset link request routes...
-            Route::post('email', 'PasswordController@postEmail');
+            Route::post('email', ['as' => 'companies.auth.email', 'uses'=>'PasswordController@postEmail']);
 
             // Password reset routes...
-            Route::post('reset', 'PasswordController@postReset');
+            Route::post('reset', ['as' => 'companies.auth.reset', 'uses'=>'PasswordController@postReset']);
         });
     });
 
