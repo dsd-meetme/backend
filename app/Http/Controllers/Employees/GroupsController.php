@@ -4,6 +4,8 @@ namespace plunner\Http\Controllers\Employees;
 
 use Illuminate\Http\Request;
 
+use plunner\Group;
+use plunner\Employee;
 use plunner\Http\Requests;
 use plunner\Http\Controllers\Controller;
 
