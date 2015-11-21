@@ -42,8 +42,11 @@ class Group extends Model
         return $this->belongsToMany('plunner\Employee', 'employee_groups');
     }
 
-    public function addEmployee($employee)
+    public function addEmployees($employees)
     {
-        $this->employees()->attach($employee->id);
+        $this->employees()->sync(array_map(function($employee)
+        {
+            return $employee->id;
+        }), $employees);
     }
 }

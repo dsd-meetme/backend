@@ -39,18 +39,29 @@ class GroupsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        $this->validateGroupUpdates($request);
+        $input = $request->all();
+
+        $g = Group::create([
+            'name' => $input['group_name'],
+            'description' => $input['description'] ? $input['description'] : ''
+        ]);
+        $employees = Employee::whereIn('name', $input['employees'])->get();
+
+        $g->addEmployees($employees);
+
+        return $this->respondOK();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -61,7 +72,7 @@ class GroupsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -72,61 +83,50 @@ class GroupsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
+        $this->validateGroupUpdates($request);
         $input = $request->all();
-        if (array_key_exists('employee_name', $input)
-            && array_key_exists('group_name', $input))
-        {
-            try
-            {
-                $employee = Employee::findOrFail($input['employee_name']);
-            }
-            catch (ModelNotFoundException $e)
-            {
-                return $this->responder->respond(
-                    [
-                        'message' => 'Employee not found',
-                        'employee_name' => $input['employee_name']
-                    ],
-                    404
-                );
-            }
-            try
-            {
-                $group = Group::findOrFail($input['group_name']);
-            }
-            catch (ModelNotFoundException $e)
-            {
-                return $this->responder->respond(
-                    [
-                        'message' => 'Group not found',
-                        'group_name' => $input['group_name']
-                    ],
-                    404
-                );
-            }
-            $group->addEmployee($employee);
-        }
-        else
-        {
+
+        $employees = Employee::whereIn('name', $input['employees'])->get();
+
+        try {
+            $group = Group::findOrFail($input['group_name']);
+        } catch (ModelNotFoundException $e) {
             return $this->responder->respond(
-            [
-                'message' => 'Specify both name and group'
-            ],
-            400
-        );
+                [
+                    'message' => 'Group not found',
+                    'group_name' => $input['group_name']
+                ],
+                404
+            );
         }
+        $group->addEmployees($employees);
+
+        return $this->respondOK();
+    }
+
+    private function validateGroupUpdates($request)
+    {
+        $this->validate($request, [
+            'group_name' => 'required|max:255',
+            'employees' => 'required|array',
+        ]);
+    }
+
+    private function respondOK()
+    {
+        return $this->responder->respond([], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
