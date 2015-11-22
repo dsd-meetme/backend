@@ -1,6 +1,6 @@
 <?php
 
-namespace plunner\Http\Controllers\Companies;
+namespace plunner\Http\Controllers\Companies\Groups;
 
 use Illuminate\Http\Request;
 use plunner\Company;
@@ -9,7 +9,7 @@ use plunner\Http\Controllers\Controller;
 use plunner\Http\Requests\Companies\EmployeeRequest;
 
 
-class EmployeesController extends Controller
+class GroupsController extends Controller
 {
     /**
      * @var \plunner\Company
@@ -39,7 +39,7 @@ class EmployeesController extends Controller
          * @var $company Company
          */
         $company = \Auth::user();
-        return $company->employees;
+        //return $company->groups; //TODO implement
     }
 
     /**
@@ -48,13 +48,9 @@ class EmployeesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(EmployeeRequest $request)
+    public function store(Request $request)
     {
         //
-        $company = \Auth::user();
-        $input = $request->all();
-        $employee = $company->employees()->create($input);
-        return $employee;
     }
 
     /**
@@ -66,9 +62,6 @@ class EmployeesController extends Controller
     public function show($id)
     {
         //
-        $employee = Employee::findOrFail($id);
-        $this->authorize($employee);
-        return $employee;
     }
 
     /**
@@ -78,14 +71,9 @@ class EmployeesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(EmployeeRequest $request, $id)
+    public function update(Request $request, $id)
     {
         //
-        $employee = Employee::findOrFail($id);
-        $this->authorize($employee);
-        $input = $request->all();
-        $employee->update($input);
-        return $employee;
     }
 
     /**
@@ -97,9 +85,5 @@ class EmployeesController extends Controller
     public function destroy($id)
     {
         //
-        $employee = Employee::findOrFail($id);
-        $this->authorize($employee);
-        $employee->delete();
-        return $employee;
     }
 }

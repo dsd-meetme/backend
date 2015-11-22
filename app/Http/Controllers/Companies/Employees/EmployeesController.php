@@ -1,6 +1,6 @@
 <?php
 
-namespace plunner\Http\Controllers\Companies;
+namespace plunner\Http\Controllers\Companies\Employees;
 
 use Illuminate\Http\Request;
 use plunner\Company;
@@ -9,7 +9,7 @@ use plunner\Http\Controllers\Controller;
 use plunner\Http\Requests\Companies\EmployeeRequest;
 
 
-class GroupsController extends Controller
+class EmployeesController extends Controller
 {
     /**
      * @var \plunner\Company
@@ -45,7 +45,7 @@ class GroupsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  EmployeeRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(EmployeeRequest $request)
@@ -74,7 +74,7 @@ class GroupsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  EmployeeRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */

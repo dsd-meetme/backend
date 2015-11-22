@@ -41,11 +41,18 @@ Route::group(['namespace' => 'Companies', 'prefix' => 'companies'], function() {
         });
     });
 
-    Route::resource('employees', 'EmployeesController', ['except' => ['create', 'edit']]);
-    Route::resource('groups', 'GroupsController', ['except' => ['create', 'edit']]);
+    Route::group(['namespace' => 'Employees'], function() {
+        Route::resource('employees', 'EmployeesController', ['except' => ['create', 'edit']]);
+    });
+
+    Route::group(['namespace' => 'Groups'], function() {
+        Route::resource('groups', 'GroupsController', ['except' => ['create', 'edit']]);
+        Route::resource('groups.employees', 'EmployeesController', ['except' => ['create', 'edit']]);
+        Route::resource('groups.planners', 'PlannersController', ['except' => ['create', 'edit']]);
+    });
 
     //example
-    Route::resource('example', 'ExampleController', ['except' => ['create', 'edit']]);
+    Route::resource('example', 'ExampleController', ['except' => ['create', 'edit']]); //TODO remove
 });
 
 
