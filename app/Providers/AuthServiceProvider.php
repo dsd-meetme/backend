@@ -4,6 +4,8 @@ namespace plunner\Providers;
 
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use plunner\Employee;
+use plunner\Policies\EmployeePolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -14,6 +16,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'plunner\Model' => 'plunner\Policies\ModelPolicy',
+        Employee::class => EmployeePolicy::class,
     ];
 
     /**

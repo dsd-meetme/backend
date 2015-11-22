@@ -3,11 +3,11 @@
 namespace plunner\Http\Controllers\Companies;
 
 use Illuminate\Http\Request;
-
-use plunner\Http\Requests;
-use plunner\Http\Controllers\Controller;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use plunner\Company;
+use plunner\Employee;
+use plunner\Http\Controllers\Controller;
+use plunner\Http\Requests\Companies\EmployeeRequest;
+
 
 class EmployeesController extends Controller
 {
@@ -38,7 +38,7 @@ class EmployeesController extends Controller
         /**
          * @var $company Company
          */
-        $company = JWTAuth::getUserModel();
+        $company = \Auth::user();
         return $company->employees;
     }
 
@@ -48,9 +48,13 @@ class EmployeesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(EmployeeRequest $request)
     {
         //
+        $company = \Auth::user();
+        $input = $request->all();
+        $employee = $company->employees()->create($input);
+        return $employee;
     }
 
     /**
@@ -62,6 +66,9 @@ class EmployeesController extends Controller
     public function show($id)
     {
         //
+        $employee = Employee::findOrFail($id);
+        $this->authorize($employee);
+        return $employee;
     }
 
     /**
@@ -71,9 +78,14 @@ class EmployeesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(EmployeeRequest $request, $id)
     {
         //
+        $employee = Employee::findOrFail($id);
+        $this->authorize($employee);
+        $input = $request->all();
+        $employee->update($input);
+        return $employee;
     }
 
     /**
@@ -85,5 +97,9 @@ class EmployeesController extends Controller
     public function destroy($id)
     {
         //
+        $employee = Employee::findOrFail($id);
+        $this->authorize($employee);
+        $employee->delete();
+        return $employee;
     }
 }
