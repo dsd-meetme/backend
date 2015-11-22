@@ -143,6 +143,15 @@ class EmployeesControllerTest extends TestCase
         $response->seeStatusCode(404);
     }
 
+    public function testDeleteNotMine()
+    {
+        $company = \plunner\Company::findOrFail(1);
+        $employee = plunner\Employee::where('company_id', '<>', $company->id)->first();
+        $id = $employee->id;
+        $response = $this->actingAs($company)->json('DELETE', '/companies/employees/' . $id);
+        $response->seeStatusCode(403);
+    }
+
     public function testUpdate()
     {
         $company = \plunner\Company::findOrFail(1);
@@ -165,6 +174,13 @@ class EmployeesControllerTest extends TestCase
         //duplicate employee
         $response = $this->actingAs($company)->json('PUT', '/companies/employees/'.$employee->id,$data);
         $response->seeStatusCode(422);
+
+        //a no my employee
+        $employee2 = \plunner\Employee::where('company_id', '<>', $company->id)->first();
+        $data['email'] = 'test2@test.com'; //this since we are acting as original company -> see how requests work
+        $response = $this->actingAs($company)->json('PUT', '/companies/employees/'.$employee2->id,$data);
+        $response->seeStatusCode(403);
+        $data['email'] = 'test@test.com';
 
         //force field
         $data['email'] = 'test2@test.com';
