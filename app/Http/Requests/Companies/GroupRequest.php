@@ -1,6 +1,6 @@
 <?php
 
-namespace plunner\Http\Requests;
+namespace plunner\Http\Requests\Companies;
 
 use plunner\Http\Requests\Request;
 
@@ -24,7 +24,7 @@ class GroupRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|unique:groups,name,NULL,id,company_id,'.$this->user()->id,
             'employees' => 'required|array',
             'planner' => 'required|max:255',
         ];

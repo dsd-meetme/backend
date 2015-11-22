@@ -30,6 +30,7 @@ class GroupControllerTest extends TestCase
             'employees' => $employee_ids,
             'planner' => $planner_id,
         ];
+        //TODO I think that employes should be inserted via the specific route /group/grou_id/employees -> to respect restFULL
     }
 
 
@@ -70,8 +71,8 @@ class GroupControllerTest extends TestCase
     public function testCreateNewGroup()
     {
         $data_response = $this->data;
-        unset($data_response['password']);
-        unset($data_response['password_confirmation']);
+        unset($data_response['employees']);
+        unset($data_response['planner']);
 
         $response = $this->actingAs($this->company)->json('POST', '/companies/groups', $this->data);
 
@@ -91,25 +92,38 @@ class GroupControllerTest extends TestCase
     {
         $company1 = $this->company;
         $company2 = \plunner\Company::findOrFail(2);
+
+        //insert in company1
         $company1->groups()->create($this->data);
 
-        $this->actingAs($company1)->json('POST', '/companies/employees', $this->data);
-        $response = $this->actingAs($company2)->json('POST', '/companies/employees', $this->data);
-
+        //insert user in company2
+        $response = $this->actingAs($company2)->json('POST', '/companies/groups/',$this->data);
         $response->assertResponseOk();
+
+        //duplicated in company2
+        $response = $this->actingAs($company2)->json('POST', '/companies/employees/',$this->data);
+        $response->seeStatusCode(422);
     }
 
     public function testDelete()
     {
         $group_id = $this->company->groups()->first()->id;
-        $response = $this->actingAs($this->company)->json('DELETE', '/companies/employees/' . $group_id);
+        $response = $this->actingAs($this->company)->json('DELETE', '/companies/groups/' . $group_id);
         $response->assertResponseOk();
-    }
 
-    public function testDeleteNonExisting()
-    {
-        $group_id = plunner\Group::where('company_id', '<>', $this->company->id)->first()->id;
-        $response = $this->actingAs($this->company)->json('DELETE', '/companies/employees/' . $group_id);
+        //not exists
+        $response = $this->actingAs($this->company)->json('DELETE', '/companies/groups/' . $group_id);
+        $response->seeStatusCode(404);
+        $response = $this->actingAs($this->company)->json('GET', '/companies/groups/' . $group_id);
         $response->seeStatusCode(404);
     }
+
+    public function testDeleteNotMine()
+    {
+        $group_id = plunner\Group::where('company_id', '<>', $this->company->id)->first()->id;
+        $response = $this->actingAs($this->company)->json('DELETE', '/companies/groups/' . $group_id);
+        $response->seeStatusCode(403);
+    }
+
+    //TODO implement test update
 }

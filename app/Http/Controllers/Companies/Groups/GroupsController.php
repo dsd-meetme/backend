@@ -2,17 +2,15 @@
 
 namespace plunner\Http\Controllers\Companies\Groups;
 
-use Illuminate\Http\Request;
 use plunner\Company;
-use plunner\Employee;
 use plunner\Group;
 use plunner\Http\Controllers\Controller;
-use plunner\Http\Requests\Companies\EmployeeRequest;
+use plunner\Http\Requests\Companies\GroupRequest;
 
 
 class GroupsController extends Controller
 {
-    // TODO move to other controllers
+    // TODO move to other controllers WHY?
 
     /**
      * ExampleController constructor.
@@ -36,13 +34,13 @@ class GroupsController extends Controller
          * @var $company Company
          */
         $company = \Auth::user();
-        return $company->groups();
+        return $company->groups;
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  GroupRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(GroupRequest $request)
@@ -69,7 +67,7 @@ class GroupsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  GroupRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -90,7 +88,7 @@ class GroupsController extends Controller
      */
     public function destroy($id)
     {
-        $group = Employee::findOrFail($id);
+        $group = Group::findOrFail($id);
         $this->authorize($group);
         $group->delete();
         return $group;

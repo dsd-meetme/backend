@@ -2,7 +2,8 @@
 
 namespace plunner\Policies;
 
-use Illuminate\Auth\Access\HandlesAuthorization;
+use plunner\Company;
+use plunner\Group;
 
 class GroupPolicy
 {
@@ -16,6 +17,7 @@ class GroupPolicy
         //
     }
 
+    //TODO fix phpdoc
     /**
      * @param Company $company
      * @param Employee $employee
@@ -23,7 +25,7 @@ class GroupPolicy
      */
     public function index(Company $company, Group $group)
     {
-        return $this->userCheck($company, $employee);
+        return $this->userCheck($company, $group);
     }
 
     /**
