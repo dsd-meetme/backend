@@ -48,8 +48,6 @@ class InitSeeder extends Seeder
 
     static private function groups($company, $employees)
     {
-        // TODO doesnt work, nothing appears in db, remove nullable from planner table and employee_groups
-
         factory(plunner\Group::class, 2)->make()->each(function ($group) use ($company, $employees) {
             $employeeSubsetIndices = array_rand($employees, rand(1, 3)); // 1 to 3 random members in each team
             $employeeSubsetIndices = is_array($employeeSubsetIndices) ? $employeeSubsetIndices : [$employeeSubsetIndices];
@@ -59,6 +57,8 @@ class InitSeeder extends Seeder
 
             $plannerIndex = array_rand($employeeSubset);
             $employeePlanner = $company->employees[$plannerIndex];
+
+            $company->groups()->save($group);
 
             array_map(function ($employee) use ($group) {
                 $group->employees()->save($employee);

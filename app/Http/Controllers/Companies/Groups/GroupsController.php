@@ -5,6 +5,7 @@ namespace plunner\Http\Controllers\Companies\Groups;
 use Illuminate\Http\Request;
 use plunner\Company;
 use plunner\Employee;
+use plunner\Group;
 use plunner\Http\Controllers\Controller;
 use plunner\Http\Requests\Companies\EmployeeRequest;
 
@@ -12,10 +13,6 @@ use plunner\Http\Requests\Companies\EmployeeRequest;
 class GroupsController extends Controller
 {
     // TODO move to other controllers
-    /**
-     * @var \plunner\Company
-     */
-    private $user;
 
     /**
      * ExampleController constructor.
@@ -26,7 +23,6 @@ class GroupsController extends Controller
         config(['jwt.user' => \plunner\Company::class]);
         $this->middleware('jwt.authandrefresh:mode-cn');
     }
-
 
     /**
      * Display a listing of the resource.

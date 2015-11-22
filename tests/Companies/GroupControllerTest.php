@@ -73,7 +73,7 @@ class GroupControllerTest extends TestCase
         unset($data_response['password']);
         unset($data_response['password_confirmation']);
 
-        $response = $this->actingAs($this->company)->json('POST', '/companies/groups/', $this->data);
+        $response = $this->actingAs($this->company)->json('POST', '/companies/groups', $this->data);
 
         $response->assertResponseOk();
         $response->seeJson($data_response);
@@ -81,8 +81,8 @@ class GroupControllerTest extends TestCase
 
     public function testCreateDuplicateGroup()
     {
-        $this->actingAs($this->company)->json('POST', '/companies/groups/' , $this->data);
-        $response = $this->actingAs($this->company)->json('POST', '/companies/groups/', $this->data);
+        $this->actingAs($this->company)->json('POST', '/companies/groups' , $this->data);
+        $response = $this->actingAs($this->company)->json('POST', '/companies/groups', $this->data);
 
         $response->seeStatusCode(422);
     }
@@ -93,39 +93,23 @@ class GroupControllerTest extends TestCase
         $company2 = \plunner\Company::findOrFail(2);
         $company1->groups()->create($this->data);
 
-        $this->actingAs($company1)->json('POST', '/companies/employees/', $this->data);
-        $response = $this->actingAs($company2)->json('POST', '/companies/employees/', $this->data);
+        $this->actingAs($company1)->json('POST', '/companies/employees', $this->data);
+        $response = $this->actingAs($company2)->json('POST', '/companies/employees', $this->data);
 
         $response->assertResponseOk();
     }
 
     public function testDelete()
     {
-        $response = $this->actingAs($this->company)->json('POST', '/companies/groups/', $this->data);
-        $group_id = $response->data->id;
+        $group_id = $this->company->groups()->first()->id;
         $response = $this->actingAs($this->company)->json('DELETE', '/companies/employees/' . $group_id);
         $response->assertResponseOk();
     }
 
     public function testDeleteNonExisting()
     {
-        $group_id = plunner\Group::max('id') + 1;
+        $group_id = plunner\Group::where('company_id', '<>', $this->company->id)->first()->id;
         $response = $this->actingAs($this->company)->json('DELETE', '/companies/employees/' . $group_id);
         $response->seeStatusCode(404);
     }
-
-    /*public function testUpdate()
-    {
-        //correct request
-        $response = $this->actingAs($company)->json('PUT', '/companies/employees/'.$employee->id,$data);
-        $response->assertResponseOk();
-        $data2 = $data;
-        unset($data2['password']);
-        unset($data2['password_confirmation']);
-        $response->seeJson($data2);
-
-        //duplicate employee
-        $response = $this->actingAs($company)->json('PUT', '/companies/employees/'.$employee->id,$data);
-        $response->seeStatusCode(422);
-    }*/
 }
