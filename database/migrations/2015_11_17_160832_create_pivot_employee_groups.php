@@ -13,9 +13,9 @@ class CreatePivotEmployeeGroups extends Migration
     public function up()
     {
         Schema::create('employee_groups', function (Blueprint $table) {
-            $table->integer('employee_id')->unsigned();
+            $table->integer('employee_id')->unsigned()->nullable()->default(NULL);
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('group_id')->unsigned();
+            $table->integer('group_id')->unsigned()->nullable()->default(NULL);
             $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade')->onUpdate('cascade');
             $table->unique(['employee_id', 'group_id']);
         });

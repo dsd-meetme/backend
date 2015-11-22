@@ -11,6 +11,7 @@ use plunner\Http\Requests\Companies\EmployeeRequest;
 
 class GroupsController extends Controller
 {
+    // TODO move to other controllers
     /**
      * @var \plunner\Company
      */
@@ -39,7 +40,7 @@ class GroupsController extends Controller
          * @var $company Company
          */
         $company = \Auth::user();
-        //return $company->groups; //TODO implement
+        return $company->groups();
     }
 
     /**
@@ -48,9 +49,12 @@ class GroupsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(GroupRequest $request)
     {
-        //
+        $company = \Auth::user();
+        $input = $request->all();
+        $group = $company->groups()->create($input);
+        return $group;
     }
 
     /**
@@ -61,7 +65,9 @@ class GroupsController extends Controller
      */
     public function show($id)
     {
-        //
+        $group = Group::findOrFail($id);
+        $this->authorize($group);
+        return $group;
     }
 
     /**
@@ -71,9 +77,13 @@ class GroupsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(GroupRequest $request, $id)
     {
-        //
+        $group = Group::findOrFail($id);
+        $this->authorize($group);
+        $input = $request->all();
+        $group->update($input);
+        return $group;
     }
 
     /**
@@ -84,6 +94,9 @@ class GroupsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $group = Employee::findOrFail($id);
+        $this->authorize($group);
+        $group->delete();
+        return $group;
     }
 }

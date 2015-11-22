@@ -70,6 +70,10 @@ class Employee extends Model implements AuthenticatableContract,
         return $this->belongsToMany('plunner\Group', 'employee_groups');
     }
 
+    public function planners()
+    {
+        return $this->hasMany(Planner::class);
+    }
 
     /**
      * Get the e-mail address where password reset links are sent.

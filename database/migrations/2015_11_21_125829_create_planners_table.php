@@ -14,8 +14,10 @@ class CreatePlannersTable extends Migration
     {
         Schema::create('planners', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('employee_id')->unsigned();
+            $table->integer('employee_id')->unsigned()->nullable()->default(NULL);
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade')->onUpdate('cascade');
+            $table->integer('group_id')->unsigned()->nullable()->default(NULL);
+            $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

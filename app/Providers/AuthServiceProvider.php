@@ -17,6 +17,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         'plunner\Model' => 'plunner\Policies\ModelPolicy',
         Employee::class => EmployeePolicy::class,
+        Group::class => GroupPolicy::class,
     ];
 
     /**

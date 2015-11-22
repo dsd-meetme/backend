@@ -6,15 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Planner extends Model
 {
-    private $employee;
-
-    public function __construct(Employee $employee)
-    {
-        $this->employee = $employee;
-    }
+    /**
+     * The database table used by the model.
+     *
+     * @var string
+     */
+    protected $table = 'planners';
 
     public function group()
     {
-        return $this->belongsTo('plunner\Group');
+        return $this->belongsTo(Group::class);
+    }
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
     }
 }

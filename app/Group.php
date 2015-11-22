@@ -35,28 +35,20 @@ class Group extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'description', 'planner'];
+    protected $fillable = ['name', 'description'];
 
     public function employees()
     {
-        return $this->belongsToMany('plunner\Employee', 'employee_groups');
+        return $this->belongsToMany(Employee::class, 'employee_groups');
     }
 
     public function planner()
     {
-        return $this->hasOne('plunner\Planner');
+        return $this->hasOne(Planner::class);
     }
 
-    public function addEmployees($employees)
+    public function company()
     {
-        $this->employees()->sync(array_map(function($employee)
-        {
-            return $employee->id;
-        }), $employees);
-    }
-
-    public function choosePlanner($employee)
-    {
-        $this->planner()->save(new Planner($employee));
+        return $this->belongsTo(Company::class);
     }
 }

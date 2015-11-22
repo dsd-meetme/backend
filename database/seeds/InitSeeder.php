@@ -35,13 +35,38 @@ class InitSeeder extends Seeder
     {
         factory(plunner\Company::class, 10)->create()->each(function ($company) {
             self::employees($company);
+            self::groups($company, $company->employees->toArray());
         });
     }
 
     static private function employees($company)
     {
-        factory(plunner\Employee::class, 3)->make()->each(function ($employee) use($company){
+        factory(plunner\Employee::class, 3)->make()->each(function ($employee) use ($company) {
             $company->employees()->save($employee);
+        });
+    }
+
+    static private function groups($company, $employees)
+    {
+        // TODO doesnt work, nothing appears in db, remove nullable from planner table and employee_groups
+
+        factory(plunner\Group::class, 2)->make()->each(function ($group) use ($company, $employees) {
+            $employeeSubsetIndices = array_rand($employees, rand(1, 3)); // 1 to 3 random members in each team
+            $employeeSubsetIndices = is_array($employeeSubsetIndices) ? $employeeSubsetIndices : [$employeeSubsetIndices];
+            $employeeSubset = array_map(function ($index) use ($company) {
+                return $company->employees[$index];
+            }, $employeeSubsetIndices);
+
+            $plannerIndex = array_rand($employeeSubset);
+            $employeePlanner = $company->employees[$plannerIndex];
+
+            array_map(function ($employee) use ($group) {
+                $group->employees()->save($employee);
+            }, $employeeSubset);
+
+            $p = plunner\Planner::create();
+            $group->planner()->save($p);
+            $employeePlanner->planners()->save($p);
         });
     }
 }
