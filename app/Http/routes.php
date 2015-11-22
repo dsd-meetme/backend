@@ -41,7 +41,8 @@ Route::group(['namespace' => 'Companies', 'prefix' => 'companies'], function() {
         });
     });
 
-    Route::resource('employees', 'EmployeesController');
+    Route::resource('employees', 'EmployeesController', ['except' => ['create', 'edit']]);
+    Route::resource('groups', 'GroupsController', ['except' => ['create', 'edit']]);
 
     //example
     Route::resource('example', 'ExampleController', ['except' => ['create', 'edit']]);

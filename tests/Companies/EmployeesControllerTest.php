@@ -84,11 +84,11 @@ class EmployeesControllerTest extends TestCase
         $data2 = $data;
         unset($data2['password']);
         unset($data2['password_confirmation']);
-        $response->dontSeeJson([$data['company_id']]);
-        $data['company_id'] = '1';
-        $data2 = $data;
-        unset($data2['password']);
-        unset($data2['password_confirmation']);
+        $json = $response->response->content();
+        $json = json_decode($json, true);
+        $this->assertNotEquals($data['company_id'], $json['company_id']); //this for travis problem due to consider 1 as number instead of string
+        $this->assertEquals(1, $json['company_id']);
+        unset($data2['company_id']);
         $response->SeeJson($data2);
     }
 
@@ -174,11 +174,11 @@ class EmployeesControllerTest extends TestCase
         $data2 = $data;
         unset($data2['password']);
         unset($data2['password_confirmation']);
-        $response->dontSeeJson([$data['company_id']]);
-        $data['company_id'] = '1';
-        $data2 = $data;
-        unset($data2['password']);
-        unset($data2['password_confirmation']);
+        $json = $response->response->content();
+        $json = json_decode($json, true);
+        $this->assertNotEquals($data['company_id'], $json['company_id']); //this for travis problem due to consider 1 as number instead of string
+        $this->assertEquals(1, $json['company_id']);
+        unset($data2['company_id']);
         $response->SeeJson($data2);
     }
 }
