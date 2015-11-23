@@ -13,9 +13,9 @@ class CreatePivotEmployeeMeeting extends Migration
     public function up()
     {
         Schema::create('employee_meeting', function (Blueprint $table) {
-            $table->integer('employee_id')->unsigned()->index();
+            $table->integer('employee_id')->unsigned();
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('meeting_id')->unsigned()->index();
+            $table->integer('meeting_id')->unsigned();
             $table->foreign('meeting_id')->references('id')->on('meetings')->onDelete('cascade')->onUpdate('cascade');
         });
     }
