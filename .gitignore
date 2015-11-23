@@ -112,6 +112,7 @@ composer.lock
 ### tests ###
 coverage.xml
 coverage.txt
+coverage.clover
 
 ### gulp ###
 node_modules/
