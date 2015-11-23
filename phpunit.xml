@@ -25,6 +25,7 @@
         <env name="QUEUE_DRIVER" value="sync"/>
     </php>
     <logging>
+        <log type="coverage-text" target="coverage.txt"/>
         <log type="coverage-clover" target="coverage.xml"/>
     </logging>
 </phpunit>
