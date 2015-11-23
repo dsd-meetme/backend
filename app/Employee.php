@@ -75,6 +75,11 @@ class Employee extends Model implements AuthenticatableContract,
         return $this->belongsToMany('plunner\Meeting');
     }
 
+    public function calendars()
+    {
+        return $this->hasMany('App\Calendar');
+    }
+
     /**
      * Get the e-mail address where password reset links are sent.
      *
