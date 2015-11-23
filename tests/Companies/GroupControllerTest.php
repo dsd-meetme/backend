@@ -61,7 +61,7 @@ class GroupControllerTest extends TestCase
 
     public function testTryToShowOtherCompaniesGroup()
     {
-        $group = \plunner\Group::where('company_id', '<>', $this->company->id)->first();
+        $group = \plunner\Group::where('company_id', '<>', $this->company->id)->firstOrFail();
 
         $response = $this->actingAs($this->company)->json('GET', '/companies/groups/' . $group->id);
 
@@ -107,7 +107,7 @@ class GroupControllerTest extends TestCase
 
     public function testDelete()
     {
-        $group_id = $this->company->groups()->first()->id;
+        $group_id = $this->company->groups()->firstOrFail()->id;
         $response = $this->actingAs($this->company)->json('DELETE', '/companies/groups/' . $group_id);
         $response->assertResponseOk();
 
@@ -120,7 +120,7 @@ class GroupControllerTest extends TestCase
 
     public function testDeleteNotMine()
     {
-        $group_id = plunner\Group::where('company_id', '<>', $this->company->id)->first()->id;
+        $group_id = plunner\Group::where('company_id', '<>', $this->company->id)->firstOrFail()->id;
         $response = $this->actingAs($this->company)->json('DELETE', '/companies/groups/' . $group_id);
         $response->seeStatusCode(403);
     }
