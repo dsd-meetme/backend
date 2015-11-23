@@ -111,6 +111,7 @@ composer.lock
 
 ### tests ###
 coverage.xml
+coverage.txt
 
 ### gulp ###
 node_modules/
