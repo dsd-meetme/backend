@@ -5,6 +5,7 @@ namespace plunner\Http\Controllers\Companies\Groups;
 use Illuminate\Http\Request;
 use plunner\Company;
 use plunner\Employee;
+use plunner\Group;
 use plunner\Http\Controllers\Controller;
 use plunner\Http\Requests\Companies\EmployeeRequest;
 
@@ -30,51 +31,51 @@ class EmployeesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  int  $groupId
-     * @return \Illuminate\Http\Response
+     * @param $groupId
+     * @return mixed
      */
     public function index($groupId)
     {
-        //
-        //TODO remember to use authorize even here
+        $group = Group::findOrFail($groupId);
+        $this->authorize($group);
+        return $group->employees;
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $groupId
-     * @return \Illuminate\Http\Response
+     * @param EmployeeRequest $request
+     * @param $groupId
+     * @return mixed
      */
-    public function store(Request $request, $groupId)
+    public function store(EmployeeRequest $request, $groupId)
     {
-        //
-        //TODO remember to use authorize even here
-    }
+        $group = Group::findOrFail($groupId);
+        $this->authorize($group);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $groupId
-     * @param  int  $employeeId
-     * @return \Illuminate\Http\Response
-     */
-    public function show($groupId, $employeeId)
-    {
-        //
+        $input = $request->all();
+        $employee = $group->employees->create($input);
+        return $employee;
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $groupId
-     * @param  int  $employeeId
-     * @return \Illuminate\Http\Response
+     * @param EmployeeRequest $request
+     * @param $groupId
+     * @param $employeeId
+     * @return mixed
      */
-    public function update(Request $request, $groupId, $employeeId)
+    public function update(EmployeeRequest $request, $groupId, $employeeId)
     {
-        //
+        $group = Group::findOrFail($groupId);
+        $this->authorize($group);
+        $employee = Employee::findOrFail($employeeId);
+        $this->authorize($employee);
+
+        $input = $request->all();
+        $group->$employee->update($input);
+        return $group;
     }
 
     /**
@@ -86,6 +87,12 @@ class EmployeesController extends Controller
      */
     public function destroy($groupId, $employeeId)
     {
-        //
+        $group = Group::findOrFail($groupId);
+        $this->authorize($group);
+        $employee = Employee::findOrFail($employeeId);
+        $this->authorize($employee);
+
+        $group->$employee->delete();
+        return $group;
     }
 }

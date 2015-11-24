@@ -42,6 +42,8 @@ class PlannersController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage.
+     *
      * @param PlannerRequest $request
      * @param $groupId
      * @return mixed
@@ -57,6 +59,8 @@ class PlannersController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
+     *
      * @param PlannerRequest $request
      * @param $groupId
      * @return mixed
@@ -72,6 +76,8 @@ class PlannersController extends Controller
     }
 
     /**
+     * Remove the specified resource from storage.
+     *
      * @param $groupId
      * @return mixed
      */
