@@ -8,7 +8,6 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 
 /**
@@ -36,7 +35,8 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
  */
 class Company extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
-                                    CanResetPasswordContract
+                                    CanResetPasswordContract,
+                                    PolicyCheckable
 {
     use Authenticatable, Authorizable, CanResetPassword;
 
@@ -61,6 +61,9 @@ class Company extends Model implements AuthenticatableContract,
      */
     protected $hidden = ['password', 'remember_token'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function employees()
     {
         return $this->hasMany(Employee::class);
@@ -69,5 +72,32 @@ class Company extends Model implements AuthenticatableContract,
     public function groups()
     {
         return $this->hasMany(Group::class);
+    }
+
+    /**
+     * @param Group $group
+     * @return bool
+     */
+    public function verifyGroup(Group $group)
+    {
+        return $group->company_id === $this->id;
+    }
+
+    /**
+     * @param Employee $employee
+     * @return bool
+     */
+    public function verifyEmployee(Employee $employee)
+    {
+        return $employee->company_id === $this->id;
+    }
+
+    /**
+     * @param Company $company
+     * @return bool
+     */
+    public function verifyCompany(Company $company)
+    {
+        return $company->id === $this->id;
     }
 }

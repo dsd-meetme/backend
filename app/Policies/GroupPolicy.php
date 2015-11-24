@@ -2,8 +2,8 @@
 
 namespace plunner\Policies;
 
-use plunner\Company;
 use plunner\Group;
+use plunner\PolicyCheckable;
 
 class GroupPolicy
 {
@@ -18,63 +18,63 @@ class GroupPolicy
     }
 
     /**
-     * @param Company $company
+     * @param PolicyCheckable $policyCheckable
      * @param Group $group
      * @return bool
      */
-    public function index(Company $company, Group $group)
+    public function index(PolicyCheckable $policyCheckable, Group $group)
     {
-        return $this->userCheck($company, $group);
+        return $this->userCheck($policyCheckable, $group);
     }
 
     /**
-     * @param Company $company
+     * @param PolicyCheckable $policyCheckable
      * @param Group $group
      * @return bool
      */
-    public function store(Company $company, Group $group)
+    public function store(PolicyCheckable $policyCheckable, Group $group)
     {
-        return $this->userCheck($company, $group);
+        return $this->userCheck($policyCheckable, $group);
     }
 
     /**
-     * @param Company $company
+     * @param PolicyCheckable $policyCheckable
      * @param Group $group
      * @return bool
      */
-    public function update(Company $company, Group $group)
+    public function update(PolicyCheckable $policyCheckable, Group $group)
     {
-        return $this->userCheck($company, $group);
+        return $this->userCheck($policyCheckable, $group);
     }
 
     /**
-     * @param Company $company
+     * @param PolicyCheckable $policyCheckable
      * @param Group $group
      * @return bool
      */
-    public function show(Company $company, Group $group)
+    public function show(PolicyCheckable $policyCheckable, Group $group)
     {
-        $ret = $this->userCheck($company, $group);
+        $ret = $this->userCheck($policyCheckable, $group);
         return $ret;
     }
 
     /**
-     * @param Company $company
+     * @param PolicyCheckable $policyCheckable
      * @param Group $group
      * @return bool
      */
-    public function destroy(Company $company, Group $group)
+    public function destroy(PolicyCheckable $policyCheckable, Group $group)
     {
-        return $this->userCheck($company, $group);
+        return $this->userCheck($policyCheckable, $group);
     }
 
     /**
-     * @param Company $company
+     * @param PolicyCheckable $policyCheckable
      * @param Group $group
      * @return bool
      */
-    private function userCheck(Company $company, Group $group)
+    private function userCheck(PolicyCheckable $policyCheckable, Group $group)
     {
-        return $company->id === $group->company_id;
+        return $policyCheckable->verifyGroup($group);
     }
 }
