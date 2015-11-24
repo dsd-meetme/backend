@@ -63,6 +63,19 @@ class GroupsController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function edit($id)
+    {
+        $group = Group::findOrFail($id);
+        $this->authorize($group);
+        return $group;
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  GroupRequest  $request

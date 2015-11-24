@@ -42,6 +42,19 @@ class EmployeesController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param $groupId
+     * @return mixed
+     */
+    public function edit($groupId)
+    {
+        $group = Group::findOrFail($groupId);
+        $this->authorize($group);
+        return $group->employees;
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param EmployeeRequest $request

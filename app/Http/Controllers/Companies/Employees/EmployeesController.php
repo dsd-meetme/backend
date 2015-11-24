@@ -72,6 +72,20 @@ class EmployeesController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function edit($id)
+    {
+        //
+        $employee = Employee::findOrFail($id);
+        $this->authorize($employee);
+        return $employee;
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  EmployeeRequest  $request
