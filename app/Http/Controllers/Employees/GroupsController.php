@@ -23,7 +23,7 @@ class GroupsController extends Controller
     {
         config(['auth.model' => \plunner\Employee::class]);
         config(['jwt.user' => \plunner\Employee::class]);
-        $this->middleware('jwt.authandrefresh:mode-cn');
+        $this->middleware('jwt.authandrefresh:mode-en');
     }
 
     /**

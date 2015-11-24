@@ -2,10 +2,9 @@
 
 namespace plunner\Http\Controllers\Employees;
 
-use Illuminate\Http\Request;
-
-use plunner\Http\Requests;
 use plunner\Http\Controllers\Controller;
+use plunner\Http\Requests;
+use plunner\Employee;
 
 class EmployeesController extends Controller
 {
@@ -21,7 +20,7 @@ class EmployeesController extends Controller
     {
         config(['auth.model' => \plunner\Employee::class]);
         config(['jwt.user' => \plunner\Employee::class]);
-        $this->middleware('jwt.authandrefresh:mode-cn');
+        $this->middleware('jwt.authandrefresh:mode-en');
     }
 
     /**
