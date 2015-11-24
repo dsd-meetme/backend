@@ -7,6 +7,7 @@ use plunner\Company;
 use plunner\Employee;
 use plunner\Http\Controllers\Controller;
 use plunner\Http\Requests\Companies\EmployeeRequest;
+use plunner\Http\Requests\PlannerRequest;
 
 
 class PlannersController extends Controller
@@ -35,57 +36,51 @@ class PlannersController extends Controller
      */
     public function index($groupId)
     {
-        //
-        //TODO remember to use authorize even here
+        $group = Group::findOrFail($groupId);
+        $this->authorize($group);
+        return $group->planner;
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $groupId
-     * @return \Illuminate\Http\Response
+     * @param PlannerRequest $request
+     * @param $groupId
+     * @return mixed
      */
-    public function store(Request $request, $groupId)
+    public function store(PlannerRequest $request, $groupId)
     {
-        //
-        //TODO remember to use authorize even here
+        $group = Group::findOrFail($groupId);
+        $this->authorize($group);
+
+        $input = $request->all();
+        $planner = $group->planner->create($input);
+        return $planner;
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $groupId
-     * @param  int  $employeeId
-     * @return \Illuminate\Http\Response
+     * @param PlannerRequest $request
+     * @param $groupId
+     * @return mixed
      */
-    public function show($groupId, $employeeId)
+    public function update(PlannerRequest $request, $groupId)
     {
-        //
+        $group = Group::findOrFail($groupId);
+        $this->authorize($group);
+
+        $input = $request->all();
+        $group->planner->update($input);
+        return $group;
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $groupId
-     * @param  int  $employeeId
-     * @return \Illuminate\Http\Response
+     * @param $groupId
+     * @return mixed
      */
-    public function update(Request $request, $groupId, $employeeId)
+    public function destroy($groupId)
     {
-        //
-    }
+        $group = Group::findOrFail($groupId);
+        $this->authorize($group);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $groupId
-     * @param  int  $employeeId
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($groupId, $employeeId)
-    {
-        //
+        $group->planner->delete();
+        return $group;
     }
 }
