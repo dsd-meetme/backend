@@ -4,6 +4,12 @@ namespace plunner;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * plunner\Calendar
+ *
+ * @property-read \plunner\Employee $employees
+ * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Timeslot[] $timeslots
+ */
 class Calendar extends Model
 {
     /**
@@ -13,11 +19,17 @@ class Calendar extends Model
      */
     protected $fillable = ['name'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function employees()
     {
         return $this->belongsTo('plunner\Employee');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function timeslots()
     {
         return $this->hasMany('App\Timeslot');

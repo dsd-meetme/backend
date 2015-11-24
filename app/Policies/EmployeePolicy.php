@@ -2,8 +2,8 @@
 
 namespace plunner\Policies;
 
-use plunner\Company;
 use plunner\Employee;
+use plunner\PolicyCheckable;
 
 class EmployeePolicy
 {
@@ -18,62 +18,62 @@ class EmployeePolicy
     }
 
     /**
-     * @param Company $company
+     * @param PolicyCheckable $policyCheckable
      * @param Employee $employee
      * @return bool
      */
-    public function index(Company $company, Employee $employee)
+    public function index(PolicyCheckable $policyCheckable, Employee $employee)
     {
-        return $this->userCheck($company, $employee);
+        return $this->userCheck($policyCheckable, $employee);
     }
 
     /**
-     * @param Company $company
+     * @param PolicyCheckable $policyCheckable
      * @param Employee $employee
      * @return bool
      */
-    public function store(Company $company, Employee $employee)
+    public function store(PolicyCheckable $policyCheckable, Employee $employee)
     {
-        return $this->userCheck($company, $employee);
+        return $this->userCheck($policyCheckable, $employee);
     }
 
     /**
-     * @param Company $company
+     * @param PolicyCheckable $policyCheckable
      * @param Employee $employee
      * @return bool
      */
-    public function update(Company $company, Employee $employee)
+    public function update(PolicyCheckable $policyCheckable, Employee $employee)
     {
-        return $this->userCheck($company, $employee);
+        return $this->userCheck($policyCheckable, $employee);
     }
 
     /**
-     * @param Company $company
+     * @param PolicyCheckable $policyCheckable
      * @param Employee $employee
      * @return bool
      */
-    public function show(Company $company, Employee $employee)
+    public function show(PolicyCheckable $policyCheckable, Employee $employee)
     {
-        return $this->userCheck($company, $employee);
+        return $this->userCheck($policyCheckable, $employee);
     }
 
     /**
-     * @param Company $company
+     * @param PolicyCheckable $policyCheckable
      * @param Employee $employee
      * @return bool
      */
-    public function destroy(Company $company, Employee $employee)
+    public function destroy(PolicyCheckable $policyCheckable, Employee $employee)
     {
-        return $this->userCheck($company, $employee);
+        return $this->userCheck($policyCheckable, $employee);
     }
 
     /**
-     * @param Company $company
+     * @param PolicyCheckable $policyCheckable
      * @param Employee $employee
      * @return bool
      */
-    private function userCheck(Company $company, Employee $employee)
+    private function userCheck(PolicyCheckable $policyCheckable, Employee $employee)
     {
-        return $company->id === $employee->company_id;
+        return $policyCheckable->verifyEmployee($employee);
     }
 }

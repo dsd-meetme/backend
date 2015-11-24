@@ -4,6 +4,11 @@ namespace plunner;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * plunner\Timeslot
+ *
+ * @property-read \plunner\Calendar $employees
+ */
 class Timeslot extends Model
 {
     /**
@@ -13,6 +18,9 @@ class Timeslot extends Model
      */
     protected $fillable = ['time_start', 'time_end'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function employees()
     {
         return $this->belongsTo('plunner\Calendar');
