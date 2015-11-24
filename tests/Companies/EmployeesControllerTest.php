@@ -46,7 +46,7 @@ class EmployeesControllerTest extends TestCase
         $response->seeJsonEquals($employee->toArray());
 
         //a no my employee
-        $employee = \plunner\Employee::where('company_id', '<>', $company->id)->first();
+        $employee = \plunner\Employee::where('company_id', '<>', $company->id)->firstOrFail();
         $response = $this->actingAs($company)->json('GET', '/companies/employees/'.$employee->id);
         $response->seeStatusCode(403);
     }
@@ -146,7 +146,7 @@ class EmployeesControllerTest extends TestCase
     public function testDeleteNotMine()
     {
         $company = \plunner\Company::findOrFail(1);
-        $employee = plunner\Employee::where('company_id', '<>', $company->id)->first();
+        $employee = plunner\Employee::where('company_id', '<>', $company->id)->firstOrFail();
         $id = $employee->id;
         $response = $this->actingAs($company)->json('DELETE', '/companies/employees/' . $id);
         $response->seeStatusCode(403);
@@ -176,7 +176,7 @@ class EmployeesControllerTest extends TestCase
         $response->seeStatusCode(422);
 
         //a no my employee
-        $employee2 = \plunner\Employee::where('company_id', '<>', $company->id)->first();
+        $employee2 = \plunner\Employee::where('company_id', '<>', $company->id)->firstOrFail();
         $data['email'] = 'test2@test.com'; //this since we are acting as original company -> see how requests work
         $response = $this->actingAs($company)->json('PUT', '/companies/employees/'.$employee2->id,$data);
         $response->seeStatusCode(403);

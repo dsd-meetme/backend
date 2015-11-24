@@ -54,8 +54,7 @@ class EmployeePolicy
      */
     public function show(Company $company, Employee $employee)
     {
-        $ret = $this->userCheck($company, $employee);
-        return $ret;
+        return $this->userCheck($company, $employee);
     }
 
     /**

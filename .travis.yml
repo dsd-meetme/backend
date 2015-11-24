@@ -23,7 +23,7 @@ before_script:
   - php artisan migrate  --force  --seed
 
 # Commands you want to run that will verify your build.
-script: phpunit
+script: phpunit --coverage-text --coverage-clover=coverage.clover
 
 # allow_failures: Allow this build to fail under the specified environments.
 # fast_finish: If your build fails do not continue trying to build, just stop.
@@ -37,4 +37,8 @@ matrix:
 notifications:
     on_success: never
     on_failure: always
-    slack: dsd-meetme:5i37RkHD5zeWsbrzfMJiwy42
+    slack: dsd-meetme:pZvZrzGoESPNVXScLAnMf10X
+
+after_script:
+  - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ] && [ "$TRAVIS_PHP_VERSION" != "7.0" ]; then wget https://scrutinizer-ci.com/ocular.phar; fi;'
+  - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ] && [ "$TRAVIS_PHP_VERSION" != "7.0" ]; then php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi;'

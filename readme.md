@@ -4,6 +4,8 @@ Build status: [![Build Status](https://travis-ci.org/dsd-meetme/backend.svg?bran
 
 This application uses laravel 5.1.* 
 
+Api example web server: http://api.plunner.com. It is just an example, so we don't guarantee that everything works
+
 # How to install
 
 1. Clone repository
