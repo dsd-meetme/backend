@@ -17,10 +17,9 @@ class GroupPolicy
         //
     }
 
-    //TODO fix phpdoc
     /**
      * @param Company $company
-     * @param Employee $employee
+     * @param Group $group
      * @return bool
      */
     public function index(Company $company, Group $group)
@@ -30,7 +29,7 @@ class GroupPolicy
 
     /**
      * @param Company $company
-     * @param Employee $employee
+     * @param Group $group
      * @return bool
      */
     public function store(Company $company, Group $group)
@@ -40,7 +39,7 @@ class GroupPolicy
 
     /**
      * @param Company $company
-     * @param Employee $employee
+     * @param Group $group
      * @return bool
      */
     public function update(Company $company, Group $group)
@@ -50,7 +49,7 @@ class GroupPolicy
 
     /**
      * @param Company $company
-     * @param Employee $employee
+     * @param Group $group
      * @return bool
      */
     public function show(Company $company, Group $group)
@@ -61,7 +60,7 @@ class GroupPolicy
 
     /**
      * @param Company $company
-     * @param Employee $employee
+     * @param Group $group
      * @return bool
      */
     public function destroy(Company $company, Group $group)
@@ -71,7 +70,7 @@ class GroupPolicy
 
     /**
      * @param Company $company
-     * @param Employee $employee
+     * @param Group $group
      * @return bool
      */
     private function userCheck(Company $company, Group $group)

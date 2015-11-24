@@ -10,8 +10,6 @@ use plunner\Http\Requests\Companies\GroupRequest;
 
 class GroupsController extends Controller
 {
-    // TODO move to other controllers WHY?
-
     /**
      * ExampleController constructor.
      */
