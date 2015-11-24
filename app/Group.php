@@ -39,12 +39,12 @@ class Group extends Model
 
     public function employees()
     {
-        return $this->belongsToMany(Employee::class, 'employee_groups');
+        return $this->belongsToMany(Employee::class);
     }
 
     public function planner()
     {
-        return $this->hasOne(Planner::class);
+        return $this->belongsTo(Planner::class);
     }
 
     public function company()

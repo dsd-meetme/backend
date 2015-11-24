@@ -27,8 +27,8 @@ class GroupControllerTest extends TestCase
         $this->data = [
             'name' => 'Testers',
             'description' => 'Group for testing stuff',
-            'employees' => $employee_ids,
-            'planner' => $planner_id,
+           // 'employees' => $employee_ids,
+            //'planner' => $planner_id,
         ];
         //TODO I think that employes should be inserted via the specific route /group/grou_id/employees -> to respect restFULL
     }

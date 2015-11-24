@@ -8,7 +8,6 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 
 /**
@@ -44,7 +43,7 @@ class Employee extends Model implements AuthenticatableContract,
      *
      * @var string
      */
-    //protected $table = 'employees';
+     //protected $table = 'employees';
 
     /**
      * The attributes that are mass assignable.
@@ -67,12 +66,7 @@ class Employee extends Model implements AuthenticatableContract,
 
     public function groups()
     {
-        return $this->belongsToMany('plunner\Group', 'employee_groups');
-    }
-
-    public function planners()
-    {
-        return $this->hasMany(Planner::class);
+        return $this->belongsToMany('plunner\Group', 'employee_groups', 'employee_id'); //needed for planner model
     }
 
     /**

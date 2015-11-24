@@ -25,8 +25,9 @@ class GroupRequest extends Request
     {
         return [
             'name' => 'required|max:255|unique:groups,name,NULL,id,company_id,'.$this->user()->id,
-            'employees' => 'required|array',
-            'planner' => 'required|max:255',
+            'description' => 'required|max:255',
+            //'employees' => 'required|array',
+            //'planner' => 'required|max:255',
         ];
     }
 }

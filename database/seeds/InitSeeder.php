@@ -13,6 +13,13 @@ class InitSeeder extends Seeder
     {
         //
         self::company();
+        self::makeDataKnown();
+
+    }
+
+    static private function makeDataKnown()
+    {
+        //create company
         $company = [
             'name' => 'testInit',
             'email' => 'testInit@test.com',
@@ -20,6 +27,8 @@ class InitSeeder extends Seeder
             'remember_token' => str_random(10),
         ];
         $company = plunner\Company::create($company);
+
+        //create employees
         self::employees($company);
         $employee = new \plunner\Employee([
             'name' => 'testEmp',
@@ -29,6 +38,8 @@ class InitSeeder extends Seeder
         ]);
         $company->employees()->save($employee);
 
+        //create groups
+        self::groups($company, $company->employees->toArray());
     }
 
     static private function company()
@@ -58,15 +69,15 @@ class InitSeeder extends Seeder
             $plannerIndex = array_rand($employeeSubset);
             $employeePlanner = $company->employees[$plannerIndex];
 
+            /**
+             * @var $group \plunner\Group
+             */
+            $group->planner_id = $company->employees[$plannerIndex]->id;
             $company->groups()->save($group);
 
             array_map(function ($employee) use ($group) {
                 $group->employees()->save($employee);
             }, $employeeSubset);
-
-            $p = plunner\Planner::create();
-            $group->planner()->save($p);
-            $employeePlanner->planners()->save($p);
         });
     }
 }
