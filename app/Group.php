@@ -20,6 +20,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Query\Builder|\plunner\Group whereName($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Group whereDescription($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Group wherePlannerId($value)
+ * @property integer $company_id
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Group whereCompanyId($value)
  */
 class Group extends Model
 {
@@ -37,6 +39,9 @@ class Group extends Model
      */
     protected $fillable = ['name', 'description'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function employees()
     {
         return $this->belongsToMany('plunner\Employee', 'employee_groups');

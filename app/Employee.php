@@ -8,7 +8,6 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 
 /**
@@ -32,10 +31,13 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
  * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereRememberToken($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Meeting[] $meetings
+ * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Calendar[] $calendars
  */
 class Employee extends Model implements AuthenticatableContract,
                                         AuthorizableContract,
-                                        CanResetPasswordContract
+                                        CanResetPasswordContract,
+                                        PolicyCheckable
 {
     use Authenticatable, Authorizable, CanResetPassword;
 
@@ -60,21 +62,33 @@ class Employee extends Model implements AuthenticatableContract,
      */
     protected $hidden = ['password', 'remember_token'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function company()
     {
         return $this->belongsTo('plunner\Company');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function groups()
     {
         return $this->belongsToMany('plunner\Group', 'employee_groups');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function meetings()
     {
         return $this->belongsToMany('plunner\Meeting');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function calendars()
     {
         return $this->hasMany('App\Calendar');
@@ -82,6 +96,7 @@ class Employee extends Model implements AuthenticatableContract,
 
     /**
      * Get the e-mail address where password reset links are sent.
+     * This is needed for multiple user type login
      *
      * Make email unique
      *
@@ -90,5 +105,32 @@ class Employee extends Model implements AuthenticatableContract,
     public function getEmailForPasswordReset()
     {
         return $this->email.$this->company->id;
+    }
+
+    /**
+     * @param Group $group
+     * @return bool
+     */
+    public function verifyGroup(Group $group)
+    {
+        return $this->groups()->where('id', $group->id)->first()->exists;
+    }
+
+    /**
+     * @param Employee $employee
+     * @return bool
+     */
+    public function verifyEmployee(Employee $employee)
+    {
+        return $employee->id === $this->id;
+    }
+
+    /**
+     * @param Company $company
+     * @return bool
+     */
+    public function verifyCompany(Company $company)
+    {
+        return $company->id === $this->company_id;
     }
 }
