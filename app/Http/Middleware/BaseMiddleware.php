@@ -5,6 +5,7 @@ namespace plunner\Http\Middleware;
 use Tymon\JWTAuth\JWTAuth;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Routing\ResponseFactory;
+use Log;
 
 abstract class BaseMiddleware
 {
@@ -48,6 +49,7 @@ abstract class BaseMiddleware
      */
     protected function respond($event, $error, $status, $payload = [])
     {
+        Log::error($error);
         $response = $this->events->fire($event, $payload, true);
 
         return $response ?: $this->response->json(['error' => $error], $status);
