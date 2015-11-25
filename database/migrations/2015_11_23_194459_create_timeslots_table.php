@@ -17,7 +17,7 @@ class CreateTimeslotsTable extends Migration
             $table->dateTime('time_start');
             $table->dateTime('time_end');
             $table->integer('calendar_id')->unsigned();
-            $table->foreign('calendar_id')->references('id')->on('calendars')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('calendar_id')->references('id')->on('Calendars')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

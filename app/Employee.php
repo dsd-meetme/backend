@@ -32,7 +32,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
  * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Meeting[] $meetings
- * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Calendar[] $calendars
+ * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Calendar[] $Calendars
  */
 class Employee extends Model implements AuthenticatableContract,
                                         AuthorizableContract,
@@ -91,7 +91,7 @@ class Employee extends Model implements AuthenticatableContract,
      */
     public function calendars()
     {
-        return $this->hasMany('App\Calendar');
+        return $this->hasMany('plunner\Calendar');
     }
 
     /**

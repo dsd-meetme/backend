@@ -12,7 +12,7 @@ class CreateCalendarsTable extends Migration
      */
     public function up()
     {
-        Schema::create('calendars', function (Blueprint $table) {
+        Schema::create('Calendars', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->integer('employee_id')->unsigned();
@@ -28,6 +28,6 @@ class CreateCalendarsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('calendars');
+        Schema::drop('Calendars');
     }
 }

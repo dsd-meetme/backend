@@ -32,6 +32,6 @@ class Calendar extends Model
      */
     public function timeslots()
     {
-        return $this->hasMany('App\Timeslot');
+        return $this->hasMany('pluner\Timeslot');
     }
 }

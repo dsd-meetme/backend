@@ -81,6 +81,10 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
         });
     });
 
+    Route::group(['namespace' => 'Calendars'], function() {
+        Route::resource('calendars', 'CalendarsController', ['except' => ['create', 'edit']]);
+    });
+
     Route::resource('employees', 'EmployeesController');
     Route::resource('groups', 'GroupsController');
 });
