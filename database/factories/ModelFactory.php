@@ -35,3 +35,12 @@ $factory->define(plunner\Calendar::class, function (Faker\Generator $faker) {
         'name' => $faker->name,
     ];
 });
+
+
+$factory->define(plunner\Timeslot::class, function (Faker\Generator $faker) {
+    $date = $faker->dateTimeThisYear;
+    return [
+        'time_start' => $date,
+        'time_end' => $date+100,
+    ];
+});
