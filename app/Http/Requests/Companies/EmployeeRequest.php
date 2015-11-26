@@ -26,7 +26,7 @@ class EmployeeRequest extends Request
     {
         return [
             'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:employees,email,NULL,id,company_id,'.$this->user()->id,
+            'email' => 'required|email|max:255|unique:employees,email,'.$this->route('employees').',id,company_id,'.$this->user()->id,
             'password' => 'required|confirmed|min:6',
         ];
     }

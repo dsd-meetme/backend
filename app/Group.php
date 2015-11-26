@@ -37,7 +37,7 @@ class Group extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'description'];
+    protected $fillable = ['name', 'description', 'planner_id'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
