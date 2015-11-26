@@ -1,6 +1,6 @@
 <?php
 
-namespace plunner\Http\Requests\Companies;
+namespace plunner\Http\Requests\Companies\Groups;
 
 use plunner\Http\Requests\Request;
 

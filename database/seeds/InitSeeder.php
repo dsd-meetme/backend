@@ -59,7 +59,7 @@ class InitSeeder extends Seeder
 
     static private function groups($company, $employees)
     {
-        factory(plunner\Group::class, 2)->make()->each(function ($group) use ($company, $employees) {
+        factory(plunner\Group::class, 4)->make()->each(function ($group) use ($company, $employees) {
             $employeeSubsetIndices = array_rand($employees, rand(1, 3)); // 1 to 3 random members in each team
             $employeeSubsetIndices = is_array($employeeSubsetIndices) ? $employeeSubsetIndices : [$employeeSubsetIndices];
             $employeeSubset = array_map(function ($index) use ($company) {

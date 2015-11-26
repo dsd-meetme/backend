@@ -5,7 +5,7 @@ namespace plunner\Http\Controllers\Companies\Groups;
 use plunner\Company;
 use plunner\Group;
 use plunner\Http\Controllers\Controller;
-use plunner\Http\Requests\Companies\GroupRequest;
+use plunner\Http\Requests\Companies\Groups\GroupRequest;
 
 
 class GroupsController extends Controller

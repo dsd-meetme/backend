@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use plunner\Company;
 use plunner\Employee;
 use plunner\Http\Controllers\Controller;
-use plunner\Http\Requests\Companies\EmployeeRequest;
+use plunner\Http\Requests\Companies\Employees\EmployeeRequest;
 
 
 class EmployeesController extends Controller

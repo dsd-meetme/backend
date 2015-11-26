@@ -63,11 +63,17 @@ class Group extends Model
         return $this->belongsToMany(Employee::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function planner()
     {
         return $this->belongsTo(Planner::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function company()
     {
         return $this->belongsTo(Company::class);

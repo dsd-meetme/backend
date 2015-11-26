@@ -2,11 +2,11 @@
 
 namespace plunner\Http\Controllers\Companies\Groups;
 
-use Illuminate\Http\Request;
-use plunner\Company;
+use Illuminate\Support\Facades\Response;
+use plunner\Group;
 use plunner\Employee;
 use plunner\Http\Controllers\Controller;
-use plunner\Http\Requests\Companies\EmployeeRequest;
+use plunner\Http\Requests\Companies\Groups\EmployeeRequest;
 
 
 class EmployeesController extends Controller
@@ -36,45 +36,26 @@ class EmployeesController extends Controller
     public function index($groupId)
     {
         //
-        //TODO remember to use authorize even here
+        $group = Group::findOrFail($groupId);
+        $this->authorize($group);
+        return $group->employees;
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  EmployeeRequest  $request
      * @param  int  $groupId
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $groupId)
+    public function store(EmployeeRequest $request, $groupId)
     {
         //
-        //TODO remember to use authorize even here
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $groupId
-     * @param  int  $employeeId
-     * @return \Illuminate\Http\Response
-     */
-    public function show($groupId, $employeeId)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $groupId
-     * @param  int  $employeeId
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $groupId, $employeeId)
-    {
-        //
+        $group = Group::findOrFail($groupId);
+        $this->authorize($group);
+        $id = $request->all()['id'];
+        $group->employees()->attach($id);
+        return $group->employees;
     }
 
     /**
@@ -87,5 +68,12 @@ class EmployeesController extends Controller
     public function destroy($groupId, $employeeId)
     {
         //
+        $employee = Employee::findOrFail($employeeId);
+        $this->authorize($employee);
+        $group = Group::findOrFail($groupId);
+        if(!$employee->belongsToGroup($group))
+            return Response::json(['error' => 'employId <> groupId'],404);
+        $employee->groups()->detach($groupId);
+        return $group->employees;
     }
 }

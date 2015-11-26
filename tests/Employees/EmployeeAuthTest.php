@@ -1,9 +1,10 @@
 <?php
 
+namespace Employees;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class EmployeesAuthTest extends TestCase
+class EmployeesAuthTest extends \TestCase
 {
     use DatabaseTransactions;
 
@@ -28,7 +29,7 @@ class EmployeesAuthTest extends TestCase
         $response->seeStatusCode(200);
 
         //get the token
-        $token = DB::table('password_resets_employees')->where('email', 'testEmp@test.com'.(\plunner\Company::whereName('testInit')->firstOrFail()->id))->value('token');
+        $token = \DB::table('password_resets_employees')->where('email', 'testEmp@test.com'.(\plunner\Company::whereName('testInit')->firstOrFail()->id))->value('token');
 
         //perform reset with error
         $response = $this->json('POST', '/employees/password/reset', ['company' => 'testInit', 'email' => 'atestEmp@test.com', 'password_confirmation' => 'testtest', 'password' => 'testtest', 'token' => 're' . $token]);

@@ -75,7 +75,7 @@ class Employee extends Model implements AuthenticatableContract,
      */
     public function groups()
     {
-        return $this->belongsToMany('plunner\Group', 'employee_groups', 'employee_id'); //needed for planner model
+        return $this->belongsToMany('plunner\Group', 'employee_group', 'employee_id'); //needed for planner model
     }
 
     /**
@@ -111,9 +111,21 @@ class Employee extends Model implements AuthenticatableContract,
      * @param Group $group
      * @return bool
      */
+    public function belongsToGroup(Group $group)
+    {
+        $group = $this->groups()->where('id', $group->id)->first();
+        if(is_object($group) && $group->exists)
+            return true;
+        return false;
+    }
+
+    /**
+     * @param Group $group
+     * @return bool
+     */
     public function verifyGroup(Group $group)
     {
-        return $this->groups()->where('id', $group->id)->first()->exists;
+        return false; //$this->belongsToGroup($group);
     }
 
     /**
@@ -122,7 +134,7 @@ class Employee extends Model implements AuthenticatableContract,
      */
     public function verifyEmployee(Employee $employee)
     {
-        return $employee->id === $this->id;
+        return false; //$employee->id === $this->id;
     }
 
     /**
@@ -131,6 +143,6 @@ class Employee extends Model implements AuthenticatableContract,
      */
     public function verifyCompany(Company $company)
     {
-        return $company->id === $this->company_id;
+        return false; //$company->id === $this->company_id;
     }
 }
