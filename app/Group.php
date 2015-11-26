@@ -42,7 +42,7 @@ class Group extends Model
     /**
      * @var array
      */
-//    protected $hidden = ['planner'];
+    protected $hidden = ['planner'];
 
     /**
      * @var array
