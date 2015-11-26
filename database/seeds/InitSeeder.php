@@ -72,7 +72,7 @@ class InitSeeder extends Seeder
             /**
              * @var $group \plunner\Group
              */
-            $group->planner_id = $company->employees[$plannerIndex]->id;
+            $group->planner_id = $employeePlanner->id;
             $company->groups()->save($group);
 
             array_map(function ($employee) use ($group) {
