@@ -12,11 +12,6 @@ use plunner\Http\Requests\Companies\Employees\EmployeeRequest;
 class EmployeesController extends Controller
 {
     /**
-     * @var \plunner\Company
-     */
-    private $user;
-
-    /**
      * ExampleController constructor.
      */
     public function __construct()
