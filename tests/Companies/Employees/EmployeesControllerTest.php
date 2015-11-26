@@ -171,8 +171,17 @@ class EmployeesControllerTest extends TestCase
         unset($data2['password_confirmation']);
         $response->seeJson($data2);
 
-        //duplicate employee
+        //same employee update
+        //correct request
         $response = $this->actingAs($company)->json('PUT', '/companies/employees/'.$employee->id,$data);
+        $response->assertResponseOk();
+        $data2 = $data;
+        unset($data2['password']);
+        unset($data2['password_confirmation']);
+        $response->seeJson($data2);
+
+        //duplicate employee email
+        $response = $this->actingAs($company)->json('PUT', '/companies/employees/'.($employee->id+1),$data);
         $response->seeStatusCode(422);
 
         //a no my employee
