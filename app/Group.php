@@ -40,6 +40,22 @@ class Group extends Model
     protected $fillable = ['name', 'description', 'planner_id'];
 
     /**
+     * @var array
+     */
+//    protected $hidden = ['planner'];
+
+    /**
+     * @var array
+     */
+    protected $appends = ['planner_name'];
+
+    public function getPlannerNameAttribute()
+    {
+        if(is_object($this->planner) && $this->planner->exists)
+            return $this->planner->name;
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function employees()

@@ -52,6 +52,11 @@ class GroupControllerTest extends TestCase
 
         $response->assertResponseOk();
         $response->seeJsonEquals($group->toArray());
+
+        //test planner name
+        $json = $response->response->content();
+        $json = json_decode($json, true);
+        $this->assertEquals($group->planner->name, $json['planner_name']);
     }
 
     public function testTryToShowOtherCompaniesGroup()
