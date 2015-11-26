@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePivotEmployeeGroups extends Migration
+class CreatePivotEmployeeGroup extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreatePivotEmployeeGroups extends Migration
      */
     public function up()
     {
-        Schema::create('employee_groups', function (Blueprint $table) {
+        Schema::create('employee_group', function (Blueprint $table) {
             $table->integer('employee_id')->unsigned();
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('group_id')->unsigned();
@@ -28,6 +28,6 @@ class CreatePivotEmployeeGroups extends Migration
      */
     public function down()
     {
-        Schema::drop('employee_groups');
+        Schema::drop('employee_group');
     }
 }

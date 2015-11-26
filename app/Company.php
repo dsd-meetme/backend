@@ -66,7 +66,12 @@ class Company extends Model implements AuthenticatableContract,
      */
     public function employees()
     {
-        return $this->hasMany('plunner\Employee');
+        return $this->hasMany(Employee::class);
+    }
+
+    public function groups()
+    {
+        return $this->hasMany(Group::class);
     }
 
     /**

@@ -37,13 +37,23 @@ class Group extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'description'];
+    protected $fillable = ['name', 'description', 'planner_id'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function employees()
     {
-        return $this->belongsToMany('plunner\Employee', 'employee_groups');
+        return $this->belongsToMany(Employee::class);
+    }
+
+    public function planner()
+    {
+        return $this->belongsTo(Planner::class);
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 }

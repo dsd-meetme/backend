@@ -46,7 +46,7 @@ class Employee extends Model implements AuthenticatableContract,
      *
      * @var string
      */
-    //protected $table = 'employees';
+     //protected $table = 'employees';
 
     /**
      * The attributes that are mass assignable.
@@ -75,7 +75,7 @@ class Employee extends Model implements AuthenticatableContract,
      */
     public function groups()
     {
-        return $this->belongsToMany('plunner\Group', 'employee_groups');
+        return $this->belongsToMany('plunner\Group', 'employee_groups', 'employee_id'); //needed for planner model
     }
 
     /**
