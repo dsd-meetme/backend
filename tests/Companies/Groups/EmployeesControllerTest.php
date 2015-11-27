@@ -139,8 +139,7 @@ class EmployeesControllerTest extends \TestCase
         foreach ($employees as $employee) {
             $ids[] = $employee->id;
         }
-        $employee = \plunner\Employee::whereNotIn('id', $ids)->where('company_id', '=', $company->id)->firstOrFail();
-        print_r($employee->belongsToGroup($group));
+        $employee = $company->employees()->create(['name'=>'ttt', 'email'=>'testm@test.com', 'password' => bcrypt('ttt')]);
         $response = $this->actingAs($company)->json('DELETE', '/companies/groups/'.$group->id.'/employees/' . $employee->id);
         $response->seeStatusCode(404);
     }
