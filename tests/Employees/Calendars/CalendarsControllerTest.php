@@ -42,6 +42,7 @@ class CalendarsControllerTest extends TestCase
         $employee = \plunner\Employee::findOrFail(1);
         $data = [
             'name' => 'test',
+            'enabled' => '1',
         ];
 
         //correct request
