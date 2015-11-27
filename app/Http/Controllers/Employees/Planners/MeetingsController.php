@@ -14,17 +14,12 @@ use plunner\Meeting;
 class MeetingsController extends Controller
 {
     /**
-     * @var plunner/Employee
-     */
-    private $user;
-
-    /**
      * ExampleController constructor.
      */
     public function __construct()
     {
-        config(['auth.model' => \plunner\Employee::class]);
-        config(['jwt.user' => \plunner\Employee::class]);
+        config(['auth.model' => \plunner\Planner::class]);
+        config(['jwt.user' => \plunner\Planner::class]);
         $this->middleware('jwt.authandrefresh:mode-en');
     }
 
