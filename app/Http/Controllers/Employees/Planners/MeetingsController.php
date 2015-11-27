@@ -8,7 +8,11 @@ use plunner\Http\Requests;
 use plunner\Http\Controllers\Controller;
 use plunner\Company;
 use plunner\Employee;
-use plunner\Http\Requests\Companies\EmployeeRequest;
+use plunner\Http\Requests\Companies\Groups\EmployeeRequest;
+
+//use plunner\Http\Requests\Employees\MeetingRequest;
+//TODO above gives undefined namespace on Employees even though the path is correct
+
 use plunner\Meeting;
 
 class MeetingsController extends Controller
@@ -38,18 +42,18 @@ class MeetingsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Requests\MeetingRequest $request
+     * @param MeetingRequest $request
      * @param $groupId
      * @return static
      */
-    public function store(Requests\MeetingRequest $request, $groupId)
+    public function store(MeetingRequest $request, $groupId)
     {
         $employee = \Auth::user();
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
 
         /**
-         * Check if the employee is the planner for the group. If he is, create the meeting. If not, redirect back.
+         * Check if the employee is the planner for the group.
          */
         if ($employee->id == $group->planner_id)
         {
@@ -57,8 +61,7 @@ class MeetingsController extends Controller
             $meeting = Meeting::create($input);
             return $meeting;
         }
-        Redirect::back()->with('message', 'error|You do not have sufficient permission for this action.');
-        //TODO why? we are using restfulAPI, we don't have redirect and obviously we don't have back
+        return Response::json(['error' => 'groupId'],404);
     }
 
     /**
@@ -77,12 +80,12 @@ class MeetingsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Requests\MeetingRequest $request
+     * @param MeetingRequest $request
      * @param $meetingId
      * @param $groupId
      * @return mixed
      */
-    public function update(Requests\MeetingRequest $request, $meetingId, $groupId)
+    public function update(MeetingRequest $request, $meetingId, $groupId)
     {
         $employee = \Auth::user();
         $meeting = Meeting::findOrFail($meetingId);
@@ -91,7 +94,7 @@ class MeetingsController extends Controller
         $this->authorize($group);
 
         /**
-         * Check if the employee is the planner for the group. If he is, update the meeting. If not, redirect back.
+         * Check if the employee is the planner for the group.
          */
         if ($employee->id == $group->planner_id)
         {
@@ -99,8 +102,7 @@ class MeetingsController extends Controller
             $meeting->update($input);
             return $meeting;
         }
-        Redirect::back()->with('message', 'error|You do not have sufficient permission for this action.');
-        //TODO why? we are using restfulAPI, we don't have redirect and obviously we don't have back
+        return Response::json(['error' => 'meetingId'],404);
     }
 
     /**
@@ -119,14 +121,13 @@ class MeetingsController extends Controller
         $this->authorize($group);
 
         /**
-         * Check if the employee is the planner for the group. If he is, delete the meeting. If not, redirect back.
+         * Check if the employee is the planner for the group.
          */
         if ($employee->id == $group->planner_id)
         {
             $meeting->delete();
             return $employee;
         }
-        Redirect::back()->with('message', 'error|You do not have sufficient permission for this action.');
-        //TODO why? we are using restfulAPI, we don't have redirect and obviously we don't have back
+        return Response::json(['error' => 'meetingId'],404);
     }
 }
