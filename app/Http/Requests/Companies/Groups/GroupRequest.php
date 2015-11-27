@@ -32,7 +32,7 @@ class GroupRequest extends Request
     {
         return [
             'name' => 'required|max:255|unique:groups,name,'.$this->route('groups').',id,company_id,'.$this->user()->id,
-            'description' => 'required|max:255',
+            'description' => 'max:255',
             'planner_id' => 'required|exists:employees,id,company_id,'.$this->user()->id,
         ];
     }
