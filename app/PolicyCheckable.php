@@ -19,7 +19,13 @@
 
 namespace plunner;
 
-
+/**
+ * Interface PolicyCheckable
+ * @package plunner
+ * @author Claudio Cardinale <cardi@thecsea.it>
+ * @copyright 2015 Claudio Cardinale
+ * @version 1.0.0
+ */
 interface PolicyCheckable
 {
     public function verifyGroup(Group $group);

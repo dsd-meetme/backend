@@ -1,11 +1,13 @@
 <?php
 
+namespace Companies\Employees;
+
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tymon\JWTAuth\Support\testing\ActingAs;
 
-class GroupControllerTest extends TestCase
+class GroupControllerTest extends \TestCase
 {
     use DatabaseTransactions, ActingAs;
 
@@ -52,6 +54,11 @@ class GroupControllerTest extends TestCase
 
         $response->assertResponseOk();
         $response->seeJsonEquals($group->toArray());
+
+        //test planner name
+        $json = $response->response->content();
+        $json = json_decode($json, true);
+        $this->assertEquals($group->planner->name, $json['planner_name']);
     }
 
     public function testTryToShowOtherCompaniesGroup()
@@ -100,7 +107,7 @@ class GroupControllerTest extends TestCase
 
     public function testErrorCreateGroup()
     {
-        $planner_id = plunner\Employee::where('company_id', '<>', $this->company->id)->firstOrFail()->id;
+        $planner_id = \plunner\Employee::where('company_id', '<>', $this->company->id)->firstOrFail()->id;
         $data_response = $this->data;
         $data_response['planner_id'] =  $planner_id;
 
@@ -124,7 +131,7 @@ class GroupControllerTest extends TestCase
 
     public function testDeleteNotMine()
     {
-        $group_id = plunner\Group::where('company_id', '<>', $this->company->id)->firstOrFail()->id;
+        $group_id = \plunner\Group::where('company_id', '<>', $this->company->id)->firstOrFail()->id;
         $response = $this->actingAs($this->company)->json('DELETE', '/companies/groups/' . $group_id);
         $response->seeStatusCode(403);
     }
@@ -150,7 +157,7 @@ class GroupControllerTest extends TestCase
         $response->seeStatusCode(422);
 
         //a no my group
-        $group2 = \plunner\Employee::where('company_id', '<>', $this->company->id)->firstOrFail();
+        $group2 = \plunner\Group::where('company_id', '<>', $this->company->id)->firstOrFail();
         $data2 = $this->data;
         $data2['name'] = 'Testers2'; //this since we are acting as original company -> see how requests work
         $response = $this->actingAs($this->company)->json('PUT', '/companies/groups/'.$group2->id,$data2);
