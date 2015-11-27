@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property-read \plunner\Employee $employees
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Timeslot[] $timeslots
+ * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Timeslot[] $timeslots
  * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereName($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereEmployeeId($value)

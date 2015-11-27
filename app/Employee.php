@@ -123,13 +123,17 @@ class Employee extends Model implements AuthenticatableContract,
         return false;
     }
 
+    /*
+     * for a normal employee the policyCheckable methods say if the employee can se or not the element
+     */
+
     /**
      * @param Group $group
      * @return bool
      */
     public function verifyGroup(Group $group)
     {
-        return false; //$this->belongsToGroup($group);
+        return $this->belongsToGroup($group);
     }
 
     /**
@@ -138,7 +142,7 @@ class Employee extends Model implements AuthenticatableContract,
      */
     public function verifyEmployee(Employee $employee)
     {
-        return false; //$employee->id === $this->id;
+        return $employee->company_id === $this->company_id;
     }
 
     /**
@@ -147,6 +151,6 @@ class Employee extends Model implements AuthenticatableContract,
      */
     public function verifyCompany(Company $company)
     {
-        return false; //$company->id === $this->company_id;
+        return $company->id === $this->company_id;
     }
 }
