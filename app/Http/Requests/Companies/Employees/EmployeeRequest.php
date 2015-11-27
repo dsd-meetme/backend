@@ -5,6 +5,13 @@ namespace plunner\Http\Requests\Companies\Employees;
 use plunner\Company;
 use plunner\Http\Requests\Request;
 
+/**
+ * Class EmployeeRequest
+ * @package plunner\Http\Requests\Companies\Employees
+ * @author Claudio Cardinale <cardi@thecsea.it>
+ * @copyright 2015 Claudio Cardinale
+ * @version 1.0.0
+ */
 class EmployeeRequest extends Request
 {
     /**

@@ -5,10 +5,24 @@ namespace plunner;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * plunner\Calendar
+ * Class Calendar
  *
+ * @package plunner
+ * @author Claudio Cardinale <cardi@thecsea.it>
+ * @copyright 2015 Claudio Cardinale
+ * @version 1.0.0
+ * @property integer $id
+ * @property string $name
+ * @property integer $employee_id
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
  * @property-read \plunner\Employee $employees
- * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Timeslot[] $timeslots
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Timeslot[] $timeslots
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereEmployeeId($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereUpdatedAt($value)
  */
 class Calendar extends Model
 {

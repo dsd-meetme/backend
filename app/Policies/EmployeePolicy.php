@@ -5,6 +5,13 @@ namespace plunner\Policies;
 use plunner\Employee;
 use plunner\PolicyCheckable;
 
+/**
+ * Class EmployeePolicy
+ * @package plunner\Policies
+ * @author Claudio Cardinale <cardi@thecsea.it>
+ * @copyright 2015 Claudio Cardinale
+ * @version 1.0.0
+ */
 class EmployeePolicy
 {
     /**

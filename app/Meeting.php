@@ -5,9 +5,11 @@ namespace plunner;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * plunner\Meeting
- *
- * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Employee[] $employees
+ * Class Meeting
+ * @package plunner
+ * @author Claudio Cardinale <cardi@thecsea.it>
+ * @copyright 2015 Claudio Cardinale
+ * @version 1.0.0
  */
 class Meeting extends Model
 {

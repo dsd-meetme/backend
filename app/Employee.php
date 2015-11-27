@@ -11,28 +11,11 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 
 /**
- * plunner\Employee
- *
- * @property integer $id
- * @property string $name
- * @property string $email
- * @property string $password
- * @property integer $company_id
- * @property string $remember_token
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @property-read \plunner\Company $company
- * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Group[] $groups
- * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereEmail($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Employee wherePassword($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereCompanyId($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereRememberToken($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Meeting[] $meetings
- * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Calendar[] $calendars
+ * Class Employee
+ * @package plunner
+ * @author Claudio Cardinale <cardi@thecsea.it>
+ * @copyright 2015 Claudio Cardinale
+ * @version 1.0.0
  */
 class Employee extends Model implements AuthenticatableContract,
                                         AuthorizableContract,

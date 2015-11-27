@@ -5,23 +5,11 @@ namespace plunner;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * plunner\Group
- *
- * @property integer $id
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @property string $name
- * @property string $description
- * @property integer $planner_id
- * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Employee[] $employees
- * @method static \Illuminate\Database\Query\Builder|\plunner\Group whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Group whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Group whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Group whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Group whereDescription($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Group wherePlannerId($value)
- * @property integer $company_id
- * @method static \Illuminate\Database\Query\Builder|\plunner\Group whereCompanyId($value)
+ * Class Group
+ * @package plunner
+ * @author Claudio Cardinale <cardi@thecsea.it>
+ * @copyright 2015 Claudio Cardinale
+ * @version 1.0.0
  */
 class Group extends Model
 {

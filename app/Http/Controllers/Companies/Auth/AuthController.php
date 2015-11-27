@@ -8,6 +8,13 @@ use plunner\Http\Controllers\Controller;
 use Tymon\JWTAuth\Support\auth\AuthenticatesAndRegistersUsers;
 use Tymon\JWTAuth\Support\auth\ThrottlesLogins;
 
+/**
+ * Class AuthController
+ * @package plunner\Http\Controllers\Companies\Auth
+ * @author Claudio Cardinale <cardi@thecsea.it>
+ * @copyright 2015 Claudio Cardinale
+ * @version 1.0.0
+ */
 class AuthController extends Controller
 {
     /*

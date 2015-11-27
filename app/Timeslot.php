@@ -5,9 +5,11 @@ namespace plunner;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * plunner\Timeslot
- *
- * @property-read \plunner\Calendar $employees
+ * Class Timeslot
+ * @package plunner
+ * @author Claudio Cardinale <cardi@thecsea.it>
+ * @copyright 2015 Claudio Cardinale
+ * @version 1.0.0
  */
 class Timeslot extends Model
 {

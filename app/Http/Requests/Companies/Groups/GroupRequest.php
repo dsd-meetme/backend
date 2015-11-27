@@ -4,6 +4,13 @@ namespace plunner\Http\Requests\Companies\Groups;
 
 use plunner\Http\Requests\Request;
 
+/**
+ * Class GroupRequest
+ * @package plunner\Http\Requests\Companies\Groups
+ * @author Claudio Cardinale <cardi@thecsea.it>
+ * @copyright 2015 Claudio Cardinale
+ * @version 1.0.0
+ */
 class GroupRequest extends Request
 {
     /**

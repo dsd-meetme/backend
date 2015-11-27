@@ -8,7 +8,13 @@ use plunner\Employee;
 use plunner\Http\Controllers\Controller;
 use plunner\Http\Requests\Companies\Groups\EmployeeRequest;
 
-
+/**
+ * Class EmployeesController
+ * @package plunner\Http\Controllers\Companies\Groups
+ * @author Claudio Cardinale <cardi@thecsea.it>
+ * @copyright 2015 Claudio Cardinale
+ * @version 1.0.0
+ */
 class EmployeesController extends Controller
 {
     /**
