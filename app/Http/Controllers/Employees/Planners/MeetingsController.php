@@ -62,8 +62,7 @@ class MeetingsController extends Controller
             $meeting = Meeting::create($input);
             return $meeting;
         }
-        Redirect::back()->with('message', 'error|You do not have sufficient permission for this action.');
-        //TODO why? we are using restfulAPI, we don't have redirect and obviously we don't have back
+        return null;
     }
 
     /**
@@ -104,8 +103,7 @@ class MeetingsController extends Controller
             $meeting->update($input);
             return $meeting;
         }
-        Redirect::back()->with('message', 'error|You do not have sufficient permission for this action.');
-        //TODO why? we are using restfulAPI, we don't have redirect and obviously we don't have back
+        return null;
     }
 
     /**
@@ -131,7 +129,6 @@ class MeetingsController extends Controller
             $meeting->delete();
             return $employee;
         }
-        Redirect::back()->with('message', 'error|You do not have sufficient permission for this action.');
-        //TODO why? we are using restfulAPI, we don't have redirect and obviously we don't have back
+        return null;
     }
 }
