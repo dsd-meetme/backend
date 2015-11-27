@@ -2,21 +2,21 @@
 
 namespace plunner\Http\Controllers\Companies\Groups;
 
-use Illuminate\Http\Request;
-use plunner\Company;
-use plunner\Employee;
+use Illuminate\Support\Facades\Response;
 use plunner\Group;
+use plunner\Employee;
 use plunner\Http\Controllers\Controller;
-use plunner\Http\Requests\Companies\EmployeeRequest;
+use plunner\Http\Requests\Companies\Groups\EmployeeRequest;
 
-
+/**
+ * Class EmployeesController
+ * @package plunner\Http\Controllers\Companies\Groups
+ * @author Claudio Cardinale <cardi@thecsea.it>
+ * @copyright 2015 Claudio Cardinale
+ * @version 1.0.0
+ */
 class EmployeesController extends Controller
 {
-    /**
-     * @var \plunner\Company
-     */
-    private $user;
-
     /**
      * ExampleController constructor.
      */
@@ -31,24 +31,12 @@ class EmployeesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param $groupId
-     * @return mixed
+     * @param  int  $groupId
+     * @return \Illuminate\Http\Response
      */
     public function index($groupId)
     {
-        $group = Group::findOrFail($groupId);
-        $this->authorize($group);
-        return $group->employees;
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param $groupId
-     * @return mixed
-     */
-    public function edit($groupId)
-    {
+        //
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
         return $group->employees;
@@ -57,38 +45,18 @@ class EmployeesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param EmployeeRequest $request
-     * @param $groupId
-     * @return mixed
+     * @param  EmployeeRequest  $request
+     * @param  int  $groupId
+     * @return \Illuminate\Http\Response
      */
     public function store(EmployeeRequest $request, $groupId)
     {
+        //
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
-
-        $input = $request->all();
-        $employee = $group->employees->create($input);
-        return $employee;
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param EmployeeRequest $request
-     * @param $groupId
-     * @param $employeeId
-     * @return mixed
-     */
-    public function update(EmployeeRequest $request, $groupId, $employeeId)
-    {
-        $group = Group::findOrFail($groupId);
-        $this->authorize($group);
-        $employee = Employee::findOrFail($employeeId);
-        $this->authorize($employee);
-
-        $input = $request->all();
-        $group->$employee->update($input);
-        return $group;
+        $id = $request->all()['id'];
+        $group->employees()->attach($id);
+        return $group->employees;
     }
 
     /**
@@ -100,12 +68,13 @@ class EmployeesController extends Controller
      */
     public function destroy($groupId, $employeeId)
     {
-        $group = Group::findOrFail($groupId);
-        $this->authorize($group);
+        //
         $employee = Employee::findOrFail($employeeId);
         $this->authorize($employee);
-
-        $group->$employee->delete();
-        return $group;
+        $group = Group::findOrFail($groupId);
+        if(!$employee->belongsToGroup($group))
+            return Response::json(['error' => 'employId <> groupId'],404);
+        $employee->groups()->detach($groupId);
+        return $group->employees;
     }
 }

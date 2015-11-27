@@ -11,6 +11,13 @@ use Tymon\JWTAuth\Support\auth\AuthenticatesAndRegistersUsers;
 use Tymon\JWTAuth\Support\auth\ThrottlesLogins;
 use Log;
 
+/**
+ * Class AuthController
+ * @package plunner\Http\Controllers\Employees\Auth
+ * @author Claudio Cardinale <cardi@thecsea.it>
+ * @copyright 2015 Claudio Cardinale
+ * @version 1.0.0
+ */
 class AuthController extends Controller
 {
     /*

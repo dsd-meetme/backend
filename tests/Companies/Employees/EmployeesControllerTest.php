@@ -1,11 +1,12 @@
 <?php
 
+namespace Companies\Employees;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Support\testing\ActingAs;
 
-class EmployeesControllerTest extends TestCase
+class EmployeesControllerTest extends \TestCase
 {
     use DatabaseTransactions, ActingAs;
 
@@ -146,7 +147,7 @@ class EmployeesControllerTest extends TestCase
     public function testDeleteNotMine()
     {
         $company = \plunner\Company::findOrFail(1);
-        $employee = plunner\Employee::where('company_id', '<>', $company->id)->firstOrFail();
+        $employee = \plunner\Employee::where('company_id', '<>', $company->id)->firstOrFail();
         $id = $employee->id;
         $response = $this->actingAs($company)->json('DELETE', '/companies/employees/' . $id);
         $response->seeStatusCode(403);
@@ -171,8 +172,17 @@ class EmployeesControllerTest extends TestCase
         unset($data2['password_confirmation']);
         $response->seeJson($data2);
 
-        //duplicate employee
+        //same employee update
+        //correct request
         $response = $this->actingAs($company)->json('PUT', '/companies/employees/'.$employee->id,$data);
+        $response->assertResponseOk();
+        $data2 = $data;
+        unset($data2['password']);
+        unset($data2['password_confirmation']);
+        $response->seeJson($data2);
+
+        //duplicate employee email
+        $response = $this->actingAs($company)->json('PUT', '/companies/employees/'.($employee->id+1),$data);
         $response->seeStatusCode(422);
 
         //a no my employee

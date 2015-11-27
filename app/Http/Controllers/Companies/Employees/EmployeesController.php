@@ -2,20 +2,20 @@
 
 namespace plunner\Http\Controllers\Companies\Employees;
 
-use Illuminate\Http\Request;
 use plunner\Company;
 use plunner\Employee;
 use plunner\Http\Controllers\Controller;
-use plunner\Http\Requests\Companies\EmployeeRequest;
+use plunner\Http\Requests\Companies\Employees\EmployeeRequest;
 
-
+/**
+ * Class EmployeesController
+ * @package plunner\Http\Controllers\Companies\Employees
+ * @author Claudio Cardinale <cardi@thecsea.it>
+ * @copyright 2015 Claudio Cardinale
+ * @version 1.0.0
+ */
 class EmployeesController extends Controller
 {
-    /**
-     * @var \plunner\Company
-     */
-    private $user;
-
     /**
      * ExampleController constructor.
      */
