@@ -8,7 +8,11 @@ use plunner\Http\Requests;
 use plunner\Http\Controllers\Controller;
 use plunner\Company;
 use plunner\Employee;
-use plunner\Http\Requests\Companies\EmployeeRequest;
+use plunner\Http\Requests\Companies\Groups\EmployeeRequest;
+
+//use plunner\Http\Requests\Employees\MeetingRequest;
+//TODO above gives undefined namespace on Employees even though the path is correct
+
 use plunner\Meeting;
 
 class MeetingsController extends Controller
@@ -43,11 +47,11 @@ class MeetingsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Requests\MeetingRequest $request
+     * @param MeetingRequest $request
      * @param $groupId
      * @return static
      */
-    public function store(Requests\MeetingRequest $request, $groupId)
+    public function store(MeetingRequest $request, $groupId)
     {
         $employee = \Auth::user();
         $group = Group::findOrFail($groupId);
@@ -81,12 +85,12 @@ class MeetingsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Requests\MeetingRequest $request
+     * @param MeetingRequest $request
      * @param $meetingId
      * @param $groupId
      * @return mixed
      */
-    public function update(Requests\MeetingRequest $request, $meetingId, $groupId)
+    public function update(MeetingRequest $request, $meetingId, $groupId)
     {
         $employee = \Auth::user();
         $meeting = Meeting::findOrFail($meetingId);
