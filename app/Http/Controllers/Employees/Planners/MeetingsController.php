@@ -54,7 +54,7 @@ class MeetingsController extends Controller
         $this->authorize($group);
 
         /**
-         * Check if the employee is the planner for the group. If he is, create the meeting. If not, redirect back.
+         * Check if the employee is the planner for the group.
          */
         if ($employee->id == $group->planner_id)
         {
@@ -62,7 +62,7 @@ class MeetingsController extends Controller
             $meeting = Meeting::create($input);
             return $meeting;
         }
-        return null;
+        return Response::json(['error' => 'groupId'],404);
     }
 
     /**
@@ -95,7 +95,7 @@ class MeetingsController extends Controller
         $this->authorize($group);
 
         /**
-         * Check if the employee is the planner for the group. If he is, update the meeting. If not, redirect back.
+         * Check if the employee is the planner for the group.
          */
         if ($employee->id == $group->planner_id)
         {
@@ -103,7 +103,7 @@ class MeetingsController extends Controller
             $meeting->update($input);
             return $meeting;
         }
-        return null;
+        return Response::json(['error' => 'meetingId'],404);
     }
 
     /**
@@ -122,13 +122,13 @@ class MeetingsController extends Controller
         $this->authorize($group);
 
         /**
-         * Check if the employee is the planner for the group. If he is, delete the meeting. If not, redirect back.
+         * Check if the employee is the planner for the group.
          */
         if ($employee->id == $group->planner_id)
         {
             $meeting->delete();
             return $employee;
         }
-        return null;
+        return Response::json(['error' => 'meetingId'],404);
     }
 }
