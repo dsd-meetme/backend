@@ -1,1 +1,1 @@
-Click here to reset your password: {{ 'http://admin.plunner.com/userpwdreset/'.$token }}
+Click here to reset your password: {{ 'http://admin.plunner.com/#/userpwdreset/'.$token }}
