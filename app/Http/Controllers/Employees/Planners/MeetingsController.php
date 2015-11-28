@@ -5,6 +5,7 @@ namespace plunner\Http\Controllers;
 use Illuminate\Http\Request;
 
 use plunner\Http\Requests;
+use Carbon\Carbon;
 use plunner\Http\Controllers\Controller;
 use plunner\Company;
 use plunner\Employee;
@@ -30,12 +31,42 @@ class MeetingsController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param $view_month
      * @return mixed
      */
-    public function index()
+    public function index($view_month)
     {
         $employee = \Auth::user();
-        return $employee->meetings;
+        $all_meetings = $employee->meetings;
+
+        /**
+         * Check for repeating meetings and add them to the collection of meetings.
+         */
+        foreach ($all_meetings as $meeting) {
+            if ($meeting->repeat > 0) {
+                $repeat_interval = $meeting->repeat;
+
+                // Determine how much meetings happen in a month based on the month that is currently in view
+                $date_start = DateTime::createFromFormat("Y-m-d h:m:s", $meeting->meeting_start);
+                if ($date_start.date("m") == $view_month) {
+                    $date_start->format("d");
+                    $events_remaining = intval($date_start / $repeat_interval);
+                }
+                else {
+                    $events_remaining = intval($view_month->daysInMonth / $repeat_interval);
+                }
+
+                // Create new meetings, add the repeat interval and add them to the collection of meetings
+                for ($i=1; $i<=$events_remaining; $i++) {
+                    $new_meeting = $meeting->replicate();
+                    $new_meeting->start_time = $meeting->start_date->addDays($repeat_interval);
+                    $new_meeting->end_time = $meeting->end_date->addDays($repeat_interval);
+                    $all_meetings += $new_meeting;
+                }
+            }
+        }
+
+        return $all_meetings;
     }
 
 
