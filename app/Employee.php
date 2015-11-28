@@ -110,7 +110,8 @@ class Employee extends Model implements AuthenticatableContract,
     {
         list(, $caller) = debug_backtrace(false);
         $caller = explode('\\', $caller['class']);
-        //check if tis function is called be email sender
+
+        //check if this function is called by email sender
         if ($caller[count($caller) - 1] == 'PasswordBroker')
             return $this->email;
         //return unique identify for token repository
