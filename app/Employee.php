@@ -109,10 +109,13 @@ class Employee extends Model implements AuthenticatableContract,
     public function getEmailForPasswordReset()
     {
         list(, $caller) = debug_backtrace(false);
-        $caller = explode('\\', $caller['class']);
+        if(isset($caller['class']))
+            $caller = explode('\\', $caller['class']);
+        else
+            $caller = '';
 
         //check if this function is called by email sender
-        if ($caller[count($caller) - 1] == 'PasswordBroker')
+        if (count($caller) && $caller[count($caller) - 1] == 'PasswordBroker')
             return $this->email;
         //return unique identify for token repository
         return $this->email . $this->company->id;
