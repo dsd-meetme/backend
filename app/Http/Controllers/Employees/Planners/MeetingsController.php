@@ -59,8 +59,8 @@ class MeetingsController extends Controller
                 // Create new meetings, add the repeat interval and add them to the collection of meetings
                 for ($i=1; $i<=$events_remaining; $i++) {
                     $new_meeting = $meeting->replicate();
-                    $new_meeting->start_time = $meeting->start_date->addDays($repeat_interval);
-                    $new_meeting->end_time = $meeting->end_date->addDays($repeat_interval);
+                    $new_meeting->start_time = $meeting->start_date->addDays($repeat_interval*$i);
+                    $new_meeting->end_time = $meeting->end_date->addDays($repeat_interval*$i);
                     $all_meetings += $new_meeting;
                 }
             }
