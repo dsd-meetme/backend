@@ -53,6 +53,8 @@ class EmployeesController extends Controller
         //
         $company = \Auth::user();
         $input = $request->all();
+        if(isset($input['password']))
+            $input['password'] = bcrypt($input['password']);
         $employee = $company->employees()->create($input);
         return $employee;
     }
@@ -84,6 +86,8 @@ class EmployeesController extends Controller
         $employee = Employee::findOrFail($id);
         $this->authorize($employee);
         $input = $request->all();
+        if(isset($input['password']))
+            $input['password'] = bcrypt($input['password']);
         $employee->update($input);
         return $employee;
     }
