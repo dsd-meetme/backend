@@ -115,7 +115,7 @@ class Employee extends Model implements AuthenticatableContract,
             $caller = '';
 
         //check if this function is called by email sender
-        if (count($caller) && $caller[count($caller) - 1] == 'PasswordBroker')
+        if ((count($caller) && $caller[count($caller) - 1] == 'PasswordBroker') || (defined('HHVM_VERSION') && $caller == ''))
             return $this->email;
         //return unique identify for token repository
         return $this->email . $this->company->id;
