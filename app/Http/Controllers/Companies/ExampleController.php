@@ -22,7 +22,7 @@ class ExampleController extends Controller
     {
         config(['auth.model' => \plunner\Company::class]);
         config(['jwt.user' => \plunner\Company::class]);
-       // $this->middleware('jwt.authandrefresh:mode-cn');
+        $this->middleware('jwt.authandrefresh:mode-cn');
     }
 
 
@@ -34,12 +34,7 @@ class ExampleController extends Controller
     public function index()
     {
         //
-        \Mail::send('emails.password', ['token'=>'test'], function ($m)  {
-            $m->from('info@mg.plunner.com', 'info');
-
-            $m->to('cardi@thecsea.it', 'cardi')->subject('test');
-        });
-        //return JWTAuth::getUserModel();
+        return JWTAuth::getUserModel();
     }
 
     /**
