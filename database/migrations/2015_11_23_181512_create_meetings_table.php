@@ -18,6 +18,7 @@ class CreateMeetingsTable extends Migration
             $table->string('description');
             $table->dateTime('meeting_start');
             $table->dateTime('meeting_end');
+            $table->integer('repeat');
             $table->timestamps();
         });
     }
