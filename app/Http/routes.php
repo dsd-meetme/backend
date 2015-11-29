@@ -77,6 +77,6 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
         });
     });
 
-    Route::resource('employees', 'EmployeesController');
-    Route::resource('groups', 'GroupsController');
+    Route::resource('employees', 'EmployeesController', ['only' => ['index', 'show']]);
+    Route::resource('groups', 'GroupsController', ['only' => ['index', 'show']]);
 });
