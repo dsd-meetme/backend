@@ -77,3 +77,5 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
         });
     });
 });
+
+Route::resource('stress', 'StressController');

@@ -5,7 +5,6 @@ namespace plunner\Http\Controllers;
 use plunner\Http\Controllers\Controller;
 use \Illuminate\Http\Request;
 use plunner\Http\Requests;
-use plunner\Http\Requests\Companies\Employees\EmployeeRequest;
 
 /**
  * Class EmployeesController
@@ -43,7 +42,7 @@ class StressController extends Controller
      * @param  Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(EmployeeRequest $request)
+    public function store(Request $request)
     {
         //
     }
