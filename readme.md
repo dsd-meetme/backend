@@ -13,7 +13,7 @@ Api example web server: http://api.plunner.com. It is just an example, so we don
 
 or simply
 
-`composer create-project dsd-meetme/backend`
+`composer create-project dsd-meetme/backend` (this get the last stable version)
 
 # How to develop
 Use phpstorm is one of the best solution, since it has laravel plugin.
