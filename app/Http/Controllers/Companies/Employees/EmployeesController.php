@@ -39,7 +39,7 @@ class EmployeesController extends Controller
          * @var $company Company
          */
         $company = \Auth::user();
-        return $company->employees;
+        return $company->employees()->with('groups.planner')->get();
     }
 
     /**
@@ -68,7 +68,7 @@ class EmployeesController extends Controller
     public function show($id)
     {
         //
-        $employee = Employee::findOrFail($id);
+        $employee = Employee::with('groups.planner')->findOrFail($id);
         $this->authorize($employee);
         return $employee;
     }

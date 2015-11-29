@@ -79,7 +79,4 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
             Route::post('reset', ['as' => 'companies.auth.reset', 'uses'=>'PasswordController@postReset']);
         });
     });
-
-    Route::resource('employees', 'EmployeesController');
-    Route::resource('groups', 'GroupsController');
 });

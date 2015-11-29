@@ -38,7 +38,8 @@ class GroupsController extends Controller
          * @var $company Company
          */
         $company = \Auth::user();
-        return $company->groups;
+        $groups = $company->groups()->with('planner')->get();
+        return $groups;
     }
 
     /**
@@ -63,7 +64,7 @@ class GroupsController extends Controller
      */
     public function show($id)
     {
-        $group = Group::findOrFail($id);
+        $group = Group::with('planner')->findOrFail($id);
         $this->authorize($group);
         return $group;
     }
