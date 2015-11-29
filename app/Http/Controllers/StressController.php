@@ -33,7 +33,7 @@ class StressController extends Controller
     public function index()
     {
         //
-        return \plunner\Employee::with('company')->all();
+        return \plunner\Employee::with('company')->get();
     }
 
     /**
