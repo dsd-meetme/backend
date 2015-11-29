@@ -59,7 +59,7 @@ class PasswordController extends Controller
     {
         config(['auth.model' => \plunner\Employee::class]);
         config(['jwt.user' => \plunner\Employee::class]);
-        config(['auth.password.table' => 'password_resets_employees']);
+        config(['auth.password.table' => 'password_resets_employees', 'auth.password.email' => 'emails.employees.password']);
     }
 
     public function postEmail(Request $request)

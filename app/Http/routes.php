@@ -49,9 +49,6 @@ Route::group(['namespace' => 'Companies', 'prefix' => 'companies'], function() {
         Route::resource('groups', 'GroupsController', ['except' => ['create', 'edit']]);
         Route::resource('groups.employees', 'EmployeesController', ['only' => ['store', 'index', 'destroy']]);
     });
-
-    //example
-    Route::resource('example', 'ExampleController', ['except' => ['create', 'edit']]); //TODO remove
 });
 
 

@@ -26,7 +26,7 @@ class EmployeesControllerTest extends \TestCase
         $company = \plunner\Company::findOrFail(1);
         $response = $this->actingAs($company)->json('GET', '/companies/employees');
         $response->assertResponseOk();
-        $response->seeJsonEquals($company->employees->toArray());
+        $response->seeJsonEquals($company->employees()->with('groups.planner')->get()->toArray());
     }
 
     public function testErrorIndex()
@@ -41,7 +41,7 @@ class EmployeesControllerTest extends \TestCase
          * @var $company \plunner\Company
          */
         $company = \plunner\Company::findOrFail(1);
-        $employee = $company->employees->first();
+        $employee = $company->employees()->with('groups.planner')->first();
         $response = $this->actingAs($company)->json('GET', '/companies/employees/'.$employee->id);
         $response->assertResponseOk();
         $response->seeJsonEquals($employee->toArray());
@@ -123,7 +123,7 @@ class EmployeesControllerTest extends \TestCase
     public function testDelete()
     {
         $company = \plunner\Company::findOrFail(1);
-        $employee = $company->employees->first();
+        $employee = $company->employees()->with('groups.planner')->first();
         $id = $employee->id;
 
         //employee exists

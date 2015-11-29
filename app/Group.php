@@ -49,7 +49,7 @@ class Group extends Model
     /**
      * @var array
      */
-    protected $hidden = ['planner'];
+    protected $hidden = ['planner', 'pivot'];
 
     /**
      * @var array
@@ -60,6 +60,7 @@ class Group extends Model
     {
         if(is_object($this->planner) && $this->planner->exists)
             return $this->planner->name;
+        return null;
     }
 
     /**
