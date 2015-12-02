@@ -1,12 +1,14 @@
 <?php
 
+namespace Companies\Groups;
+
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Support\testing\ActingAs;
 
-class EmployeesControllerTest extends TestCase
+class GroupsControllerTest extends \TestCase
 {
     use DatabaseTransactions, ActingAs;
 
@@ -26,34 +28,34 @@ class EmployeesControllerTest extends TestCase
     public function testIndex()
     {
         $response = $this->actingAs($this->employee)
-            ->json('GET', '/companies/employees/'.$this->employee->id);
+            ->json('GET', '/companies/groups');
 
         $response->assertResponseOk();
-        $response->seeJsonEquals($this->employee->toArray());
+        $response->seeJsonEquals($this->company->groups->toArray());
     }
 
     public function testErrorIndex()
     {
-        $response = $this->json('GET', '/companies/employees/'.$this->employee->id);
+        $response = $this->json('GET', '/companies/groups');
         $response->seeStatusCode(401);
     }
 
     public function testShow()
     {
-        $test_employee = $this->company->employees()->with('groups')->get()->last();
+        $group_id = $this->company->groups->first()->id;
         $response = $this->actingAs($this->employee)
-            ->json('GET', '/companies/employees/'.$test_employee->id);
+            ->json('GET', '/companies/groups/'.$group_id);
 
         $response->assertResponseOk();
-        $response->seeJsonEquals($test_employee->toArray());
+        $response->seeJsonEquals($this->company->groups->first()->toArray());
     }
 
-    public function testShowEmployeeNotInSameCompany()
+    public function testShowGroupNotInSameCompany()
     {
-        $test_employee = \plunner\Employee::where('company_id', '<>', $this->company->id)->firstOrFail();
+        $test_company = \plunner\Company::where('id', '<>', $this->company->id)->firstOrFail();
+        $test_group = $test_company->groups->first();
         $response = $this->actingAs($this->employee)
-            ->json('GET', '/companies/employees/'.$test_employee->id);
+            ->json('GET', '/companies/groups/'.$test_group->id);
         $response->seeStatusCode(403);
     }
-
 }
