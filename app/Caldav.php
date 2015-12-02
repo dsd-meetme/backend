@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Caldav extends Model
 {
+    //TODO fillable and other fields
+
     /**
      * @var string
      */
