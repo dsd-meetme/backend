@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Support\testing\ActingAs;
 
-class Employees_EmployeesControllerTest extends TestCase
+class EmployeesControllerTest extends TestCase
 {
     use DatabaseTransactions, ActingAs;
 
@@ -19,7 +19,7 @@ class Employees_EmployeesControllerTest extends TestCase
         config(['jwt.user' => \plunner\Employee::class]);
 
         $this->company = \plunner\Company::findOrFail(1);
-        $this->employee = $this->company->employees->first();
+        $this->employee = $this->company->employees()->with('groups')->first();
     }
 
 
@@ -43,7 +43,7 @@ class Employees_EmployeesControllerTest extends TestCase
 
     public function testShow()
     {
-        $test_employee = $this->company->employees->last();
+        $test_employee = $this->company->employees()->with('groups')->get()->last();
         $response = $this->actingAs($this->employee)
             ->json('GET', '/companies/employees/'.$test_employee->id);
 
