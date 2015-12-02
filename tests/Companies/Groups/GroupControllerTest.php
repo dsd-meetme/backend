@@ -36,7 +36,7 @@ class GroupControllerTest extends \TestCase
         $response = $this->actingAs($this->company)->json('GET', '/companies/groups');
 
         $response->assertResponseOk();
-        $response->seeJsonEquals($this->company->groups->toArray());
+        $response->seeJsonEquals($this->company->groups()->with('planner')->get()->toArray());
     }
 
     public function testErrorIndexNoCompany()
@@ -48,7 +48,7 @@ class GroupControllerTest extends \TestCase
 
     public function testShowSpecificGroup()
     {
-        $group = $this->company->groups->first();
+        $group = $this->company->groups()->with('planner')->first();
 
         $response = $this->actingAs($this->company)->json('GET', '/companies/groups/' . $group->id);
 

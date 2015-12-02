@@ -43,6 +43,6 @@ class PasswordController extends Controller
     {
         config(['auth.model' => \plunner\Company::class]);
         config(['jwt.user' => \plunner\Company::class]);
-        config(['auth.password.table' => 'password_resets_companies']);
+        config(['auth.password.table' => 'password_resets_companies', 'auth.password.email' => 'emails.companies.password']);
     }
 }

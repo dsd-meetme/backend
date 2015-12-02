@@ -28,7 +28,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
  * @property-read \plunner\Company $company
  * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Group[] $groups
  * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Meeting[] $meetings
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Calendar[] $calendars
+ * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Calendar[] $calendars
  * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereName($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereEmail($value)
@@ -108,7 +108,17 @@ class Employee extends Model implements AuthenticatableContract,
      */
     public function getEmailForPasswordReset()
     {
-        return $this->email.$this->company->id;
+        list(, $caller) = debug_backtrace(false);
+        if(isset($caller['class']))
+            $caller = explode('\\', $caller['class']);
+        else
+            $caller = '';
+
+        //check if this function is called by email sender
+        if ((count($caller) && $caller[count($caller) - 1] == 'PasswordBroker') || (defined('HHVM_VERSION') && $caller == ''))
+            return $this->email;
+        //return unique identify for token repository
+        return $this->email . $this->company->id;
     }
 
     /**

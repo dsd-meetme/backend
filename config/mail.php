@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'from' => ['address' => 'info@plunner.com', 'name' => 'plunner info'],
+    'from' => ['address' => 'info@mg.plunner.com', 'name' => 'plunner info'],
 
     /*
     |--------------------------------------------------------------------------

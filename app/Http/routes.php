@@ -49,9 +49,6 @@ Route::group(['namespace' => 'Companies', 'prefix' => 'companies'], function() {
         Route::resource('groups', 'GroupsController', ['except' => ['create', 'edit']]);
         Route::resource('groups.employees', 'EmployeesController', ['only' => ['store', 'index', 'destroy']]);
     });
-
-    //example
-    Route::resource('example', 'ExampleController', ['except' => ['create', 'edit']]); //TODO remove
 });
 
 
@@ -79,7 +76,4 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
             Route::post('reset', ['as' => 'companies.auth.reset', 'uses'=>'PasswordController@postReset']);
         });
     });
-
-    Route::resource('employees', 'EmployeesController');
-    Route::resource('groups', 'GroupsController');
 });

@@ -39,7 +39,7 @@ class EmployeesController extends Controller
          * @var $company Company
          */
         $company = \Auth::user();
-        return $company->employees;
+        return $company->employees()->with('groups.planner')->get();
     }
 
     /**
@@ -53,6 +53,8 @@ class EmployeesController extends Controller
         //
         $company = \Auth::user();
         $input = $request->all();
+        if(isset($input['password']))
+            $input['password'] = bcrypt($input['password']);
         $employee = $company->employees()->create($input);
         return $employee;
     }
@@ -66,7 +68,7 @@ class EmployeesController extends Controller
     public function show($id)
     {
         //
-        $employee = Employee::findOrFail($id);
+        $employee = Employee::with('groups.planner')->findOrFail($id);
         $this->authorize($employee);
         return $employee;
     }
@@ -84,6 +86,8 @@ class EmployeesController extends Controller
         $employee = Employee::findOrFail($id);
         $this->authorize($employee);
         $input = $request->all();
+        if(isset($input['password']))
+            $input['password'] = bcrypt($input['password']);
         $employee->update($input);
         return $employee;
     }
