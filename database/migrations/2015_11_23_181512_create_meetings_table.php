@@ -16,13 +16,18 @@ class CreateMeetingsTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->string('description');
-            $table->dateTime('soonest_meeting_start_time');
-            $table->dateTime('latest_meeting_start_time');
+
+            /*
+            'start_time' and 'end_time' can mean different things depending on 'is_scheduled'
+            if the meeting is not yet scheduled, this are the earliest and latest meeting times
+            and if the meeting is scheduled this are the start and end of the meeting
+            */
+            $table->dateTime('start_time');
+            $table->dateTime('end_time');
+
             $table->integer('repeat');
             $table->dateTime('repetition_end_time')->nullable();
             $table->boolean('is_scheduled');
-            $table->dateTime('scheduled_start_time');
-            $table->dateTime('scheduled_end_time');
             $table->timestamps();
         });
     }

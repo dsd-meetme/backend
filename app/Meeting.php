@@ -34,8 +34,8 @@ class Meeting extends Model
      *
      * @var array
      */
-    protected $fillable = ['title', 'description', 'soonest_meeting_start_time',
-                    'latest_meeting_start_time', 'repeat', 'repetition_end_time'];
+    protected $fillable = ['title', 'description', 'start_time',
+                    'end_time', 'repeat', 'repetition_end_time'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
