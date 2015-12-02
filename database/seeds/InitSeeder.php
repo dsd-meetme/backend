@@ -40,6 +40,10 @@ class InitSeeder extends Seeder
 
         //create groups
         self::groups($company, $company->employees->toArray());
+
+        //add caldav
+        $calendar = $employee->calendars()->create(['name' => 'caldavTes', 'type' => 'caldav']);
+        $calendar->caldav()->create(['url'=>'https://webmail.thecsea.it/rpc.php', 'username'=>'caldav.test@plunner.com', 'password'=>env('CALDAV_TEST_PSW', '')]);
     }
 
     static private function company()

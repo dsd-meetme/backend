@@ -95,7 +95,7 @@ class Employee extends Model implements AuthenticatableContract,
      */
     public function calendars()
     {
-        return $this->hasMany('App\Calendar');
+        return $this->hasMany('plunner\Calendar');
     }
 
     /**

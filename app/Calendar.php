@@ -36,7 +36,7 @@ class Calendar extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function employees()
+    public function employee()
     {
         return $this->belongsTo('plunner\Employee');
     }
@@ -46,6 +46,16 @@ class Calendar extends Model
      */
     public function timeslots()
     {
-        return $this->hasMany('App\Timeslot');
+        return $this->hasMany('plunner\Timeslot');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne|null
+     */
+    public function Caldav()
+    {
+        if($this->type == 'caldav')
+            return $this->hasOne(Caldav::class);
+        return null;
     }
 }
