@@ -51,8 +51,10 @@ class SyncCaldav extends Command
     private function syncAll()
     {
         $function = 'makeSequentially';
-        if(class_exists('\Thread'))
+        if(class_exists('\Thread')) {
+            $this->info('Threaded');
             $function = 'makeThreaded';
+        }
 
         $calendars = Caldav::all();
         foreach($calendars as $calendar) {
@@ -127,13 +129,6 @@ class Sync
      */
     public function sync()
     {
-        //TODO ...
-        //TODO report erros to clients
-        //TODO fire events on sync
-        //TODO errors if return false
-        /*$events = $this->getEvents();
-        foreach($events as $event)
-            print_r($this->parseEvent($event));*/
         $this->syncToTimeSlots();
     }
 
@@ -154,8 +149,12 @@ class Sync
         return $caldavClient->getEvents(date('Ymd\THis\Z', time()-93600), date('Ymd\THis\Z', time()+2592000));
     }
 
+    /**
+     *
+     */
     private function syncToTimeSlots()
     {
+        //TODO log???
         try
         {
             $events = $this->getEvents();
