@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \plunner\Console\Commands\Inspire::class,
+        \plunner\Console\Commands\SyncCaldav::class,
     ];
 
     /**

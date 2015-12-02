@@ -6,7 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Caldav extends Model
 {
-    //
+    /**
+     * @var string
+     */
+    protected $primaryKey = 'calendar_id';
+
+    /**
+     * @var array
+     */
     protected $touches = ['calendar'];
 
     /**
