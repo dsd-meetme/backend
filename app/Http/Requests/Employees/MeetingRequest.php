@@ -26,9 +26,10 @@ class MeetingRequest extends Request
         return [
             'title' => 'required|max:255|unique:groups,name,NULL,id,company_id,',
             'description' => 'required|max:255',
-            'meeting_start' => 'required|date',
-            'meeting_end' => 'required|date|after:meeting_start',
+            'soonest_meeting_start_time' => 'required|date',
+            'latest_meeting_start_time' => 'required|date|after:meeting_start',
             'repeat' => 'required|integer',
+            'repetition_end_time' => 'date',
         ];
     }
 }
