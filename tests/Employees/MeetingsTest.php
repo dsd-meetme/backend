@@ -1,13 +1,16 @@
 <?php
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+namespace Employees;
 
-class MeetingsTest extends TestCase
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tymon\JWTAuth\Support\testing\ActingAs;
+use plunner;
+
+class MeetingsTest extends \TestCase
 {
     use DatabaseTransactions, ActingAs;
 
+    private $planner;
     private $group;
 
     public function setUp()
@@ -17,6 +20,8 @@ class MeetingsTest extends TestCase
         $company = $this->makeCompany();
         $employees = $this->makeEmployees($company);
         $this->group = $this->makeGroup($company, $employees);
+
+        $this->planner = $this->group->planner;
     }
 
     private function makeCompany()
@@ -46,14 +51,27 @@ class MeetingsTest extends TestCase
         $group->employees()->save($employees[0]);
         $group->employees()->save($employees[1]);
         $group->employees()->save($employees[2]);
+
+        return $group;
     }
 
-    public function testCreateNonRepeatingMeeting()
+    /*public function testCreateNonRepeatingMeeting()
     {
-        $this->assertTrue(true);
-    }
+        $data = [
+            'title' => 'Requirements meeting',
+            'description' => 'Discussing the requirements',
+            'start_time' => '20.12.2015',
+            'end_time' => '02.01.2016',
+            'repeat' => '0',
+            'repetition_end_time' => '02.01.2016',
+        ];
 
-    public function testCreateRepeatingMeeting()
+        $response = $this->actingAs($this->planner)->json('POST', '/employees/meetings', $data, $this->group->id);
+        $response->assertResponseOk();
+        $response->seeJson($data);
+    }*/
+
+    /*public function testCreateRepeatingMeeting()
     {
         $this->assertTrue(true);
     }
@@ -61,9 +79,9 @@ class MeetingsTest extends TestCase
     public function testShowNonRepeatingMeeting()
     {
         $this->assertTrue(true);
-    }
+    }*/
 
-    public function testShowRepeatingMeeting()
+    /*public function testShowRepeatingMeeting()
     {
         $this->assertTrue(true);
     }
@@ -86,7 +104,7 @@ class MeetingsTest extends TestCase
     public function testDeleteMeeting()
     {
         $this->assertTrue(true);
-    }
+    }*/
 
     public function testUpdateMeeting()
     {
