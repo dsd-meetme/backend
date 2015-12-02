@@ -32,7 +32,7 @@ $factory->define(plunner\Employee::class, function (Faker\Generator $faker) {
 
 $factory->define(plunner\Group::class, function (Faker\Generator $faker) {
     return [
-        'name' => $faker->name,
+        'name' => $faker->word . ' group',
         'description' => $faker->sentence . $faker->sentence,
     ];
 });
