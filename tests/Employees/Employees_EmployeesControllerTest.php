@@ -44,7 +44,7 @@ class Employees_EmployeesControllerTest extends TestCase
 
     public function testShow()
     {
-        $test_employee = $this->company->employees->where('id', '<>', $this->employee->id)->firstOrFail();
+        $test_employee = $this->company->employees->where('id', '<>', $this->employee->id)->first();
         $response = $this->actingAs($this->employee)
             ->json('GET', '/companies/'.$this->company->id.'employees/'.$test_employee->id);
 
