@@ -11,27 +11,30 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 
 /**
- * plunner\Company
+ * Class Company
  *
+ * @package plunner
+ * @author Claudio Cardinale <cardi@thecsea.it>
+ * @copyright 2015 Claudio Cardinale
+ * @version 1.0.0
  * @property integer $id
  * @property string $name
  * @property string $email
  * @property string $password
+ * @property boolean $verified
  * @property string $remember_token
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|Employee[] $employees
+ * @property-read \Illuminate\Database\Eloquent\Collection|Group[] $groups
  * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereName($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereEmail($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Company wherePassword($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereVerified($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereRememberToken($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereUpdatedAt($value)
- * @property string $deleted_at
- * @property boolean $verified
- * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereDeletedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereVerified($value)
- * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Employee[] $employees
  */
 class Company extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
@@ -66,7 +69,12 @@ class Company extends Model implements AuthenticatableContract,
      */
     public function employees()
     {
-        return $this->hasMany('plunner\Employee');
+        return $this->hasMany(Employee::class);
+    }
+
+    public function groups()
+    {
+        return $this->hasMany(Group::class);
     }
 
     /**

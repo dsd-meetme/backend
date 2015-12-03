@@ -47,12 +47,8 @@ Route::group(['namespace' => 'Companies', 'prefix' => 'companies'], function() {
 
     Route::group(['namespace' => 'Groups'], function() {
         Route::resource('groups', 'GroupsController', ['except' => ['create', 'edit']]);
-        Route::resource('groups.employees', 'EmployeesController', ['except' => ['create', 'edit']]);
-        Route::resource('groups.planners', 'PlannersController', ['except' => ['create', 'edit']]);
+        Route::resource('groups.employees', 'EmployeesController', ['only' => ['store', 'index', 'destroy']]);
     });
-
-    //example
-    Route::resource('example', 'ExampleController', ['except' => ['create', 'edit']]); //TODO remove
 });
 
 
@@ -85,6 +81,4 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
         Route::resource('calendars', 'CalendarsController', ['except' => ['create', 'edit']]);
     });
 
-    Route::resource('employees', 'EmployeesController');
-    Route::resource('groups', 'GroupsController');
 });

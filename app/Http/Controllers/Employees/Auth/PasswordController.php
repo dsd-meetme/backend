@@ -8,6 +8,13 @@ use Tymon\JWTAuth\Support\auth\ResetsPasswords;
 use \plunner\Company;
 use \plunner\Employee;
 
+/**
+ * Class PasswordController
+ * @package plunner\Http\Controllers\Employees\Auth
+ * @author Claudio Cardinale <cardi@thecsea.it>
+ * @copyright 2015 Claudio Cardinale
+ * @version 1.0.0
+ */
 class PasswordController extends Controller
 {
     /*
@@ -33,7 +40,15 @@ class PasswordController extends Controller
      */
     protected $custom = ['mode'=>'en'];
 
+    /**
+     * @var array
+     */
     protected $username = ['email', 'company_id'];
+
+    /**
+     * @var company
+     */
+    private $company = null;
 
     /**
      * Create a new password controller instance.
@@ -44,7 +59,7 @@ class PasswordController extends Controller
     {
         config(['auth.model' => \plunner\Employee::class]);
         config(['jwt.user' => \plunner\Employee::class]);
-        config(['auth.password.table' => 'password_resets_employees']);
+        config(['auth.password.table' => 'password_resets_employees', 'auth.password.email' => 'emails.employees.password']);
     }
 
     public function postEmail(Request $request)

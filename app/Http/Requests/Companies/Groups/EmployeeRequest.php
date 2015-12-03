@@ -1,10 +1,17 @@
 <?php
 
-namespace plunner\Http\Requests\Companies;
+namespace plunner\Http\Requests\Companies\Groups;
 
 use plunner\Company;
 use plunner\Http\Requests\Request;
 
+/**
+ * Class EmployeeRequest
+ * @package plunner\Http\Requests\Companies\Groups
+ * @author Claudio Cardinale <cardi@thecsea.it>
+ * @copyright 2015 Claudio Cardinale
+ * @version 1.0.0
+ */
 class EmployeeRequest extends Request
 {
     /**
@@ -25,9 +32,7 @@ class EmployeeRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:employees,email,NULL,id,company_id,'.$this->user()->id,
-            'password' => 'required|confirmed|min:6',
+            'id' => 'required|array|exists:employees,id,company_id,'.$this->user()->id,
         ];
     }
 }

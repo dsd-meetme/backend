@@ -5,9 +5,25 @@ namespace plunner;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * plunner\Timeslot
+ * Class Timeslot
  *
+ * @package plunner
+ * @author Claudio Cardinale <cardi@thecsea.it>
+ * @copyright 2015 Claudio Cardinale
+ * @version 1.0.0
+ * @property integer $id
+ * @property string $time_start
+ * @property string $time_end
+ * @property integer $calendar_id
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
  * @property-read \plunner\Calendar $employees
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Timeslot whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Timeslot whereTimeStart($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Timeslot whereTimeEnd($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Timeslot whereCalendarId($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Timeslot whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Timeslot whereUpdatedAt($value)
  */
 class Timeslot extends Model
 {

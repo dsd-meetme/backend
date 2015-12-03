@@ -41,6 +41,13 @@ $factory->define(plunner\Timeslot::class, function (Faker\Generator $faker) {
     $date = $faker->dateTimeThisYear;
     return [
         'time_start' => $date,
-        'time_end' => $date+100,
+        'time_end' => $date + 100,
+    ];
+});
+
+$factory->define(plunner\Group::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->name,
+        'description' => $faker->sentence . $faker->sentence,
     ];
 });

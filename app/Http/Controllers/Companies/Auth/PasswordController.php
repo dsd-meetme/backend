@@ -5,6 +5,13 @@ namespace plunner\Http\Controllers\Companies\Auth;
 use plunner\Http\Controllers\Controller;
 use Tymon\JWTAuth\Support\auth\ResetsPasswords;
 
+/**
+ * Class PasswordController
+ * @package plunner\Http\Controllers\Companies\Auth
+ * @author Claudio Cardinale <cardi@thecsea.it>
+ * @copyright 2015 Claudio Cardinale
+ * @version 1.0.0
+ */
 class PasswordController extends Controller
 {
     /*
@@ -36,6 +43,6 @@ class PasswordController extends Controller
     {
         config(['auth.model' => \plunner\Company::class]);
         config(['jwt.user' => \plunner\Company::class]);
-        config(['auth.password.table' => 'password_resets_companies']);
+        config(['auth.password.table' => 'password_resets_companies', 'auth.password.email' => 'emails.companies.password']);
     }
 }

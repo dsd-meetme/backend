@@ -1,11 +1,12 @@
 <?php
 
+namespace Companies\Employees;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Support\testing\ActingAs;
 
-class EmployeesControllerTest extends TestCase
+class EmployeesControllerTest extends \TestCase
 {
     use DatabaseTransactions, ActingAs;
 
@@ -25,7 +26,7 @@ class EmployeesControllerTest extends TestCase
         $company = \plunner\Company::findOrFail(1);
         $response = $this->actingAs($company)->json('GET', '/companies/employees');
         $response->assertResponseOk();
-        $response->seeJsonEquals($company->employees->toArray());
+        $response->seeJsonEquals($company->employees()->with('groups.planner')->get()->toArray());
     }
 
     public function testErrorIndex()
@@ -40,7 +41,7 @@ class EmployeesControllerTest extends TestCase
          * @var $company \plunner\Company
          */
         $company = \plunner\Company::findOrFail(1);
-        $employee = $company->employees->first();
+        $employee = $company->employees()->with('groups.planner')->first();
         $response = $this->actingAs($company)->json('GET', '/companies/employees/'.$employee->id);
         $response->assertResponseOk();
         $response->seeJsonEquals($employee->toArray());
@@ -122,7 +123,7 @@ class EmployeesControllerTest extends TestCase
     public function testDelete()
     {
         $company = \plunner\Company::findOrFail(1);
-        $employee = $company->employees->first();
+        $employee = $company->employees()->with('groups.planner')->first();
         $id = $employee->id;
 
         //employee exists
@@ -146,7 +147,7 @@ class EmployeesControllerTest extends TestCase
     public function testDeleteNotMine()
     {
         $company = \plunner\Company::findOrFail(1);
-        $employee = plunner\Employee::where('company_id', '<>', $company->id)->firstOrFail();
+        $employee = \plunner\Employee::where('company_id', '<>', $company->id)->firstOrFail();
         $id = $employee->id;
         $response = $this->actingAs($company)->json('DELETE', '/companies/employees/' . $id);
         $response->seeStatusCode(403);
@@ -171,8 +172,17 @@ class EmployeesControllerTest extends TestCase
         unset($data2['password_confirmation']);
         $response->seeJson($data2);
 
-        //duplicate employee
+        //same employee update
+        //correct request
         $response = $this->actingAs($company)->json('PUT', '/companies/employees/'.$employee->id,$data);
+        $response->assertResponseOk();
+        $data2 = $data;
+        unset($data2['password']);
+        unset($data2['password_confirmation']);
+        $response->seeJson($data2);
+
+        //duplicate employee email
+        $response = $this->actingAs($company)->json('PUT', '/companies/employees/'.($employee->id+1),$data);
         $response->seeStatusCode(422);
 
         //a no my employee

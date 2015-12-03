@@ -1,10 +1,11 @@
 <?php
 
+namespace Companies;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class CompaniesAuthTest extends TestCase
+class CompaniesAuthTest extends \TestCase
 {
     use DatabaseTransactions;
 
@@ -49,7 +50,7 @@ class CompaniesAuthTest extends TestCase
         $response->seeStatusCode(200);
 
         //get the token
-        $token = DB::table('password_resets_companies')->where('email', 'testInit@test.com')->value('token');
+        $token = \DB::table('password_resets_companies')->where('email', 'testInit@test.com')->value('token');
 
         //perform reset with error
         $response = $this->json('POST', '/companies/password/reset', ['email' => 'testInit@test.com', 'password_confirmation' => 'testtest', 'password' => 'testtest', 'token' => 're' . $token]);

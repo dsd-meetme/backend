@@ -13,7 +13,7 @@ Api example web server: http://api.plunner.com. It is just an example, so we don
 
 or simply
 
-`composer create-project dsd-meetme/backend`
+`composer create-project dsd-meetme/backend` (this gets the last stable version)
 
 # How to develop
 Use phpstorm is one of the best solution, since it has laravel plugin.
@@ -29,7 +29,8 @@ After cloning and installing repository:
 * execute as test phpunit.xml
 
 # Notes
-You should insert your name as author in composer file
+ * You should insert your name as author in composer file
+ * We use UTC time
 
 # Credits
 * [laravel framework](http://laravel.com/)
@@ -37,3 +38,4 @@ You should insert your name as author in composer file
 * [laravel phpstorm plugin](https://github.com/Haehnchen/idea-php-laravel-plugin)
 * [laravel noredirect traits for JWT](https://github.com/thecsea/jwt-auth)
 * [laravel cors library](https://github.com/barryvdh/laravel-cors)
+* [caldav client library](https://github.com/thecsea/caldav-client)
