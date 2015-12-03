@@ -18,6 +18,7 @@
 /**
  * Companies
  */
+
 Route::group(['namespace' => 'Companies', 'prefix' => 'companies'], function() {
 
     //\Auth
@@ -80,5 +81,7 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
     Route::resource('employees', 'EmployeesController', ['only' => ['index', 'show']]);
     Route::resource('groups', 'GroupsController', ['only' => ['index', 'show']]);
 
-    Route::resource('meetings', 'MeetingController');
+    Route::group(['namespace' => 'Planners'], function() {
+        Route::resource('meetings', 'MeetingsController');
+    });
 });
