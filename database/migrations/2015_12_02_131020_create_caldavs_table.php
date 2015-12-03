@@ -18,7 +18,7 @@ class CreateCaldavsTable extends Migration
             $table->foreign('calendar_id')->references('id')->on('calendars')->onDelete('cascade')->onUpdate('cascade');
             $table->string('url');
             $table->string('username');
-            $table->string('password');
+            $table->text('password'); //since we encrypt password 255 is not enough
             $table->string('calendar_name');
             $table->timestamps();
         });

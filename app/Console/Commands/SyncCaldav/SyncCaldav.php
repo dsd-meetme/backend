@@ -64,7 +64,8 @@ class SyncCaldav extends Command
             $this->$function(new Sync($calendar));
         }
 
-        $this->pool->shutdown();
+        if(is_object($this->pool))
+            $this->pool->shutdown();
         //TODO check if miss tasks in this way, check the defautl status of garbage
 
         //TODO log and write all info

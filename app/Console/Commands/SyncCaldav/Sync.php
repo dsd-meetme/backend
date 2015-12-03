@@ -65,11 +65,12 @@ class Sync
     /**
      * @return array|\it\thecsea\caldav_client_adapter\EventInterface[]
      * @throws \it\thecsea\caldav_client_adapter\CaldavException
+     * @thorws \Illuminate\Contracts\Encryption\DecryptException
      */
     private function getEvents()
     {
         $caldavClient = new SimpleCaldavAdapter();
-        $caldavClient->connect($this->calendar->url, $this->calendar->username, $this->calendar->password);
+        $caldavClient->connect($this->calendar->url, $this->calendar->username, \Crypt::decrypt($this->calendar->password));
         $calendars = $caldavClient->findCalendars();
         $caldavClient->setCalendar($calendars[$this->calendar->calendar_name]);
         /**
@@ -92,6 +93,8 @@ class Sync
             $events = $this->getEvents();
         }catch (\it\thecsea\caldav_client_adapter\CaldavException $e)
         {
+            //TODO fire appropriate event
+        }catch(\Illuminate\Contracts\Encryption\DecryptException $e){
             //TODO fire appropriate event
         }
 
