@@ -28,15 +28,21 @@ namespace plunner\Console\Commands\SyncCaldav;
  */
 class Autoloader extends \Worker {
 
-    public function __construct($loader) {
-        $this->loader = $loader;
+    public function __construct() {
+
     }
 
+    protected $app;
+
     /* include autoloader for Tasks */
-    public function run()   { require_once($this->loader); }
+    public function run()   {
+        require __DIR__.'/../../../../bootstrap/autoload.php';
+
+        $this->app = require_once __DIR__.'/../../../../bootstrap/app.php';
+    }
 
     /* override default inheritance behaviour for the new threaded context */
     public function start($options =  null) { return parent::start(PTHREADS_INHERIT_NONE); }
 
-    protected $loader;
+
 }

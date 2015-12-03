@@ -26,7 +26,7 @@ namespace plunner\Console\Commands\SyncCaldav;
  * @copyright 2015 Claudio Cardinale
  * @version 1.0.0
  */
-class WorkerThread extends \Collectable
+class WorkerThread extends \Thread
 {
     /**
      * @var
@@ -45,8 +45,24 @@ class WorkerThread extends \Collectable
 
     public function run()
     {
+        require __DIR__.'/../../../../bootstrap/autoload.php';
+
+        $app = require_once __DIR__.'/../../../../bootstrap/app.php';
+
+        $kernel = $app->make(\Illuminate\Contracts\Console\Kernel::class);
+
+        $status = $kernel->handle(
+            $input = new \Symfony\Component\Console\Input\ArgvInput(['','sync:caldav', $this->sync]),
+            new \Symfony\Component\Console\Output\ConsoleOutput
+        );
+
+        $kernel->terminate($input, $status);
+
+        exit($status);
+
         //require_once (__DIR__.'/../../../bootstrap/autoload.php');
-        $sync = new Sync($this->sync);
-        $sync->sync();
+
+        //$sync = new Sync($this->sync);
+        //$sync->sync();
     }
 }

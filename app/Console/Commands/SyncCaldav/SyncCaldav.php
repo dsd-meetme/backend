@@ -42,10 +42,9 @@ class SyncCaldav extends Command
     {
         //
         $calendarId = $this->argument('calendarId');
-        if(is_numeric($calendarId)) {
+        if(is_numeric($calendarId))
             $this->makeSequentially(new Sync(Caldav::findOrFail($calendarId)));
-            $this->info('Sync '. $calendarId.' completed');
-        }else
+        else
             $this->syncAll();
     }
 
@@ -62,7 +61,6 @@ class SyncCaldav extends Command
             $this->$function(new Sync($calendar));
         }
 
-        $this->info('Sync all completed'); //TODO if we use thread print this after
         //TODO log and write all info
     }
 
@@ -75,9 +73,11 @@ class SyncCaldav extends Command
         /*$thread = new WorkerThread($sync);
         $thread->start(PTHREADS_INHERIT_NONE);*/
         //TODO log return of start
-        $pool = new \Pool(4, Autoloader::class, [__DIR__.'/../../../../bootstrap/autoload.php']);
+        //$pool = new \Pool(4, Autoloader::class);
         /* submit a task to the pool */
-        $pool->submit(new WorkerThread($sync->getCalendar()));
+       // $pool->submit(new WorkerThread($sync->getCalendar()->calendar_id));
+        $thread = new WorkerThread($sync->getCalendar()->calendar_id);
+        $thread->start(PTHREADS_INHERIT_NONE);
     }
 
     /**
@@ -87,6 +87,7 @@ class SyncCaldav extends Command
     private function makeSequentially(Sync $sync)
     {
         $sync->sync();
+        $this->info('Sync calendar '. $sync->getCalendar()->calendar_id.' completed');
     }
 }
 //TODO improvement pool
