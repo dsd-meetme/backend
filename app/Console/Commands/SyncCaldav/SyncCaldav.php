@@ -13,7 +13,7 @@ class SyncCaldav extends Command
      *
      * @var string
      */
-    protected $signature = 'sync:caldav {calendarId?}';
+    protected $signature = 'sync:caldav {calendarId?} {--background}';
 
     /**
      * The console command description.
@@ -24,7 +24,7 @@ class SyncCaldav extends Command
 
 
     /**
-     * @var Schedule
+     * @var Schedule laravel schedule object needed to perform command in background
      */
     private $schedule;
 
@@ -51,24 +51,23 @@ class SyncCaldav extends Command
         //
         $calendarId = $this->argument('calendarId');
         if(is_numeric($calendarId))
-            $this->makeSequentially(new Sync(Caldav::findOrFail($calendarId)));
+            $this->makeForeground(Caldav::findOrFail($calendarId));
         else
             $this->syncAll();
     }
 
     private function syncAll()
     {
-        $function = 'makeSequentially';
-        $function = 'makeThreaded';
-        if(class_exists('\Thread')) {
-            $this->info('Threaded');
-            $function = 'makeThreaded';
-        }
-
         $calendars = Caldav::all();
-        foreach($calendars as $calendar) {
-            $this->$function(new Sync($calendar));
-        }
+        if($this->option('background')) {
+            $this->info('Background mode');
+            foreach ($calendars as $calendar)
+                $this->makeBackground($calendar);
+            $this->info('All background tasks started');
+        }else
+            foreach($calendars as $calendar)
+                $this->makeForeground($calendar);
+
 
         //TODO check if miss tasks in this way, check the defautl status of garbage
 
@@ -76,26 +75,25 @@ class SyncCaldav extends Command
     }
 
     /**
-     * sync calendars via thread
-     * @param Sync $sync
+     * sync calendars via exec command
+     * @param Caldav $calendar
      */
-    private function makeThreaded(Sync $sync)
+    private function makeBackground(Caldav $calendar)
     {
-        //TODO log return of start
-        $event = $this->schedule->command('sync:caldav '.$sync->getCalendar()->calendar_id)->withoutOverlapping();
+        $event = $this->schedule->command('sync:caldav '.$calendar->calendar_id)->withoutOverlapping();
         if($event->isDue($this->laravel))
              $event->run($this->laravel);
     }
 
     /**
-     * sync calendars sequentially
-     * @param Sync $sync
+     * sync calendars foreground
+     * @param Caldav $calendar
      */
-    private function makeSequentially(Sync $sync)
+    private function makeForeground(Caldav $calendar)
     {
-        $this->info('Sync calendar '. $sync->getCalendar()->calendar_id.' started');
-        $sync->sync();
-        $this->info('Sync calendar '. $sync->getCalendar()->calendar_id.' completed');
+        $this->info('Sync calendar '. $calendar->calendar_id.' started');
+        (new Sync($calendar))->sync();
+        $this->info('Sync calendar '. $calendar->calendar_id.' completed');
     }
 }
 //TODO improvement pool
