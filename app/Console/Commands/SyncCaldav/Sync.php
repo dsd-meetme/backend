@@ -1,113 +1,35 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Claudio Cardinale <cardi@thecsea.it>
+ * Date: 03/12/15
+ * Time: 2.33
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
 
-namespace plunner\Console\Commands;
+namespace plunner\Console\Commands\SyncCaldav;
 
-use Illuminate\Console\Command;
 use it\thecsea\caldav_client_adapter\simple_caldav_client\SimpleCaldavAdapter;
-use plunner\Caldav;
 use \it\thecsea\caldav_client_adapter\EventInterface;
+use plunner\Caldav;
 
-class SyncCaldav extends Command
-{
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'sync:caldav {calendarId?}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Sync caldav accounts';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
-    public function handle()
-    {
-        //
-        $calendarId = $this->argument('calendarId');
-        if(is_numeric($calendarId))
-            $this->makeSequentially(new Sync(Caldav::findOrFail($calendarId)));
-        else
-            $this->syncAll();
-    }
-
-    private function syncAll()
-    {
-        $function = 'makeSequentially';
-        if(class_exists('\Thread')) {
-            $this->info('Threaded');
-            $function = 'makeThreaded';
-        }
-
-        $calendars = Caldav::all();
-        foreach($calendars as $calendar) {
-            $this->$function(new Sync($calendar));
-        }
-    }
-
-    /**
-     * sync calendars via thread
-     * @param Sync $sync
-     */
-    private function makeThreaded(Sync $sync)
-    {
-        $thread = new WorkerThread($sync);
-        $thread->start();
-    }
-
-    /**
-     * sync calendars sequentially
-     * @param Sync $sync
-     */
-    private function makeSequentially(Sync $sync)
-    {
-        $sync->sync();
-    }
-}
-
-
-if(class_exists('\Thread')) {
-    class WorkerThread extends \Thread
-    {
-        /**
-         * @var Sync
-         */
-        private $sync;
-
-        /**
-         * workerThread constructor.
-         * @param Sync $sync
-         */
-        public function __construct(Sync $sync)
-        {
-            $this->sync = $sync;
-        }
-
-
-        public function run()
-        {
-            $this->sync();
-        }
-    }
-}
-
+/**
+ * Class Sync
+ * @package plunner\Console\Commands
+ * @author Claudio Cardinale <cardi@thecsea.it>
+ * @copyright 2015 Claudio Cardinale
+ * @version 1.0.0
+ */
 class Sync
 {
     /**
@@ -122,6 +44,14 @@ class Sync
     public function __construct(Caldav $calendar)
     {
         $this->calendar = $calendar;
+    }
+
+    /**
+     * @return Caldav
+     */
+    public function getCalendar()
+    {
+        return $this->calendar;
     }
 
     /**
@@ -154,7 +84,9 @@ class Sync
      */
     private function syncToTimeSlots()
     {
-        //TODO log???
+        //TODO log??? even in thread or not mode. problems with thread
+        //TODO make in a queue or task is better (we have an instance each minute)? I'm talking form the blocking point view since we have a lot of tasks to do. the taskl execute more than one command per time? how does it work? do we have to set a timeout?
+
         try
         {
             $events = $this->getEvents();
