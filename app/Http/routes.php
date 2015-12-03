@@ -82,6 +82,7 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
     Route::resource('groups', 'GroupsController', ['only' => ['index', 'show']]);
 
     Route::group(['namespace' => 'Planners'], function() {
-        Route::resource('meetings', 'MeetingsController');
+        Route::resource('meetings', 'MeetingsController', ['except' => ['index']]);
+        Route::get('meetings/months/{id}', ['as' => 'meetings.index', 'uses' => 'MeetingsController@index']);
     });
 });
