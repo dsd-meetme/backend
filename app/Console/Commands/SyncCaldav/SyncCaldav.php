@@ -86,6 +86,7 @@ class SyncCaldav extends Command
      */
     private function makeSequentially(Sync $sync)
     {
+        $this->info('Sync calendar '. $sync->getCalendar()->calendar_id.' started');
         $sync->sync();
         $this->info('Sync calendar '. $sync->getCalendar()->calendar_id.' completed');
     }
