@@ -23,6 +23,8 @@ class SyncCaldav extends Command
      */
     protected $description = 'Sync caldav accounts';
 
+    private $pool;
+
     /**
      * Create a new command instance.
      *
@@ -54,12 +56,16 @@ class SyncCaldav extends Command
         if(class_exists('\Thread')) {
             $this->info('Threaded');
             $function = 'makeThreaded';
+            $this->pool = new \Pool(10, Autoloader::class);//TODO decide the right number (cosndier the avarage time for a request
         }
 
         $calendars = Caldav::all();
         foreach($calendars as $calendar) {
             $this->$function(new Sync($calendar));
         }
+
+        $this->pool->shutdown();
+        //TODO check if miss tasks in this way, check the defautl status of garbage
 
         //TODO log and write all info
     }
@@ -77,7 +83,8 @@ class SyncCaldav extends Command
         /* submit a task to the pool */
        // $pool->submit(new WorkerThread($sync->getCalendar()->calendar_id));
         $thread = new WorkerThread($sync->getCalendar()->calendar_id);
-        $thread->start(PTHREADS_INHERIT_NONE);
+        //$thread->start(PTHREADS_INHERIT_NONE);
+        $this->pool->submit($thread);
     }
 
     /**

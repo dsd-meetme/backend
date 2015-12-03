@@ -33,6 +33,8 @@ class WorkerThread extends \Thread
      */
     private $sync;
 
+    private $app;
+
     /**
      * workerThread constructor.
      * @param  $sync
@@ -59,6 +61,7 @@ class WorkerThread extends \Thread
         $kernel->terminate($input, $status);
 
         exit($status);
+        $this->setGarbage();
 
         //require_once (__DIR__.'/../../../bootstrap/autoload.php');
 

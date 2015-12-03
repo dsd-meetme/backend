@@ -32,13 +32,13 @@ class Autoloader extends \Worker {
 
     }
 
-    protected $app;
+    //protected $app;
 
     /* include autoloader for Tasks */
     public function run()   {
-        require __DIR__.'/../../../../bootstrap/autoload.php';
+        //require __DIR__.'/../../../../bootstrap/autoload.php';
 
-        $this->app = require_once __DIR__.'/../../../../bootstrap/app.php';
+        //$this->app = require_once __DIR__.'/../../../../bootstrap/app.php';
     }
 
     /* override default inheritance behaviour for the new threaded context */
