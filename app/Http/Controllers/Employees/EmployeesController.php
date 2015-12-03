@@ -34,6 +34,8 @@ class EmployeesController extends Controller
         return $employee;
     }
 
+    //TODO this is not RESTFUL, but it can be ok
+
     /**
      * Display the specified resource.
      *
@@ -46,4 +48,6 @@ class EmployeesController extends Controller
         $this->authorize($employee);
         return $employee;
     }
+
+    //TODO why this? when we need this?
 }
