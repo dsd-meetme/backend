@@ -53,6 +53,7 @@ class WorkerThread extends \Thread
 
         $kernel = $app->make(\Illuminate\Contracts\Console\Kernel::class);
 
+        //in this way we have a new environment each time, we don't have concurrency problems
         $status = $kernel->handle(
             $input = new \Symfony\Component\Console\Input\ArgvInput(['','sync:caldav', $this->sync]),
             new \Symfony\Component\Console\Output\ConsoleOutput
