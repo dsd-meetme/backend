@@ -3,8 +3,7 @@
 namespace plunner\Console\Commands\SyncCaldav;
 
 use Illuminate\Console\Command;
-use it\thecsea\caldav_client_adapter\simple_caldav_client\SimpleCaldavAdapter;
-use \it\thecsea\caldav_client_adapter\EventInterface;
+use Illuminate\Console\Scheduling\Schedule;
 use plunner\Caldav;
 
 class SyncCaldav extends Command
@@ -23,16 +22,23 @@ class SyncCaldav extends Command
      */
     protected $description = 'Sync caldav accounts';
 
-    private $pool;
+
+    /**
+     * @var Schedule
+     */
+    private $schedule;
+
 
     /**
      * Create a new command instance.
+     * @param Schedule $schedule
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Schedule $schedule)
     {
         parent::__construct();
+        $this->schedule = $schedule;
     }
 
     /**
@@ -53,10 +59,10 @@ class SyncCaldav extends Command
     private function syncAll()
     {
         $function = 'makeSequentially';
+        $function = 'makeThreaded';
         if(class_exists('\Thread')) {
             $this->info('Threaded');
             $function = 'makeThreaded';
-            $this->pool = new \Pool(10, Autoloader::class);//TODO decide the right number (cosndier the avarage time for a request
         }
 
         $calendars = Caldav::all();
@@ -64,8 +70,6 @@ class SyncCaldav extends Command
             $this->$function(new Sync($calendar));
         }
 
-        if(is_object($this->pool))
-            $this->pool->shutdown();
         //TODO check if miss tasks in this way, check the defautl status of garbage
 
         //TODO log and write all info
@@ -77,15 +81,10 @@ class SyncCaldav extends Command
      */
     private function makeThreaded(Sync $sync)
     {
-        /*$thread = new WorkerThread($sync);
-        $thread->start(PTHREADS_INHERIT_NONE);*/
         //TODO log return of start
-        //$pool = new \Pool(4, Autoloader::class);
-        /* submit a task to the pool */
-       // $pool->submit(new WorkerThread($sync->getCalendar()->calendar_id));
-        $thread = new WorkerThread($sync->getCalendar()->calendar_id);
-        //$thread->start(PTHREADS_INHERIT_NONE);
-        $this->pool->submit($thread);
+        $event = $this->schedule->command('sync:caldav '.$sync->getCalendar()->calendar_id)->withoutOverlapping();
+        if($event->isDue($this->laravel))
+             $event->run($this->laravel);
     }
 
     /**
