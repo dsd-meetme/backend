@@ -36,6 +36,7 @@ class MeetingsController extends Controller
      */
     public function index($view_month)
     {
+        return 'g';
         $employee = \Auth::user();
         $all_meetings = $employee->meetings;
 
