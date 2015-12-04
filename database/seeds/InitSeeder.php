@@ -42,7 +42,7 @@ class InitSeeder extends Seeder
         self::groups($company, $company->employees->toArray());
 
         //add caldav
-        $calendar = $employee->calendars()->create(['name' => 'caldavTes', 'type' => 'caldav']);
+        $calendar = $employee->calendars()->create(['name' => 'errors', 'type' => 'caldav']);
         $calendar->caldav()->create(['url'=>'https://example.com', 'username'=>'caldav.test@plunner.com', 'password'=>Crypt::encrypt('wrong'), 'calendar_name' => 'test']);
         $examples = env('CALDAV_EXAMPLES', '[]');
         $examples = json_decode($examples, true);
