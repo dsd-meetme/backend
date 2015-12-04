@@ -43,7 +43,13 @@ class InitSeeder extends Seeder
 
         //add caldav
         $calendar = $employee->calendars()->create(['name' => 'caldavTes', 'type' => 'caldav']);
-        $calendar->caldav()->create(['url'=>'https://webmail.plunner.com/rpc.php', 'username'=>'caldav.test@plunner.com', 'password'=>Crypt::encrypt(env('CALDAV_TEST_PSW', ''))]);
+        $calendar->caldav()->create(['url'=>'https://example.com', 'username'=>'caldav.test@plunner.com', 'password'=>Crypt::encrypt('wrong'), 'calendar_name' => 'test']);
+        $examples = env('CALDAV_EXAMPLES', '[]');
+        $examples = json_decode($examples, true);
+        foreach($examples as $example) {
+            $example['password'] = Crypt::encrypt($example['password']);
+            $employee->calendars()->create(['name' => 'caldavTes', 'type' => 'caldav'])->caldav()->create($example);
+        }
     }
 
     static private function company()
