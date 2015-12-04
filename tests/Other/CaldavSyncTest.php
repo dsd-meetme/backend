@@ -28,4 +28,6 @@ class EmployeesAuthTest extends \TestCase
         $calendar = $employee->calendars()->whereName('errors')->firstOrFail()->caldav;
         $this->assertNotEquals('', $calendar->sync_errors);
     }
+
+    //TODO test a correct sync
 }

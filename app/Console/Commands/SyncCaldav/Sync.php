@@ -108,7 +108,8 @@ class Sync
         foreach($events as $event){
             if(!($event = $this->parseEvent($event)))
                 \Event::fire(new CaldavErrorEvent($this->calendar, 'problem during the parsing an event'));
-            $calendarMain->timeslots()->create($event);
+            else
+                $calendarMain->timeslots()->create($event);
         }
     }
 
