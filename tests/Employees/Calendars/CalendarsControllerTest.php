@@ -65,4 +65,48 @@ class CalendarsControllerTest extends TestCase
         unset($data['employee_id']);
         $response->SeeJson($data);
     }
+
+    public function testDelete()
+    {
+        $employee = \plunner\Employee::findOrFail(1);
+        $id = $employee->id;
+
+        //calendar exists
+        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/'.$id);
+        $response->assertResponseOk();
+        $response->seeJsonEquals($employee->calendars->toArray());
+
+        //remove
+        $response = $this->actingAs($employee)->json('DELETE', '/employees/calendars/'.$id);
+        $response->assertResponseOk();
+
+        //calendar doesn't exist
+        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/'.$id);
+        $response->seeStatusCode(404);
+
+        //I cannot remove a removed calendar
+        $response = $this->actingAs($employee)->json('DELETE', '/employees/calendars/'.$id);
+        $response->seeStatusCode(404);
+    }
+
+    public function testUpdate()
+    {
+        $employee = \plunner\Employee::findOrFail(1);
+        $data = [
+            'name' => 'test',
+            'enabled' => '1',
+        ];
+
+        //correct request
+        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/'.$employee->id,$data);
+        $response->assertResponseOk();
+        $response->seeJson($data);
+
+
+        //same calendar update
+        //correct request
+        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/'.$employee->id,$data);
+        $response->assertResponseOk();
+        $response->seeJson($data);
+    }
 }
