@@ -28,6 +28,7 @@ class MeetingRequest extends Request
             'description' => 'required|max:255',
             'meeting_start' => 'required|date',
             'meeting_end' => 'required|date|after:meeting_start',
+            'utc' => 'required|integer|max:12|min:-12',
             'repeat' => 'required|integer',
         ];
     }
