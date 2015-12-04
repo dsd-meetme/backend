@@ -92,14 +92,16 @@ class Sync
         }catch (\it\thecsea\caldav_client_adapter\CaldavException $e)
         {
             \Event::fire(new CaldavErrorEvent($this->calendar, $e->getMessage()));
+            return ;
         }catch(\Illuminate\Contracts\Encryption\DecryptException $e){
             \Event::fire(new CaldavErrorEvent($this->calendar, $e->getMessage()));
+            return ;
         }
 
         /**
          * @var $calendarMain \plunner\Calendar
          */
-        $calendarMain = $this->calendar->calendar;
+        $calendarMain = $this->calendar->Calendar;
 
         //remove old timeslots
         $calendarMain->timeslots()->delete();

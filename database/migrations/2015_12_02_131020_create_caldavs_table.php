@@ -20,6 +20,7 @@ class CreateCaldavsTable extends Migration
             $table->string('username');
             $table->text('password'); //since we encrypt password 255 is not enough
             $table->string('calendar_name');
+            $table->string('sync_errors');
             $table->timestamps();
         });
     }
