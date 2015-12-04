@@ -63,11 +63,11 @@ class SyncCaldav extends Command
     {
         $calendars = Caldav::all();
         if($this->option('background')) {
-            \Log::info(self::BACKGROUND_MOD_MEX);
+            \Log::debug(self::BACKGROUND_MOD_MEX);
             $this->info(self::BACKGROUND_MOD_MEX);
             foreach ($calendars as $calendar)
                 $this->makeBackground($calendar);
-            \Log::info(self::BACKGROUND_COMPLETED_MEX);
+            \Log::debug(self::BACKGROUND_COMPLETED_MEX);
             $this->info(self::BACKGROUND_COMPLETED_MEX);
         }else
             foreach($calendars as $calendar)
