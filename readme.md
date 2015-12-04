@@ -15,6 +15,14 @@ or simply
 
 `composer create-project dsd-meetme/backend` (this gets the last stable version)
 
+# How to configure
+
+1. Create database
+1. Configure database data in .env file
+1. perform `php artisan migrate`
+1. configure urls in `config/app.php` (this only for real environment)
+1. this must be installed on the root of the virtual host
+
 # How to develop
 Use phpstorm is one of the best solution, since it has laravel plugin.
 
@@ -30,6 +38,8 @@ After cloning and installing repository:
 
 # Notes
  * You should insert your name as author in composer file
+ * We use UTC time
+ * In real environment you should use apache2
 
 
 # Credits
