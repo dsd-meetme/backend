@@ -1,6 +1,6 @@
 <?php
 
-namespace plunner\Http\Controllers;
+namespace plunner\Http\Controllers\Employees\Planners;
 
 use Illuminate\Http\Request;
 
@@ -78,15 +78,18 @@ class MeetingsController extends Controller
      * @param $groupId
      * @return static
      */
-    public function store(MeetingRequest $request, $groupId)
+    //TODO BEFORE USE MeetingRequest create it
+    public function store(Request $request)
     {
+        //TODO why do you use group even if you don't get this in the route?
+       /*
         $employee = \Auth::user();
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
 
-        /**
-         * Check if the employee is the planner for the group.
-         */
+
+         // Check if the employee is the planner for the group.
+
         if ($employee->id == $group->planner_id)
         {
             $input = $request->all();
@@ -94,6 +97,8 @@ class MeetingsController extends Controller
             return $meeting;
         }
         return Response::json(['error' => 'groupId'],404);
+       */
+        return [];
     }
 
     /**
@@ -117,7 +122,8 @@ class MeetingsController extends Controller
      * @param $groupId
      * @return mixed
      */
-    public function update(MeetingRequest $request, $meetingId, $groupId)
+    //TODO BEFORE USE MeetingRequest create it
+    public function update(Request $request, $meetingId)
     {
         $employee = \Auth::user();
         $meeting = Meeting::findOrFail($meetingId);
@@ -144,22 +150,27 @@ class MeetingsController extends Controller
      * @param $groupId
      * @return mixed
      */
-    public function destroy($meetingId, $groupId)
+    //TODO why two parameter?
+    public function destroy($meetingId)
     {
+        /*
         $employee = \Auth::user();
         $meeting = Meeting::findOrFail($meetingId);
         $this->authorize($meeting);
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
 
-        /**
-         * Check if the employee is the planner for the group.
-         */
+
+         // Check if the employee is the planner for the group.
+
         if ($employee->id == $group->planner_id)
         {
             $meeting->delete();
             return $employee;
         }
-        return Response::json(['error' => 'meetingId'],404);
+        return Response::json(['error' => 'meetingId'],404);*/
+
+        //TODO why do you use group even if you don't get this in the route?
+        return [];
     }
 }
