@@ -52,6 +52,6 @@ class Caldav extends Model
      */
     public function Employee()
     {
-        $this->calendar->Employee();
+        $this->Calendar->Employee();
     }
 }
