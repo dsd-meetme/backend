@@ -26,6 +26,8 @@ class Caldav extends Model
         return $this->belongsTo(Calendar::class);
     }
 
+    //TODO remmeber to don't allow to change timelsot for a caldav claendar
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

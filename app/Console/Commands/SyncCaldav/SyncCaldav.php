@@ -8,6 +8,9 @@ use plunner\Caldav;
 
 class SyncCaldav extends Command
 {
+    const BACKGROUND_MOD_MEX = 'background mode';
+    const BACKGROUND_COMPLETED_MEX = 'All background tasks started';
+
     /**
      * The name and signature of the console command.
      *
@@ -60,18 +63,15 @@ class SyncCaldav extends Command
     {
         $calendars = Caldav::all();
         if($this->option('background')) {
-            $this->info('Background mode');
+            \Log::info(self::BACKGROUND_MOD_MEX);
+            $this->info(self::BACKGROUND_MOD_MEX);
             foreach ($calendars as $calendar)
                 $this->makeBackground($calendar);
-            $this->info('All background tasks started');
+            \Log::info(self::BACKGROUND_COMPLETED_MEX);
+            $this->info(self::BACKGROUND_COMPLETED_MEX);
         }else
             foreach($calendars as $calendar)
                 $this->makeForeground($calendar);
-
-
-        //TODO check if miss tasks in this way, check the defautl status of garbage
-
-        //TODO log and write all info
     }
 
     /**
@@ -96,4 +96,3 @@ class SyncCaldav extends Command
         $this->info('Sync calendar '. $calendar->calendar_id.' completed');
     }
 }
-//TODO improvement pool

@@ -22,6 +22,7 @@ namespace plunner\Console\Commands\SyncCaldav;
 use it\thecsea\caldav_client_adapter\simple_caldav_client\SimpleCaldavAdapter;
 use \it\thecsea\caldav_client_adapter\EventInterface;
 use plunner\Caldav;
+use plunner\Events\CaldavErrorEvent;
 
 /**
  * Class Sync
@@ -85,17 +86,14 @@ class Sync
      */
     private function syncToTimeSlots()
     {
-        //TODO log??? even in thread or not mode. problems with thread
-        //TODO make in a queue or task is better (we have an instance each minute)? I'm talking form the blocking point view since we have a lot of tasks to do. the taskl execute more than one command per time? how does it work? do we have to set a timeout?
-
         try
         {
             $events = $this->getEvents();
         }catch (\it\thecsea\caldav_client_adapter\CaldavException $e)
         {
-            //TODO fire appropriate event
+            \Event::fire(new CaldavErrorEvent($this->calendar, $e->getMessage()));
         }catch(\Illuminate\Contracts\Encryption\DecryptException $e){
-            //TODO fire appropriate event
+            \Event::fire(new CaldavErrorEvent($this->calendar, $e->getMessage()));
         }
 
         /**
@@ -107,7 +105,7 @@ class Sync
         $calendarMain->timeslots()->delete();
         foreach($events as $event){
             if(!($event = $this->parseEvent($event)))
-                ;//TODO fire appropriate event
+                \Event::fire(new CaldavErrorEvent($this->calendar, 'problem during the parsing an event'));
             $calendarMain->timeslots()->create($event);
         }
     }
