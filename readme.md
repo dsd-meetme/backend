@@ -29,8 +29,8 @@ After cloning and installing repository:
 * execute as test phpunit.xml
 
 # Notes
-* You should insert your name as author in composer file
-* pthreads needed to increase cladav sync speed
+ * You should insert your name as author in composer file
+
 
 # Credits
 * [laravel framework](http://laravel.com/)
