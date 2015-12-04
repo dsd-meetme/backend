@@ -22,6 +22,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Query\Builder|\plunner\Caldav whereCalendarName($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Caldav whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Caldav whereUpdatedAt($value)
+ * @property string $sync_errors
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Caldav whereSyncErrors($value)
  */
 class Caldav extends Model
 {
