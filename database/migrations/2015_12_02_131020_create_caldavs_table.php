@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTimeslotsTable extends Migration
+class CreateCaldavsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,15 @@ class CreateTimeslotsTable extends Migration
      */
     public function up()
     {
-        Schema::create('timeslots', function (Blueprint $table) {
-            $table->increments('id'); //TODO bigIncrements or increments on two fields
-            $table->dateTime('time_start');
-            $table->dateTime('time_end');
-            $table->integer('calendar_id')->unsigned();
+        //
+        Schema::create('caldavs', function (Blueprint $table) {
+            $table->integer('calendar_id')->unsigned()->primary();
             $table->foreign('calendar_id')->references('id')->on('calendars')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('url');
+            $table->string('username');
+            $table->text('password'); //since we encrypt password 255 is not enough
+            $table->string('calendar_name');
+            $table->string('sync_errors');
             $table->timestamps();
         });
     }
@@ -29,6 +32,7 @@ class CreateTimeslotsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('timeslots');
+        //
+        Schema::drop('caldavs');
     }
 }
