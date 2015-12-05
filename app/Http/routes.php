@@ -81,9 +81,11 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
     Route::resource('employees', 'EmployeesController', ['only' => ['index', 'show']]);
     Route::resource('groups', 'GroupsController', ['only' => ['index', 'show']]);
 
-    //TODO  'prefix' => 'planners'??
+    // for non planners
+    Route::resource('meetings', 'MeetingsController', ['only' => ['index', 'show']]);
+
+    // for planners
     Route::group(['namespace' => 'Planners'], function() {
-        Route::resource('meetings', 'MeetingsController', ['except' => ['index']]);
-        Route::get('meetings/months/{id}', ['as' => 'meetings.index', 'uses' => 'MeetingsController@index']); //TODO  Why? this is not restful
+        Route::resource('meetings.planner', 'MeetingsController', ['except' => ['index', 'show']]);
     });
 });
