@@ -40,6 +40,18 @@ class Caldav extends Model
     protected $touches = ['calendar'];
 
     /**
+     * @var array
+     */
+    protected $fillable = ['url', 'username', 'password', 'calendar_name'];
+
+    /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
+     */
+    protected $hidden = ['password'];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function Calendar()
