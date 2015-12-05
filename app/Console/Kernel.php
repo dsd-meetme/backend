@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \plunner\Console\Commands\Inspire::class,
+        \plunner\Console\Commands\SyncCaldav\SyncCaldav::class,
     ];
 
     /**
@@ -24,7 +25,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('inspire')
-                 ->hourly();
+        //$schedule->command('inspire')
+        //         ->hourly();
+        $schedule->command('sync:caldav --background')->withoutOverlapping();
     }
 }
