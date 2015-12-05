@@ -24,12 +24,13 @@ class MeetingRequest extends Request
     public function rules()
     {
         return [
-            'title' => 'required|max:255|unique:groups,name,NULL,id,company_id,',
+            'title' => 'required|max:255|unique:meetings,name,NULL,id',
             'description' => 'required|max:255',
             'start_time' => 'required|date',
             'end_time' => 'required|date|after:meeting_start',
             'repeat' => 'required|integer',
             'repetition_end_time' => 'date',
+            'group_id' => 'required|exists:groups,id',
         ];
     }
 }

@@ -81,11 +81,5 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
     Route::resource('employees', 'EmployeesController', ['only' => ['index', 'show']]);
     Route::resource('groups', 'GroupsController', ['only' => ['index', 'show']]);
 
-    // for non planners
-    Route::resource('meetings', 'MeetingsController', ['only' => ['index', 'show']]);
-
-    // for planners
-    Route::group(['namespace' => 'Planners'], function() {
-        Route::resource('meetings.planner', 'MeetingsController', ['except' => ['index', 'show']]);
-    });
+    Route::resource('meetings', 'MeetingsController');
 });

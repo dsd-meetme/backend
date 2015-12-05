@@ -66,7 +66,6 @@ class MeetingsTest extends \TestCase
             'start_time' => '20.12.2015',
             'end_time' => '02.01.2016',
             'repeat' => '0',
-            'repetition_end_time' => '02.01.2016',
             'group_id' => $this->group->id,
         ];
 
@@ -102,7 +101,6 @@ class MeetingsTest extends \TestCase
             'start_time' => '20.12.2015',
             'end_time' => '02.01.2016',
             'repeat' => '0',
-            'repetition_end_time' => '02.01.2016',
             'group_id' => $this->group->id,
         ];
         $this->actingAs($this->planner)->json('POST', '/employees/meetings', $data);
