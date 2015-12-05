@@ -13,7 +13,7 @@ class CreateTimeslotsTable extends Migration
     public function up()
     {
         Schema::create('timeslots', function (Blueprint $table) {
-            $table->increments('id'); //TODO bigIncrements or increments on two fields
+            $table->bigIncrements('id');
             $table->dateTime('time_start');
             $table->dateTime('time_end');
             $table->integer('calendar_id')->unsigned();
