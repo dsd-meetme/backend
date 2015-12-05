@@ -42,6 +42,11 @@ class Meeting extends Model
      */
     public function employees()
     {
-        return $this->belongsToMany('plunner\Employee');
+        return $this->belongsToMany(Employee::class);
+    }
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
     }
 }

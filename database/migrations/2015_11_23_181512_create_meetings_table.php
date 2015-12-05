@@ -25,6 +25,9 @@ class CreateMeetingsTable extends Migration
             $table->dateTime('start_time');
             $table->dateTime('end_time');
 
+            $table->integer('group_id')->unsigned();
+            $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade')->onUpdate('cascade');
+
             $table->integer('repeat');
             $table->dateTime('repetition_end_time')->nullable();
             $table->boolean('is_scheduled');
