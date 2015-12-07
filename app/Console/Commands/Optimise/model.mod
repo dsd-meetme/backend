@@ -28,10 +28,10 @@ sum{j in TimeSlotsLong} y[i, j] <= 1;
 
 
 subject to UsersAvailabilityC {i in Users, j in Meetings, z in TimeSlots, t in {1..MeetingDuration[j]}}:
-UsersAvailability[i, z+t-1]*2 >= x[i, j]+y[j, z];
+UsersAvailability[i, z+t-1]+1 >= x[i, j]+y[j, z];
 
 subject to UsersOverlaysMeetings {i in Users, j in Meetings, z in TimeSlots, j2 in Meetings, t in {1..MeetingDuration[j]}:  j2 <> j}:
-(x[i, j]+y[j, z] + x[i, j2]+y[j2, z+t-1]) <=2 ;
+(x[i, j]+y[j, z] + x[i, j2]+y[j2, z+t-1]) <=3 ;
 
 
 subject to UserMeetingsC {i in Users, j in Meetings}:
