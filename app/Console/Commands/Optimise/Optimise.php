@@ -5,6 +5,13 @@ namespace plunner\Console\Commands\Optimise;
 use Illuminate\Console\Command;
 use Illuminate\Console\Scheduling\Schedule;
 
+/**
+ * Class Optimise
+ * @package plunner\Console\Commands\Optimise
+ * @author Claudio Cardinale <cardi@thecsea.it>
+ * @copyright 2015 Claudio Cardinale
+ * @version 1.0.0
+ */
 class Optimise extends Command
 {
     /**
@@ -47,6 +54,8 @@ class Optimise extends Command
         //
         //TODO check if glpk is installed
         //TODO multithreads
+        //TODO log exceptions and fire
+
         $event = $this->schedule->exec('glpsol --math '.__DIR__.'/model.mod')->withoutOverlapping()->sendOutputTo(__DIR__.'/out.txt');
         if($event->isDue($this->laravel))
             $event->run($this->laravel);
