@@ -455,11 +455,70 @@ class Solver
     {
         $strReplaceS = array('{USERS_PATH}', '{MEETINGS_PATH}', '{USER_AVAILABILITY_PATH}', '{MEETINGS_AVAILABILITY_PATH}', '{USER_MEETINGS_PATH}', '{MEETINGS_DURATION_PATH}', '{TIME_SLOTS}', '{MAX_TIME_SLOTS}', '{X_OUT_PATH}', '{Y_OUT_PATH}');
         $strReplaceR = array($this->getUsersPath(), $this->getMeetingsPath(), $this->getUsersAvailabilityPath(), $this->getMeetingsAvailabilityPath(), $this->getUsersMeetingsPath(), $this->getMeetingsDurationPath(), $this->timeSlots, $this->maxTimeSlots, $this->getXPath(), $this->getYPath());
-        $f = fopen($this->getModelPath(), "w");
+        $f = @fopen($this->getModelPath(), "w");
         if(!$f)
             throw new OptimiseException('problem during creation of a file');
         fwrite($f, str_replace($strReplaceS, $strReplaceR, file_get_contents(__DIR__ . "/model.stub")));
         fclose($f);
+    }
+
+    /**
+     * @return array
+     * @throws OptimiseException
+     */
+    public function getXResults()
+    {
+        return self::readCSVFile($this->getXPath());
+    }
+
+    /**
+     * @return array
+     * @throws OptimiseException
+     */
+    public function getYResults()
+    {
+        return self::readCSVFile($this->getYPath());
+    }
+
+    /**
+     * @return string
+     */
+    public function getOutput()
+    {
+        $handle = @fopen($this->getOutputPath(),"r");
+        if(!$handle)
+            throw new OptimiseException('problems during reading the file');
+        fclose($handle);
+        return file_get_contents($this->getOutputPath());
+    }
+
+    /**
+     * @param string $file
+     * @return array
+     * @throws OptimiseException
+     */
+    static private function readCSVFile($file)
+    {
+        if(!file_exists($file) || !filesize($file))
+            throw new OptimiseException('no results file');
+
+        $handle = @fopen($file,"r");
+        if(!$handle)
+            throw new OptimiseException('problems during reading the file');
+
+        $ret = [];
+        while (($data = fgetcsv($handle)) !== FALSE) {
+            if(count($data) != 3) {
+                fclose($handle);
+                throw new OptimiseException('problems during parsing the file');
+            }
+
+            $ret[$data[0]][$data[1]] = $data[2];
+        }
+
+        fclose($handle);
+
+        return $ret;
     }
 
     /**
