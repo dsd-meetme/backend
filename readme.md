@@ -22,6 +22,8 @@ or simply
 1. perform `php artisan migrate`
 1. configure urls in `config/app.php` (this only for real environment)
 1. this must be installed on the root of the virtual host
+1. configure crontab `* * * * * php /path/to/artisan schedule:run >> /dev/null 2>&1` to optimise and caldav import
+1. install `GLPSOL` `https://en.wikibooks.org/wiki/GLPK/Linux_packages` (needed for optimisation task -> finding perfect meeting slot)
 
 # How to develop
 Use phpstorm is one of the best solution, since it has laravel plugin.
@@ -49,3 +51,4 @@ After cloning and installing repository:
 * [laravel noredirect traits for JWT](https://github.com/thecsea/jwt-auth)
 * [laravel cors library](https://github.com/barryvdh/laravel-cors)
 * [caldav client library](https://github.com/thecsea/caldav-client)
+* [GLPK](https://www.gnu.org/software/glpk/)
