@@ -83,13 +83,46 @@ class Solver
 
     /**
      * Solver constructor.
-     * @throws OptimiseException on problems during creation of tmp dir
+     * @throws OptimiseException on general problems
      */
     public function __construct(Schedule $schedule)
     {
+        self::checkGlpsol();
         $this->createPath();
         $this->schedule = $schedule;
     }
+
+    /**
+     * @throws OptimiseException
+     */
+    function __destruct()
+    {
+        if ($this->path && is_dir($this->path) && !self::delTree($this->path))
+            throw new OptimiseException('problems during removing of path directory');
+    }
+
+    /**
+     * @throws OptimiseException
+     */
+    static private function checkGlpsol()
+    {
+        if(!(`which glpsol`))
+            throw new OptimiseException('glpsol is not installed');
+    }
+
+    /**
+     * remove a no empty dir
+     * @param $dir
+     * @return bool
+     */
+    private static function delTree($dir) {
+        $files = array_diff(scandir($dir), array('.','..'));
+        foreach ($files as $file) {
+            (is_dir("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file");
+        }
+        return rmdir($dir);
+    }
+
 
     /**
      * @throws OptimiseException on problems during creation of tmp dir
@@ -409,7 +442,10 @@ class Solver
     {
         $this->writeData();
         $this->writeModelFile();
-        //TODO ...
+        $event = $this->schedule->exec('glpsol --math '.$this->getModelPath())->sendOutputTo($this->getOutputPath())->after(function () { }); //this just to execute in foreground
+        if($event->isDue($this->laravel))
+            $event->run($this->laravel);
+        //TODO catch glpsol errors
     }
 
     /**
@@ -417,8 +453,8 @@ class Solver
      */
     private function writeModelFile()
     {
-        $strReplaceS = array('{USERS_PATH}', '{MEETINGS_PATH}', '{USER_AVAILABILITY_PATH}', '{MEETINGS_AVAILABILITY_PATH}', '{USER_MEETINGS_PATH}', '{MEETINGS_DURATION_PATH}, {TIME_SLOTS}, {MAX_TIME_SLOTS}');
-        $strReplaceR = array($this->getUsersPath(), $this->getMeetingsPath(), $this->getUsersAvailabilityPath(), $this->getMeetingsAvailabilityPath(), $this->getUsersMeetingsPath(), $this->getMeetingsDurationPath(), $this->timeSlots, $this->maxTimeSlots);
+        $strReplaceS = array('{USERS_PATH}', '{MEETINGS_PATH}', '{USER_AVAILABILITY_PATH}', '{MEETINGS_AVAILABILITY_PATH}', '{USER_MEETINGS_PATH}', '{MEETINGS_DURATION_PATH}', '{TIME_SLOTS}', '{MAX_TIME_SLOTS}', '{X_OUT_PATH}', '{Y_OUT_PATH}');
+        $strReplaceR = array($this->getUsersPath(), $this->getMeetingsPath(), $this->getUsersAvailabilityPath(), $this->getMeetingsAvailabilityPath(), $this->getUsersMeetingsPath(), $this->getMeetingsDurationPath(), $this->timeSlots, $this->maxTimeSlots, $this->getXPath(), $this->getYPath());
         $f = fopen($this->getModelPath(), "w");
         if(!$f)
             throw new OptimiseException('problem during creation of a file');
@@ -480,6 +516,30 @@ class Solver
     private function getUsersMeetingsPath()
     {
         return $this->path.'/UsersMeetings.csv';
+    }
+
+    /**
+     * @return string
+     */
+    private function getXPath()
+    {
+        return $this->path.'/x.csv';
+    }
+
+    /**
+     * @return string
+     */
+    private function getYPath()
+    {
+        return $this->path.'/y.csv';
+    }
+
+    /**
+     * @return string
+     */
+    private function getOutputPath()
+    {
+        return $this->path.'/out.txt';
     }
 
     /**

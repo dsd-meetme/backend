@@ -56,8 +56,5 @@ class Optimise extends Command
         //TODO multithreads
         //TODO log exceptions and fire
 
-        $event = $this->schedule->exec('glpsol --math '.__DIR__.'/model.mod')->withoutOverlapping()->sendOutputTo(__DIR__.'/out.txt');
-        if($event->isDue($this->laravel))
-            $event->run($this->laravel);
     }
 }

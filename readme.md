@@ -42,6 +42,7 @@ After cloning and installing repository:
  * You should insert your name as author in composer file
  * We use UTC time
  * In real environment you should use apache2
+ * exec calls must be enabled in php-cli
 
 
 # Credits
