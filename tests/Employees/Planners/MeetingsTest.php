@@ -18,7 +18,7 @@ class MeetingsTest extends \TestCase
         config(['jwt.user' => \plunner\Employee::class]);
 
         $this->company = \plunner\Company::findOrFail(1);
-        $this->employee = $this->company->employees()->with('groups')->first();
+        $this->employee = $this->company->employees()->with('groups')->last();
         $this->group = $this->employee->groups->first();
         $this->planner = $this->group->planner;
 
