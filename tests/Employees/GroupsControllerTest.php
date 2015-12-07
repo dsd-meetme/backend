@@ -40,7 +40,6 @@ class GroupsControllerTest extends \TestCase
         $response->seeStatusCode(401);
     }
 
-    //TODO This returns ErrorException: Trying to get property of non-object for all users (like they don't have groups)
     public function testShow()
     {
         $group_id = $this->employee->groups->first()->id;
