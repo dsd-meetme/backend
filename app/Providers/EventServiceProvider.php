@@ -13,8 +13,8 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'plunner\Events\SomeEvent' => [
-            'plunner\Listeners\EventListener',
+        'plunner\Events\CaldavErrorEvent' => [
+            'plunner\Listeners\CaldavErrorListener',
         ],
     ];
 

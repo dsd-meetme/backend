@@ -26,34 +26,16 @@ class EmployeesControllerTest extends TestCase
     public function testIndex()
     {
         $response = $this->actingAs($this->employee)
-            ->json('GET', '/companies/employees/'.$this->employee->id);
+            ->json('GET', '/employees/employees/');
 
         $response->assertResponseOk();
-        $response->seeJsonEquals($this->employee->toArray());
+        $response->seeJsonEquals($this->company->employees->toArray());
     }
 
     public function testErrorIndex()
     {
-        $response = $this->json('GET', '/companies/employees/'.$this->employee->id);
+        $response = $this->json('GET', '/employees/employees/');
         $response->seeStatusCode(401);
-    }
-
-    public function testShow()
-    {
-        $test_employee = $this->company->employees()->with('groups')->get()->last();
-        $response = $this->actingAs($this->employee)
-            ->json('GET', '/companies/employees/'.$test_employee->id);
-
-        $response->assertResponseOk();
-        $response->seeJsonEquals($test_employee->toArray());
-    }
-
-    public function testShowEmployeeNotInSameCompany()
-    {
-        $test_employee = \plunner\Employee::where('company_id', '<>', $this->company->id)->firstOrFail();
-        $response = $this->actingAs($this->employee)
-            ->json('GET', '/companies/employees/'.$test_employee->id);
-        $response->seeStatusCode(403);
     }
 
 }
