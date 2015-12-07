@@ -46,11 +46,16 @@ x[i,j] <= sum{z in TimeSlots}y[j,z];
 
 solve;
 
-printf "results:\n";
-printf {i in Meetings, j in TimeSlots} " %s %i %i\n", i, j, y[i,j];
-printf {i in Users, j in Meetings} " %s %s %i\n", i, j, x[i,j];
-printf "\n";
+#printf "results:\n";
+#printf {i in Meetings, j in TimeSlots} " %s %i %i\n", i, j, y[i,j];
+#printf {i in Users, j in Meetings} " %s %s %i\n", i, j, x[i,j];
+#printf "\n";
 
+table tout {i in Users, j in Meetings} OUT "CSV" "x.csv" :
+i, j, x[i,j];
+
+table tout {j in Meetings, z in TimeSlots} OUT "CSV" "y.csv" :
+j, z, y[j,z];
 
 data;
 
