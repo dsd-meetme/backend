@@ -107,8 +107,8 @@ class Solver
      */
     function __destruct()
     {
-  //      if ($this->path && is_dir($this->path) && !self::delTree($this->path))
-//            throw new OptimiseException('problems during removing of path directory');
+        if ($this->path && is_dir($this->path) && !self::delTree($this->path))
+            throw new OptimiseException('problems during removing of path directory');
     }
 
     /**
