@@ -69,12 +69,13 @@ class CalendarsControllerTest extends TestCase
     public function testDelete()
     {
         $employee = \plunner\Employee::findOrFail(1);
-        $id = $employee->id;
+        $calendar = $employee->calendars()->firstOrFail();
+        $id = $calendar->id;
 
         //calendar exists
         $response = $this->actingAs($employee)->json('GET', '/employees/calendars/'.$id);
         $response->assertResponseOk();
-        $response->seeJsonEquals($employee->calendars->toArray());
+        $response->seeJsonEquals($calendar->toArray());
 
         //remove
         $response = $this->actingAs($employee)->json('DELETE', '/employees/calendars/'.$id);
@@ -92,20 +93,21 @@ class CalendarsControllerTest extends TestCase
     public function testUpdate()
     {
         $employee = \plunner\Employee::findOrFail(1);
+        $calendar = $employee->Calendars()->firstOrFail();
         $data = [
             'name' => 'test',
             'enabled' => '1',
         ];
 
         //correct request
-        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/'.$employee->id,$data);
+        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/'.$calendar->id,$data);
         $response->assertResponseOk();
         $response->seeJson($data);
 
 
         //same calendar update
         //correct request
-        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/'.$employee->id,$data);
+        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/'.$calendar->id,$data);
         $response->assertResponseOk();
         $response->seeJson($data);
     }
