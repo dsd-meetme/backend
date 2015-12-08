@@ -23,6 +23,14 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereEmployeeId($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereUpdatedAt($value)
+ * @property string $type
+ * @property string $sync_errors
+ * @property boolean $enabled
+ * @property-read \plunner\Employee $employee
+ * @property-read Caldav $Caldav
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereType($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereSyncErrors($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereEnabled($value)
  */
 class Calendar extends Model
 {
@@ -36,7 +44,7 @@ class Calendar extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function employees()
+    public function employee()
     {
         return $this->belongsTo('plunner\Employee');
     }
@@ -46,6 +54,16 @@ class Calendar extends Model
      */
     public function timeslots()
     {
-        return $this->hasMany('pluner\Timeslot');
+        return $this->hasMany('plunner\Timeslot');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne|null
+     */
+    public function Caldav()
+    {
+        if($this->type == 'caldav')
+            return $this->hasOne(Caldav::class);
+        return null;
     }
 }

@@ -18,7 +18,8 @@
         "barryvdh/laravel-ide-helper": "^2.1",
         "thecsea/jwt-auth": "0.5.*",
         "barryvdh/laravel-cors": "0.7.x",
-        "guzzlehttp/guzzle": "~5.3|~6.0"
+        "guzzlehttp/guzzle": "~5.3|~6.0",
+        "thecsea/caldav-client-adapter": "<2.0.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
