@@ -55,6 +55,7 @@ class Optimise extends Command
         //TODO check if glpk is installed
         //TODO multithreads
         //TODO log exceptions and fire
+        //TODO insert a timeout
         $solver = new Solver($this->schedule, $this->laravel);
         $solver->setTimeSlots(4);
         $solver->setMaxTimeSlots(4);
