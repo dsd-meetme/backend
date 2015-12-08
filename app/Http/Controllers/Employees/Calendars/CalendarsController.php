@@ -3,7 +3,7 @@
 namespace plunner\Http\Controllers\Employees\Calendars;
 
 use Illuminate\Http\Request;
-use plunner\Employee;
+use plunner\Calendar;
 use plunner\Http\Controllers\Controller;
 use plunner\Http\Requests\Employees\CalendarRequest;
 
@@ -65,26 +65,26 @@ class CalendarsController extends Controller
     public function show($id)
     {
         //
-        $employee = Employee::findOrFail($id);
-        $this->authorize($employee);
-        return $employee;
+        $calendar = Calendar::findOrFail($id);
+        $this->authorize($calendar);
+        return $calendar;
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  EmployeeRequest  $request
+     * @param  CalendarRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(EmployeeRequest $request, $id)
+    public function update(CalendarRequest $request, $id)
     {
         //
-        $employee = Employee::findOrFail($id);
-        $this->authorize($employee);
+        $calendar = Calendar::findOrFail($id);
+        $this->authorize($calendar);
         $input = $request->all();
-        $employee->update($input);
-        return $employee;
+        $calendar->update($input);
+        return $calendar;
     }
 
     /**
@@ -96,9 +96,9 @@ class CalendarsController extends Controller
     public function destroy($id)
     {
         //
-        $employee = Employee::findOrFail($id);
-        $this->authorize($employee);
-        $employee->delete();
-        return $employee;
+        $calendar = Calendar::findOrFail($id);
+        $this->authorize($calendar);
+        $calendar->delete();
+        return $calendar;
     }
 }
