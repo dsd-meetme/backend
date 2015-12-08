@@ -24,7 +24,7 @@ table tin3 IN "CSV" "{USER_AVAILABILITY_PATH}" :
 table tin4 IN "CSV" "{MEETINGS_AVAILABILITY_PATH}" :
 [i,j], MeetingsAvailability;
 
-table tin5 IN "CSV" "{USER_MEETINGS_PATH}"" :
+table tin5 IN "CSV" "{USER_MEETINGS_PATH}" :
 [i,j], UsersMeetings;
 
 table tin6 IN "CSV" "{MEETINGS_DURATION_PATH}" :

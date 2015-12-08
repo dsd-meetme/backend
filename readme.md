@@ -43,6 +43,7 @@ After cloning and installing repository:
  * We use UTC time
  * In real environment you should use apache2
  * exec calls must be enabled in php-cli
+ * tmp dir permissions needed
 
 
 # Credits

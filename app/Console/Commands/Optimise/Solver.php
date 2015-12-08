@@ -19,7 +19,8 @@
 
 namespace plunner\Console\Commands\Optimise;
 
-use Illuminate\Console\Scheduling\Schedule;
+use \Illuminate\Console\Scheduling\Schedule;
+use \Illuminate\Foundation\Application;
 
 /**
  * Class Solver
@@ -72,6 +73,11 @@ class Solver
     */
     private $schedule;
 
+    /**
+     * @var Application
+     */
+    private $laravel;
+
     const ARRAY_PROPRIETIES = ['users', 'meetings', 'meetingsAvailability', 'meetingsDuration', 'usersAvailability', 'usersMeetings'];
     const INT_PROPRIETIES = ['timeSlots', 'maxTimeSlots'];
 
@@ -79,17 +85,21 @@ class Solver
     //TODO mehtod to check if all variables are correctly set
     //TODO check no duplicates
     //TODO exception if glpsol return erros
+    //TODO intercept all erros of system calls like mkdir
 
 
     /**
      * Solver constructor.
+     * @param Schedule $schedule
+     * @param Application $laravel
      * @throws OptimiseException on general problems
      */
-    public function __construct(Schedule $schedule)
+    public function __construct(Schedule $schedule, Application $laravel)
     {
         self::checkGlpsol();
         $this->createPath();
         $this->schedule = $schedule;
+        $this->laravel = $laravel;
     }
 
     /**
@@ -97,8 +107,8 @@ class Solver
      */
     function __destruct()
     {
-        if ($this->path && is_dir($this->path) && !self::delTree($this->path))
-            throw new OptimiseException('problems during removing of path directory');
+  //      if ($this->path && is_dir($this->path) && !self::delTree($this->path))
+//            throw new OptimiseException('problems during removing of path directory');
     }
 
     /**
@@ -129,10 +139,14 @@ class Solver
      */
     private function createPath()
     {
-        $this->path = tempnam(sys_get_temp_dir(), 'OPT');
-        mkdir($this->path);
+        $this->path = tempnam(sys_get_temp_dir(), 'OPT'); //TODO check the return in case of errors this return false on failure
+        unlink($this->path); //remove file to create a dir
+        if(file_exists($this->path))
+            throw new OptimiseException('problem during creation of tmp dir (the directory already exists)');
+        if(!@mkdir($this->path))
+            throw new OptimiseException('problem during creation of tmp dir (mkdir problem)');;
         if(! is_dir($this->path))
-            throw new OptimiseException('problem during creation of tmp dir');
+            throw new OptimiseException('problem during creation of tmp dir (it is not possible to create directory)');
     }
 
     /**
@@ -205,10 +219,8 @@ class Solver
      */
     public function setTimeSlots($timeSlots)
     {
-        foreach($timeSlots as $timeSlot) {
-            if(!is_int($timeSlot) || $timeSlot <=0)
-                throw new OptimiseException('$timeSlots is not integer or it is not >0');
-        }
+        if(!is_int($timeSlots) || $timeSlots <=0)
+            throw new OptimiseException('$timeSlots is not integer or it is not >0');
 
         $this->timeSlots = $timeSlots;
     }
@@ -223,9 +235,13 @@ class Solver
 
     /**
      * @param int $maxTimeSlots
+     * @throws OptimiseException
      */
     public function setMaxTimeSlots($maxTimeSlots)
     {
+        if(!is_int($maxTimeSlots) || $maxTimeSlots <=0)
+            throw new OptimiseException('$maxTimeSlots is not integer or it is not >0');
+
         $this->maxTimeSlots = $maxTimeSlots;
     }
 
@@ -244,12 +260,13 @@ class Solver
     public function setMeetingsAvailability($meetingsAvailability)
     {
         $meetings = array_keys($meetingsAvailability);
-        if($meetings != $this->meetings)
+        if(array_diff($meetings, $this->meetings))
             throw new OptimiseException('meetings different from meetings set');
-        foreach($meetingsAvailability as $meetingsAvailabilityS) {
+        foreach($meetingsAvailability as $key=>$meetingsAvailabilityS) {
             $timeSlots = array_keys($meetingsAvailabilityS);
-            if($timeSlots != $this->timeSlots)
+            if(count($timeSlots) != $this->timeSlots)
                 throw new OptimiseException('timeSlots different from timeSlots set');
+            $meetingsAvailability[$key] = self::arrayPad($meetingsAvailabilityS, $this->timeSlots + $this->maxTimeSlots, 0);
         }
 
         $this->meetingsAvailability = $meetingsAvailability;
@@ -270,10 +287,12 @@ class Solver
     public function setMeetingsDuration($meetingsDuration)
     {
         $meetings = array_keys($meetingsDuration);
-        if($meetings != $this->meetings)
+        if(array_diff($meetings, $this->meetings)) {
+            print "";
             throw new OptimiseException('meetings different from meetings set');
+        }
         foreach($meetingsDuration as $duration) {
-            if(is_int($duration) && $duration >0)
+            if(!is_int($duration) || $duration <=0)
                 throw new OptimiseException('duration is not integer or it is not >0');
         }
 
@@ -295,12 +314,14 @@ class Solver
     public function setUsersAvailability($usersAvailability)
     {
         $users = array_keys($usersAvailability);
-        if($users != $this->users)
+        if(array_diff($users, $this->users))
             throw new OptimiseException('users different from users set');
-        foreach($usersAvailability as $usersAvailabilityS) {
+        foreach($usersAvailability as $key=>$usersAvailabilityS) {
             $timeSlots = array_keys($usersAvailabilityS);
-            if($timeSlots != $this->timeSlots)
+            if(count($timeSlots) != $this->timeSlots)
                 throw new OptimiseException('timeSlots different from timeSlots set');
+
+            $usersAvailability[$key] = self::arrayPad($usersAvailabilityS, $this->timeSlots + $this->maxTimeSlots, 0);
         }
 
         $this->usersAvailability = $usersAvailability;
@@ -321,11 +342,11 @@ class Solver
     public function setUsersMeetings($usersMeetings)
     {
         $users = array_keys($usersMeetings);
-        if($users != $this->users)
+        if(array_diff($users, $this->users))
             throw new OptimiseException('users different from users set');
         foreach($usersMeetings as $usersMeetingsS) {
             $meetings = array_keys($usersMeetingsS);
-            if($meetings != $this->meetings)
+            if(array_diff($meetings, $this->meetings))
                 throw new OptimiseException('meetings different from meetings set');
         }
 
@@ -353,7 +374,7 @@ class Solver
      */
     private function writeMeetingsDuration()
     {
-        self::writeCSVArray($this->getMeetingsDurationsPath().'/MeetingsDuration.csv', $this->meetingsDuration, 'MeetingsDuration');
+        self::writeCSVArray($this->getMeetingsDurationPath(), $this->meetingsDuration, 'MeetingsDuration');
     }
 
     /**
@@ -361,7 +382,7 @@ class Solver
      */
     private function writeMeetingsAvailability()
     {
-        self::writeCSVMatrix($this->getMeetingsAvailabilityPath().'/MeetingsAvailability.csv', $this->meetingsAvailability, 'MeetingsAvailability');
+        self::writeCSVMatrix($this->getMeetingsAvailabilityPath(), $this->meetingsAvailability, 'MeetingsAvailability');
     }
 
     /**
@@ -369,7 +390,7 @@ class Solver
      */
     private function writeUsersAvailability()
     {
-        self::writeCSVMatrix($this->getUsersAvailabilityPath().'/UsersAvailability.csv', $this->usersAvailability, 'UsersAvailability');
+        self::writeCSVMatrix($this->getUsersAvailabilityPath(), $this->usersAvailability, 'UsersAvailability');
     }
 
     /**
@@ -377,7 +398,7 @@ class Solver
      */
     private function writeUsersMeetings()
     {
-        self::writeCSVMatrix($this->getUsersMeetingsPath().'/UsersMeetings.csv', $this->usersMeetings, 'UsersMeetings');
+        self::writeCSVMatrix($this->getUsersMeetingsPath(), $this->usersMeetings, 'UsersMeetings');
     }
 
     /**
@@ -432,6 +453,8 @@ class Solver
 
         $writer($fp, $data);
 
+        //fputcsv($fp, []); //empty line
+
         fclose($fp);
     }
 
@@ -482,6 +505,7 @@ class Solver
 
     /**
      * @return string
+     * @throws OptimiseException
      */
     public function getOutput()
     {
@@ -507,6 +531,7 @@ class Solver
             throw new OptimiseException('problems during reading the file');
 
         $ret = [];
+        fgetcsv($handle); //skip head
         while (($data = fgetcsv($handle)) !== FALSE) {
             if(count($data) != 3) {
                 fclose($handle);
@@ -644,5 +669,19 @@ class Solver
         foreach($proprieties as $propriety)
             if(!is_int($this->$propriety) || $this->$propriety <= 0)
                 throw new OptimiseException($propriety.' is not set correctly');
+    }
+
+    /**
+     * implementation of arraypad that doesn't change original keys<br/>
+     * <strong>CAUTION: Only positive $len</strong>
+     * @param array $array
+     * @return array
+     */
+    static private function arrayPad(array $array, $len, $pad)
+    {
+        $len = $len - count($array);
+        for($i = 0; $i<$len; $i++)
+            $array[] = $pad;
+        return $array;
     }
 }
