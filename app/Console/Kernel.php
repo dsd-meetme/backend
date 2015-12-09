@@ -27,6 +27,6 @@ class Kernel extends ConsoleKernel
     {
         //$schedule->command('inspire')
         //         ->hourly();
-        $schedule->command('sync:caldav --background')->withoutOverlapping();
+        $schedule->command('sync:caldav --background')->withoutOverlapping()->everyTenMinutes();
     }
 }
