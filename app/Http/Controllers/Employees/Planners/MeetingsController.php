@@ -1,11 +1,12 @@
 <?php
 
-namespace plunner\Http\Controllers;
+namespace plunner\Http\Controllers\Employees\Planners;
 
 use Illuminate\Http\Request;
 
 use plunner\Http\Requests;
 use plunner\Http\Requests\Employees\MeetingRequest;
+use plunner\Http\Controllers\Controller;
 
 use plunner\Meeting;
 

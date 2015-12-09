@@ -85,6 +85,6 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
 
     Route::group(['namespace' => 'Planners'], function()
     {
-        Route::resource('planner', 'MeetingController', ['except' => ['show', 'index']]);
+        Route::resource('meetings', 'MeetingsController', ['except' => ['show', 'index']]);
     });
 });
