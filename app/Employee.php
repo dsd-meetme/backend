@@ -64,7 +64,7 @@ class Employee extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = ['password', 'remember_token', 'pivot'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

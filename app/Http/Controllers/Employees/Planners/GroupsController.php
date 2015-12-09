@@ -1,28 +1,21 @@
 <?php
 
-namespace plunner\Http\Controllers\Employees;
-
-use Illuminate\Http\Request;
+namespace plunner\Http\Controllers\Employees\Planners;
 
 use plunner\Group;
-use plunner\Employee;
-use plunner\Http\Requests;
 use plunner\Http\Controllers\Controller;
+use plunner\Http\Requests;
+use plunner\Planner;
 
 class GroupsController extends Controller
 {
-    /**
-     * @var plunner/Employee
-     */
-    private $user;
-
     /**
      * ExampleController constructor.
      */
     public function __construct()
     {
-        config(['auth.model' => \plunner\Employee::class]);
-        config(['jwt.user' => \plunner\Employee::class]);
+        config(['auth.model' => Planner::class]);
+        config(['jwt.user' => Planner::class]);
         $this->middleware('jwt.authandrefresh:mode-en');
     }
 
@@ -33,8 +26,11 @@ class GroupsController extends Controller
      */
     public function index()
     {
-        $employee = \Auth::user();
-        return $employee->groups;
+        /**
+         * @var $planner Planner
+         */
+        $planner = \Auth::user();
+        return $planner->groupsManaged;
     }
 
     /**
@@ -45,7 +41,7 @@ class GroupsController extends Controller
      */
     public function show($id)
     {
-        $group = Group::findOrFail($id);
+        $group = Group::with('employees')->findOrFail($id);
         $this->authorize($group);
         return $group;
     }

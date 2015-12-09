@@ -1,11 +1,8 @@
 <?php
 
-namespace Companies\Groups;
+namespace Employees\Groups;
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Support\testing\ActingAs;
 
 class GroupsControllerTest extends \TestCase
@@ -21,7 +18,7 @@ class GroupsControllerTest extends \TestCase
         config(['jwt.user' => \plunner\Employee::class]);
 
         $this->company = \plunner\Company::findOrFail(1);
-        $this->employee = $this->company->employees()->with('groups')->first();
+        $this->employee = $this->company->employees()->has('groups')->firstOrFail();
     }
 
 
