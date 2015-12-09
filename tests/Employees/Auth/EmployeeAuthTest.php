@@ -1,6 +1,6 @@
 <?php
 
-namespace Employees;
+namespace Employees\Auth;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 

@@ -57,8 +57,8 @@ Route::group(['namespace' => 'Companies', 'prefix' => 'companies'], function() {
  * Employees
  */
 Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
-    //\Auth
 
+    //\Auth
     Route::group(['namespace' => 'Auth'], function() {
         Route::group(['prefix' => 'auth'], function () {
             // Authentication routes...
@@ -78,13 +78,17 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
         });
     });
 
-    Route::resource('employees', 'EmployeesController', ['only' => ['index']]);
-    Route::resource('groups', 'GroupsController', ['only' => ['index', 'show']]);
-
     Route::resource('meetings', 'MeetingsController', ['only' => ['show', 'index']]);
 
-    Route::group(['namespace' => 'Planners'], function()
-    {
-        Route::resource('meetings', 'MeetingsController', ['except' => ['show', 'index']]);
+    Route::group(['namespace' => 'Planners'], function() {
+        Route::resource('meetings', 'MeetingsController', ['except' => ['show', 'index']]); //TODO insert below. Caution: consider the prefix
+    });
+
+    Route::group(['namespace' => 'Planners', 'prefix' => 'planners'], function() {
+        Route::resource('groups', 'GroupsController', ['only' => ['index', 'show']]);
+    });
+
+    Route::group(['namespace' => 'Groups'], function() {
+        Route::resource('groups', 'GroupsController', ['only' => ['index', 'show']]);
     });
 });
