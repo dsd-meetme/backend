@@ -33,21 +33,4 @@ class EmployeesController extends Controller
         $employee = \Auth::user();
         return $employee;
     }
-
-    //TODO this is not RESTFUL, but it can be ok
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $employee = Employee::findOrFail($id);
-        $this->authorize($employee);
-        return $employee;
-    }
-
-    //TODO why this? when we need this?
 }
