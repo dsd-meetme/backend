@@ -111,4 +111,23 @@ class CalendarsControllerTest extends TestCase
         $response->assertResponseOk();
         $response->seeJson($data);
     }
+
+    public function testShow()
+    {
+        $employee = \plunner\Employee::findOrFail(1);
+        $calendar = $employee->Calendars()->firstOrFail();
+
+        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/'.$calendar->id);
+        $response->assertResponseOk();
+        $response->seeJsonEquals($calendar->toArray());
+    }
+
+    public function testShowNotMine()
+    {
+        $employee = \plunner\Employee::findOrFail(1);
+        $calendar = \plunner\Calendar::where('employee_id','<>', $employee->id)->firstOrFail();
+
+        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/'.$calendar->id);
+        $response->seeStatusCode(403);
+    }
 }
