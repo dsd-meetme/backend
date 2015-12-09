@@ -19,6 +19,9 @@ or simply
 
 1. Create database
 1. Configure database data in .env file
+1. Configure private keys in .env file
+    1. `JWT_SECRET` via `jwt:generate`
+    1. `APP_KEY` via `key:generate `
 1. perform `php artisan migrate`
 1. configure urls in `config/app.php` (this only for real environment)
 1. this must be installed on the root of the virtual host
@@ -42,9 +45,10 @@ After cloning and installing repository:
  * You should insert your name as author in composer file
  * We use UTC time
  * In real environment you should use apache2
+ * To not to perform tests of console tasks, since they can be have problems on windows and they need specif software, set the following env variable `DO_CONSOLE_TESTS=false`
  * exec calls must be enabled in php-cli
  * tmp dir permissions needed
- * the library is tested only on linux, we don't now the behaviour of critical parts (optimisation and caldav sync) on other systems
+ * the library is tested only on linux, we don't know the behaviour of critical parts (optimisation and caldav sync) on other systems
 
 
 # Credits
