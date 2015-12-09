@@ -26,6 +26,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Query\Builder|\plunner\Meeting whereMeetingEnd($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Meeting whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Meeting whereUpdatedAt($value)
+ * @property integer $utc
+ * @property integer $repeat
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Meeting whereUtc($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Meeting whereRepeat($value)
  */
 class Meeting extends Model
 {

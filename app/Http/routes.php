@@ -77,6 +77,9 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
         });
     });
 
+    Route::group(['namespace' => 'Calendars'], function() {
+        Route::resource('calendars', 'CalendarsController', ['except' => ['create', 'edit']]);
+    });
 
     Route::group(['namespace' => 'Planners', 'prefix' => 'planners'], function() {
         Route::resource('groups', 'GroupsController', ['only' => ['index', 'show']]);
