@@ -48,7 +48,8 @@ After cloning and installing repository:
  * To not to perform tests of console tasks, since they can be have problems on windows and they need specif software, set the following env variable `DO_CONSOLE_TESTS=false`
  * exec calls must be enabled in php-cli
  * tmp dir permissions needed
- * the library is tested only on linux, we don't know the behaviour of critical parts (optimisation and caldav sync) on other systems
+ * The library is tested only on linux, we don't know the behaviour of critical parts (optimisation and caldav sync) on other systems
+ * Details about optimisation task [https://docs.google.com/document/d/18vCFEVrd8ENgS80hC-ACjSicDFYXV2QjoFiO3FiGZ5w/edit](https://docs.google.com/document/d/18vCFEVrd8ENgS80hC-ACjSicDFYXV2QjoFiO3FiGZ5w/edit)
 
 
 # Credits
