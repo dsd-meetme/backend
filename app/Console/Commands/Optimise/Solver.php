@@ -78,9 +78,6 @@ class Solver
      */
     private $laravel;
 
-    const ARRAY_PROPRIETIES = ['users', 'meetings', 'meetingsAvailability', 'meetingsDuration', 'usersAvailability', 'usersMeetings'];
-    const INT_PROPRIETIES = ['timeSlots', 'maxTimeSlots'];
-
     //TODo clone function
     //TODO mehtod to check if all variables are correctly set
     //TODO check no duplicates
@@ -645,8 +642,8 @@ class Solver
      */
     private function checkData()
     {
-        $this->checkArrayProprieties(self::ARRAY_PROPRIETIES);
-        $this->checkIntProprieties(self::INT_PROPRIETIES);
+        $this->checkArrayProprieties(['users', 'meetings', 'meetingsAvailability', 'meetingsDuration', 'usersAvailability', 'usersMeetings']);
+        $this->checkIntProprieties(['timeSlots', 'maxTimeSlots']);
     }
 
     /**
