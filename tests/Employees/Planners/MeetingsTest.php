@@ -34,11 +34,27 @@ class MeetingsTest extends \TestCase
     }
 
 
+    public function testIndexAllMeetings()
+    {
+        $response = $this->actingAs($this->employee->json('GET', '/employees/meetings'));
+
+        $response->assertResponseOk();
+        $response->seeJsonEquals($this->employee->meetings->toArray());
+    }
+
+    public function testErrorIndexNoMeetings()
+    {
+        $response = $this->json('GET', '/employees/meetings');
+
+        $response->seeStatusCode(401);
+    }
+
     public function testCreateNonRepeatingMeeting()
     {
         $response = $this->actingAs($this->planner)->json('POST', '/employees/meetings', $this->data_non_repeat);
+
         $response->assertResponseOk();
-        $response->seeJsonEquals($this->data_non_repeat->toArray());
+        $response->seeJson($this->data_non_repeat);
     }
 
     public function testCreateDuplicateNonRepeatingMeeting()
@@ -52,7 +68,7 @@ class MeetingsTest extends \TestCase
     public function testShowNonRepeatingMeeting()
     {
         $this->actingAs($this->planner)->json('POST', '/employees/meetings', $this->data_non_repeat);
-        $meeting_id = $this->employee->meetings()->first()->id;
+        $meeting_id = $this->planner->meetings()->first()->id;
 
         $response = $this->actingAs($this->employee)->json('GET', '/employees/meetings/'.$meeting_id);
         $response->assertResponseOk();
@@ -66,7 +82,7 @@ class MeetingsTest extends \TestCase
         // Find an id of a non existing meeting
         for ($test_meeting_id; $test_meeting_id < $this->employee->meetings->count() + 1; $test_meeting_id++)
         {
-            if (!$this->employee->meetings->where("id", $test_meeting_id)->id)
+            if (!$this->planner->meetings->where("id", $test_meeting_id)->id)
             {
                 break;
             }
@@ -79,7 +95,7 @@ class MeetingsTest extends \TestCase
     public function testPlannerDeleteMeeting()
     {
         $this->actingAs($this->planner)->json('POST', '/employees/meetings', $this->data_non_repeat);
-        $meeting_id = $this->employee->meetings()->first()->id;
+        $meeting_id = $this->planner->meetings()->first()->id;
 
         $response = $this->actingAs($this->planner)->json('DELETE', '/employees/meetings/'.$meeting_id);
         $response->assertResponseOk();
@@ -92,7 +108,7 @@ class MeetingsTest extends \TestCase
         $test_planner = $test_group->planner;
 
         $this->actingAs($test_planner)->json('POST', '/employees/meetings', $this->data_non_repeat);
-        $meeting_id = $this->employee->meetings()->first()->id;
+        $meeting_id = $this->planner->meetings()->first()->id;
 
         $response = $this->actingAs($this->employee)->json('DELETE', '/employees/meetings/'.$meeting_id);
         $response->seeStatusCode(403);
@@ -105,7 +121,7 @@ class MeetingsTest extends \TestCase
         // Find an id of a non existing meeting
         for ($test_meeting_id; $test_meeting_id < $this->employee->meetings->count() + 1; $test_meeting_id++)
         {
-            if (!$this->employee->meetings->where("id", $test_meeting_id)->id)
+            if (!$this->planner->meetings->where("id", $test_meeting_id)->id)
             {
                 break;
             }
