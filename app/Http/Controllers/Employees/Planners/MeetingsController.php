@@ -11,8 +11,7 @@ use plunner\Company;
 use plunner\Employee;
 use plunner\Http\Requests\Companies\Groups\EmployeeRequest;
 
-//use plunner\Http\Requests\Employees\MeetingRequest;
-//TODO above gives undefined namespace on Employees even though the path is correct
+use plunner\Http\Requests\Employees\MeetingRequest;
 
 use plunner\Meeting;
 
