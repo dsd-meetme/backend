@@ -30,6 +30,7 @@ class MeetingRequest extends Request
             'end_time' => 'required|date|after:meeting_start',
             'repeat' => 'required|integer',
             'repetition_end_time' => 'date',
+            'is_scheduled' => 'required|boolean',
             'group_id' => 'required|exists:groups,id',
         ];
     }

@@ -9,9 +9,7 @@ class MeetingsTest extends \TestCase
 {
     use DatabaseTransactions, ActingAs;
 
-    private $company;
-    private $group;
-    private $planner;
+    private $company, $group, $employee, $planner, $data_non_repeat, $data_repeat;
 
     public function setUp()
     {
@@ -19,60 +17,37 @@ class MeetingsTest extends \TestCase
         config(['auth.model' => \plunner\Employee::class]);
         config(['jwt.user' => \plunner\Employee::class]);
 
-        $this->company = $this->makeCompany();
-        $employees = $this->makeEmployees($this->company);
-        $this->group = $this->makeGroup($this->company, $employees);
-
+        $this->company = \plunner\Company::findOrFail(1);
+        $this->employee = $this->company->employees()->with('groups')->first();
+        $this->group = $this->employee->groups->first();
         $this->planner = $this->group->planner;
-    }
 
-    private function makeCompany()
-    {
-        return factory(\plunner\Company::class, 1)->create();
-    }
-
-    private function makeEmployees($company)
-    {
-        factory(\plunner\Employee::class, 3)->create(
-            [
-                'company_id' => $company->id,
-            ]
-        );
-
-        return $company->employees;
-    }
-
-    private function makeGroup($company, $employees)
-    {
-        $group = factory(\plunner\Group::class, 1)->create(
-            [
-                'company_id' => $company->id,
-                'planner_id' => $employees[0]->id,
-            ]
-        );
-        $group->employees()->save($employees[0]);
-        $group->employees()->save($employees[1]);
-        $group->employees()->save($employees[2]);
-
-        return $group;
+        $this->data_non_repeat= [
+            'title' => 'Test non-repeating meeting',
+            'description' => 'Errare humanum est!',
+            'start_time' => '2015-12-07 12:00:00',
+            'end_time' => '2015-12-07 14:00:00',
+            'repeat' => '0',
+            'is_scheduled' => false,
+            'group_id' => $this->group->id,
+        ];
     }
 
 
     public function testCreateNonRepeatingMeeting()
     {
-        $data = [
-            'title' => 'Requirements meeting',
-            'description' => 'Discussing the requirements',
-            'start_time' => '20.12.2015',
-            'end_time' => '02.01.2016',
-            'repeat' => '0',
-            'group_id' => $this->group->id,
-        ];
-
-        $response = $this->actingAs($this->planner)->json('POST', '/employees/meetings', $data);
+        $response = $this->actingAs($this->planner)->json('POST', '/employees/meetings', $this->data_non_repeat);
 
         $response->assertResponseOk();
-        $response->seeJson($data);
+        $response->seeJson($this->data_non_repeat);
+    }
+
+    public function testCreateDuplicateNonRepeatingMeeting()
+    {
+        $this->actingAs($this->planner)->json('POST', '/employees/meetings', $this->data_non_repeat);
+        $response = $this->actingAs($this->planner)->json('POST', '/employees/meetings', $this->data_non_repeat);
+
+        $response->seeStatusCode(422);
     }
 
     /*public function testCreateRepeatingMeeting()

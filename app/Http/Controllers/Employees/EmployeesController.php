@@ -31,6 +31,7 @@ class EmployeesController extends Controller
     public function index()
     {
         $employee = \Auth::user();
-        return $employee;
+        $company = $employee->company;
+        return $company->employees;
     }
 }
