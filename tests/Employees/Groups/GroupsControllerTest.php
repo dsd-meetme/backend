@@ -18,7 +18,7 @@ class GroupsControllerTest extends \TestCase
         config(['jwt.user' => \plunner\Employee::class]);
 
         $this->company = \plunner\Company::findOrFail(1);
-        $this->employee = $this->company->employees()->with('groups')->first();
+        $this->employee = $this->company->employees()->has('groups')->first();
     }
 
 
@@ -37,7 +37,6 @@ class GroupsControllerTest extends \TestCase
         $response->seeStatusCode(401);
     }
 
-    //TODO This returns ErrorException: Trying to get property of non-object for all users (like they don't have groups)
     public function testShow()
     {
         $group_id = $this->employee->groups->first()->id;
