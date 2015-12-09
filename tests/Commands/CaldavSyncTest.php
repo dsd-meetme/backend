@@ -1,6 +1,6 @@
 <?php
 
-namespace Other;
+namespace Commands;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
