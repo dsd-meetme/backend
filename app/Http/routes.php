@@ -56,8 +56,8 @@ Route::group(['namespace' => 'Companies', 'prefix' => 'companies'], function() {
  * Employees
  */
 Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
-    //\Auth
 
+    //\Auth
     Route::group(['namespace' => 'Auth'], function() {
         Route::group(['prefix' => 'auth'], function () {
             // Authentication routes...
@@ -81,4 +81,11 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
         Route::resource('calendars', 'CalendarsController', ['except' => ['create', 'edit']]);
     });
 
+    Route::group(['namespace' => 'Planners', 'prefix' => 'planners'], function() {
+        Route::resource('groups', 'GroupsController', ['only' => ['index', 'show']]);
+    });
+
+    Route::group(['namespace' => 'Groups'], function() {
+        Route::resource('groups', 'GroupsController', ['only' => ['index', 'show']]);
+    });
 });
