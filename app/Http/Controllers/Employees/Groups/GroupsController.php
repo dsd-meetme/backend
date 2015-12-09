@@ -12,11 +12,6 @@ use plunner\Http\Controllers\Controller;
 class GroupsController extends Controller
 {
     /**
-     * @var plunner/Employee
-     */
-    private $user;
-
-    /**
      * ExampleController constructor.
      */
     public function __construct()

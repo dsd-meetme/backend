@@ -10,11 +10,6 @@ use plunner\Planner;
 class GroupsController extends Controller
 {
     /**
-     * @var plunner/Employee
-     */
-    private $user;
-
-    /**
      * ExampleController constructor.
      */
     public function __construct()
@@ -35,7 +30,7 @@ class GroupsController extends Controller
          * @var $planner Planner
          */
         $planner = \Auth::user();
-        return $planner->GroupsManaged;
+        return $planner->groupsManaged;
     }
 
     /**
