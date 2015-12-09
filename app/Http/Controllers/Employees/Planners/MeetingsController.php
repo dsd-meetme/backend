@@ -5,11 +5,7 @@ namespace plunner\Http\Controllers;
 use Illuminate\Http\Request;
 
 use plunner\Http\Requests;
-use Carbon\Carbon;
-use plunner\Http\Controllers\Controller;
-use plunner\Company;
-use plunner\Employee;
-use plunner\Http\Requests\Companies\Groups\EmployeeRequest;
+use plunner\Http\Requests\Employees\MeetingRequest;
 
 //use plunner\Http\Requests\Employees\MeetingRequest;
 //TODO above gives undefined namespace on Employees even though the path is correct

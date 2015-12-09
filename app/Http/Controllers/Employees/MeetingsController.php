@@ -4,7 +4,7 @@ namespace plunner\Http\Controllers\Employees;
 
 use Illuminate\Http\Request;
 
-use plunner\Http\Requests\MeetingRequest;
+use plunner\Http\Requests\Employees\MeetingRequest;
 use Carbon\Carbon;
 use plunner\Http\Controllers\Controller;
 use plunner\Company;
@@ -76,7 +76,8 @@ class MeetingsController extends Controller
      */
     public function store(MeetingRequest $request)
     {
-        $employee = \Auth::user();
+        //TODO remove thsi since this is not the correct place
+      /*  $employee = \Auth::user();
         $input = $request->all();
         $group = Group::findOrFail($input['group_id']);
 
@@ -87,11 +88,11 @@ class MeetingsController extends Controller
             $employees = $group->employees;
             foreach ($employees as $employee)
             {
-                $group->employees()->save($employee);
+                $group->employees()->save($employee);//TODO WRONG
             }
             return $meeting;
         }
-        return Response::json(['error' => 'groupId'],404);
+        return Response::json(['error' => 'groupId'],404);*/
     }
 
     /**
