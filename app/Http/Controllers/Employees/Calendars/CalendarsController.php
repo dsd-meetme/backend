@@ -11,11 +11,6 @@ use plunner\Http\Requests\Employees\CalendarRequest;
 class CalendarsController extends Controller
 {
     /**
-     * @var \plunner\Company
-     */
-    private $user;
-
-    /**
      * ExampleController constructor.
      */
     public function __construct()
