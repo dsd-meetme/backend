@@ -111,6 +111,6 @@ class Company extends Model implements AuthenticatableContract,
     public function verifyCalendar(Calendar $calendar)
     {
         //TODO test this
-        return $calendar->employee->Company->id == $this->id;
+        return $calendar->employee->company->id == $this->id;
     }
 }
