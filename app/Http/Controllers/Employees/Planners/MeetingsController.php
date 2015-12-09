@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use plunner\Http\Requests;
 use plunner\Http\Requests\Employees\MeetingRequest;
 
-use plunner\Http\Requests\Employees\MeetingRequest;
-
 use plunner\Meeting;
 
 class MeetingsController extends Controller
@@ -22,48 +20,6 @@ class MeetingsController extends Controller
         config(['jwt.user' => \plunner\Planner::class]);
         $this->middleware('jwt.authandrefresh:mode-en');
     }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @param $view_month
-     * @return mixed
-     */
-    public function index($view_month)
-    {
-        $employee = \Auth::user();
-        $all_meetings = $employee->meetings;
-
-        /**
-         * Check for repeating meetings and add them to the collection of meetings.
-         */
-        foreach ($all_meetings as $meeting) {
-            if ($meeting->repeat > 0) {
-                $repeat_interval = $meeting->repeat;
-
-                // Determine how much meetings happen in a month based on the month that is currently in view
-                $date_start = DateTime::createFromFormat("Y-m-d h:m:s", $meeting->meeting_start);
-                if ($date_start.date("m") == $view_month) {
-                    $date_start->format("d");
-                    $events_remaining = intval($date_start / $repeat_interval);
-                }
-                else {
-                    $events_remaining = intval($view_month->daysInMonth / $repeat_interval);
-                }
-
-                // Create new meetings, add the repeat interval and add them to the collection of meetings
-                for ($i=1; $i<=$events_remaining; $i++) {
-                    $new_meeting = $meeting->replicate();
-                    $new_meeting->start_time = $meeting->start_date->addDays($repeat_interval*$i);
-                    $new_meeting->end_time = $meeting->end_date->addDays($repeat_interval*$i);
-                    $all_meetings += $new_meeting;
-                }
-            }
-        }
-
-        return $all_meetings;
-    }
-
 
     /**
      * Store a newly created resource in storage.
@@ -88,19 +44,6 @@ class MeetingsController extends Controller
             return $meeting;
         }
         return Response::json(['error' => 'groupId'],404);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param $meetingId
-     * @return mixed
-     */
-    public function show($meetingId)
-    {
-        $meeting = Meeting::findOrFail($meetingId);
-        $this->authorize($meeting);
-        return $meeting;
     }
 
     /**

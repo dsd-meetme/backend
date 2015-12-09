@@ -66,35 +66,6 @@ class MeetingsController extends Controller
         return $all_meetings;*/
     }
 
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param MeetingRequest $request
-     * @param $groupId
-     * @return static
-     */
-    public function store(MeetingRequest $request)
-    {
-        //TODO remove thsi since this is not the correct place
-      /*  $employee = \Auth::user();
-        $input = $request->all();
-        $group = Group::findOrFail($input['group_id']);
-
-        // Check if the employee is the planner for the group.
-        if ($employee->id == $group->planner_id)
-        {
-            $meeting = $group->meetings()->create($input);
-            $employees = $group->employees;
-            foreach ($employees as $employee)
-            {
-                $group->employees()->save($employee);//TODO WRONG
-            }
-            return $meeting;
-        }
-        return Response::json(['error' => 'groupId'],404);*/
-    }
-
     /**
      * Display the specified resource.
      *
@@ -108,54 +79,4 @@ class MeetingsController extends Controller
         return $meeting;
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param MeetingRequest $request
-     * @param $meetingId
-     * @param $groupId
-     * @return mixed
-     */
-    public function update(MeetingRequest $request, $meetingId)
-    {
-        $employee = \Auth::user();
-        $meeting = Meeting::findOrFail($meetingId);
-        $group = $meeting->group;
-        $this->authorize($group);
-
-
-        // Check if the employee is the planner for the group.
-
-        if ($employee->id == $group->planner_id)
-        {
-            $input = $request->all();
-            $meeting->update($input);
-            return $meeting;
-        }
-        return Response::json(['error' => 'meetingId'],404);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param $meetingId
-     * @param $groupId
-     * @return mixed
-     */
-    public function destroy($meetingId)
-    {
-        $employee = \Auth::user();
-        $meeting = Meeting::findOrFail($meetingId);
-        $this->authorize($meeting);
-        $group = $meeting->group;
-        $this->authorize($group);
-
-        // Check if the employee is the planner for the group.
-        if ($employee->id == $group->planner_id)
-        {
-            $meeting->delete();
-            return $employee;
-        }
-        return Response::json(['error' => 'meetingId'],404);
-    }
 }
