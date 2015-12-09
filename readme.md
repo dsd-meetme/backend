@@ -44,6 +44,7 @@ After cloning and installing repository:
  * In real environment you should use apache2
  * exec calls must be enabled in php-cli
  * tmp dir permissions needed
+ * the library is tested only on linux, we don't now the behaviour of critical parts (optimisation and caldav sync) on other systems
 
 
 # Credits
