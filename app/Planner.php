@@ -74,4 +74,15 @@ class Planner extends Employee
     {
         return false;
     }
+
+    /**
+     * the employee can see a calendar
+     * @param Calendar $calendar
+     * @return bool
+     */
+    public function verifyCalendar(Calendar $calendar)
+    {
+        //TODO implement and test
+        return false;
+    }
 }

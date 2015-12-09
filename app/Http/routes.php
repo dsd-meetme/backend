@@ -82,6 +82,9 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
 
     Route::group(['namespace' => 'Planners'], function() {
         Route::resource('meetings', 'MeetingsController', ['except' => ['show', 'index']]); //TODO insert below. Caution: consider the prefix
+
+        Route::group(['namespace' => 'Calendars'], function() {
+        Route::resource('calendars', 'CalendarsController', ['except' => ['create', 'edit']]);
     });
 
     Route::group(['namespace' => 'Planners', 'prefix' => 'planners'], function() {

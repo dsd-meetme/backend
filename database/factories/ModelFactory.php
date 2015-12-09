@@ -30,6 +30,21 @@ $factory->define(plunner\Employee::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(plunner\Calendar::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->name,
+    ];
+});
+
+
+$factory->define(plunner\Timeslot::class, function (Faker\Generator $faker) {
+    $date = $faker->dateTimeThisYear;
+    return [
+        'time_start' => $date,
+        'time_end' => $date + 100,
+    ];
+});
+
 $factory->define(plunner\Group::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,

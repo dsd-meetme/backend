@@ -17,6 +17,7 @@ class CreateCalendarsTable extends Migration
             $table->string('name');
             $table->integer('employee_id')->unsigned();
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade')->onUpdate('cascade');
+            $table->boolean('enabled')->default('1');
             $table->string('type')->nullable()->default(NULL);
             $table->timestamps();
         });
