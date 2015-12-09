@@ -32,10 +32,14 @@ class MeetingsController extends Controller
      */
     public function index()
     {
-        return 'g';
-        /*$employee = \Auth::user();
+        $employee = \Auth::user();
         $all_meetings = $employee->meetings;
+        return $all_meetings;
 
+        /**
+         * Meeting interval repetition (not implemented)
+         */
+        /*
         *
          * Check for repeating meetings and add them to the collection of meetings.
 
