@@ -2,6 +2,7 @@
 
 namespace plunner\Http\Controllers\Employees\Planners;
 
+use plunner\Group;
 use plunner\Http\Controllers\Controller;
 use plunner\Http\Requests;
 use plunner\Planner;
@@ -34,7 +35,19 @@ class GroupsController extends Controller
          * @var $planner Planner
          */
         $planner = \Auth::user();
-        //return $planner->groupsManaged()->with('employees')->get();
         return $planner->GroupsManaged;
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $group = Group::with('employees')->findOrFail($id);
+        $this->authorize($group);
+        return $group;
     }
 }

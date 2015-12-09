@@ -79,7 +79,7 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
 
 
     Route::group(['namespace' => 'Planners', 'prefix' => 'planners'], function() {
-        Route::resource('groups', 'GroupsController', ['only' => ['index']]);
+        Route::resource('groups', 'GroupsController', ['only' => ['index', 'show']]);
     });
 
     Route::group(['namespace' => 'Groups'], function() {

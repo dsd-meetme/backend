@@ -18,7 +18,7 @@ class GroupsControllerTest extends \TestCase
         config(['jwt.user' => \plunner\Employee::class]);
 
         $this->company = \plunner\Company::findOrFail(1);
-        $this->employee = $this->company->employees()->has('groups')->first();
+        $this->employee = $this->company->employees()->has('groups')->firstOrFail();
     }
 
 
