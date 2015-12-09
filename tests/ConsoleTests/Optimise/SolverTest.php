@@ -13,6 +13,8 @@ class SolverTest extends \TestCase
 
     public function testSimpleModel()
     {
+        if(!$this->doConsole())
+            return;
         $solver = new Solver(new Schedule(), \App::getInstance());
         $solver->setTimeSlots(4);
         $solver->setMaxTimeSlots(4);
