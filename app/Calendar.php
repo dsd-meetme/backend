@@ -39,7 +39,7 @@ class Calendar extends Model
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'enabled'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

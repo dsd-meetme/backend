@@ -37,6 +37,7 @@ class InitSeeder extends Seeder
             'remember_token' => str_random(10),
         ]);
         $company->employees()->save($employee);
+        self::calendars($employee);
 
         //create groups
         self::groups($company, $company->employees->toArray());
@@ -64,6 +65,14 @@ class InitSeeder extends Seeder
     {
         factory(plunner\Employee::class, 3)->make()->each(function ($employee) use ($company) {
             $company->employees()->save($employee);
+            self::calendars($employee);
+        });
+    }
+
+    static private function calendars($employee)
+    {
+        factory(plunner\Calendar::class, 3)->make()->each(function ($calendar) use($employee){
+            $employee->calendars()->save($calendar);
         });
     }
 
