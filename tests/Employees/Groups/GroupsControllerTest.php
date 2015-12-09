@@ -1,11 +1,8 @@
 <?php
 
-namespace Companies\Groups;
+namespace Employees\Groups;
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Support\testing\ActingAs;
 
 class GroupsControllerTest extends \TestCase

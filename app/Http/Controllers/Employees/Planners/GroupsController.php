@@ -1,12 +1,12 @@
 <?php
 
-namespace plunner\Http\Controllers\Employees;
+namespace plunner\Http\Controllers\Employees\Planners;
 
 use plunner\Http\Controllers\Controller;
 use plunner\Http\Requests;
-use plunner\Employee;
+use plunner\Planner;
 
-class EmployeesController extends Controller
+class GroupsController extends Controller
 {
     /**
      * @var plunner/Employee
@@ -18,8 +18,8 @@ class EmployeesController extends Controller
      */
     public function __construct()
     {
-        config(['auth.model' => \plunner\Employee::class]);
-        config(['jwt.user' => \plunner\Employee::class]);
+        config(['auth.model' => Planner::class]);
+        config(['jwt.user' => Planner::class]);
         $this->middleware('jwt.authandrefresh:mode-en');
     }
 
@@ -30,8 +30,11 @@ class EmployeesController extends Controller
      */
     public function index()
     {
-        $employee = \Auth::user();
-        $company = $employee->company;
-        return $company->employees;
+        /**
+         * @var $planner Planner
+         */
+        $planner = \Auth::user();
+        //return $planner->groupsManaged()->with('employees')->get();
+        return $planner->GroupsManaged;
     }
 }

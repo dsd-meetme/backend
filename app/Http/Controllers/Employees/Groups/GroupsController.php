@@ -1,6 +1,6 @@
 <?php
 
-namespace plunner\Http\Controllers\Employees;
+namespace plunner\Http\Controllers\Employees\Groups;
 
 use Illuminate\Http\Request;
 
@@ -34,7 +34,7 @@ class GroupsController extends Controller
     public function index()
     {
         $employee = \Auth::user();
-        return $employee->groups;
+        return $employee->Groups;
     }
 
     /**
