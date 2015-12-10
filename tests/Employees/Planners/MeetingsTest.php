@@ -67,7 +67,7 @@ class MeetingsTest extends \TestCase
 
     public function testShowNonRepeatingMeeting()
     {
-        $this->actingAs($this->planner)->json('POST', '/employees/meetings', $this->data_non_repeat);
+        //$this->actingAs($this->planner)->json('POST', '/employees/meetings', $this->data_non_repeat);
         $meeting_id = $this->employee->meetings()->first()->id;
 
         $response = $this->actingAs($this->employee)->json('GET', '/employees/meetings/'.$meeting_id);
@@ -82,7 +82,7 @@ class MeetingsTest extends \TestCase
         // Find an id of a non existing meeting
         for ($test_meeting_id; $test_meeting_id < $this->employee->meetings->count() + 1; $test_meeting_id++)
         {
-            if ($test_meeting_id == !$this->employee->meetings->where("id", $test_meeting_id)->id)
+            if ($test_meeting_id == !$this->employee->meetings->where("id", $test_meeting_id)->id())
             {
                 break;
             }
