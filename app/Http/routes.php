@@ -79,7 +79,7 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
 
     Route::group(['namespace' => 'Calendars'], function() {
         Route::resource('calendars', 'CalendarsController', ['except' => ['create', 'edit']]);
-        Route::get('calendars/calendars', ['as' => 'employees.calendars.calendars','uses'=>'CalendarsController@getCalendars']);
+        Route::post('calendars/calendars', ['as' => 'employees.calendars.calendars','uses'=>'CalendarsController@getCalendars']);
     });
 
     Route::group(['namespace' => 'Planners', 'prefix' => 'planners'], function() {
