@@ -24,7 +24,6 @@ class CalendarsControllerTest extends TestCase
         $employee = \plunner\Employee::findOrFail(1);
         $response = $this->actingAs($employee)->json('GET', '/employees/calendars');
         $response->assertResponseOk();
-        $response->response->content();
         $response->seeJsonEquals($employee->calendars->toArray());
     }
 
