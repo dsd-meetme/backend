@@ -25,6 +25,8 @@ class CreateMeetingsTable extends Migration
             $table->dateTime('start_time');
             $table->dateTime('end_time');
 
+            $table->integer('employee_id')->unsigned();
+            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('group_id')->unsigned();
             $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade')->onUpdate('cascade');
 

@@ -30,6 +30,7 @@ class MeetingsTest extends \TestCase
             'repeat' => '0',
             'is_scheduled' => false,
             'group_id' => $this->group->id,
+            'employee_id' => $this->employee->id
         ];
     }
 
@@ -67,7 +68,7 @@ class MeetingsTest extends \TestCase
 
     public function testShowNonRepeatingMeeting()
     {
-        //$this->actingAs($this->planner)->json('POST', '/employees/meetings', $this->data_non_repeat);
+        $this->actingAs($this->planner)->json('POST', '/employees/meetings', $this->data_non_repeat);
         $meeting_id = $this->employee->meetings()->first()->id;
 
         $response = $this->actingAs($this->employee)->json('GET', '/employees/meetings/'.$meeting_id);
