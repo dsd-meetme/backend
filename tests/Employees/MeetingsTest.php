@@ -34,91 +34,49 @@ class MeetingsTest extends \TestCase
         ];
     }
 
-    public function testCreateNonRepeatingMeeting()
+
+    public function testIndexAllMeetings()
     {
-        $response = $this->actingAs($this->planner)->json('POST', '/employees/meetings', $this->data_non_repeat);
+        $response = $this->actingAs($this->employee)->json('GET', '/employees/meetings');
 
         $response->assertResponseOk();
-        $response->seeJson($this->data_non_repeat);
+        $response->seeJsonEquals($this->employee->meetings->toArray());
     }
 
-    public function testCreateDuplicateNonRepeatingMeeting()
+    public function testErrorIndexNoMeetings()
     {
-        $this->actingAs($this->planner)->json('POST', '/employees/meetings', $this->data_non_repeat);
+        $response = $this->json('GET', '/employees/meetings');
 
-        $response = $this->actingAs($this->planner)->json('POST', '/employees/meetings', $this->data_non_repeat);
-        $response->seeStatusCode(422);
+        $response->seeStatusCode(401);
     }
 
-    public function testPlannerDeleteMeeting()
+    public function testShowNonRepeatingMeeting()
     {
         $this->actingAs($this->planner)->json('POST', '/employees/meetings', $this->data_non_repeat);
-        $meeting_id = $this->employee->meetings()->first()->id;
+        $meeting_id = $this->employee->meetings->first()->id;
 
-        $response = $this->actingAs($this->planner)->json('DELETE', '/employees/meetings/'.$meeting_id);
+        $response = $this->actingAs($this->employee)->json('GET', '/employees/meetings/'.$meeting_id);
         $response->assertResponseOk();
+        $response->seeJsonEquals($this->data_non_repeat->toArray());
     }
 
-    public function testEmployeeDeleteMeeting()
-    {
-        // Assure the employee is not the groups planner
-        $test_group = $this->employee->groups->where($this->employee->id, '<>' , $this->planner->id)->first();
-        $test_planner = $test_group->planner;
-
-        $this->actingAs($test_planner)->json('POST', '/employees/meetings', $this->data_non_repeat);
-        $meeting_id = $this->employee->meetings()->first()->id;
-
-        $response = $this->actingAs($this->employee)->json('DELETE', '/employees/meetings/'.$meeting_id);
-        $response->seeStatusCode(403);
-    }
-
-    public function testDeleteNonExistingMeeting()
+    public function testShowNonExistingMeeting()
     {
         $test_meeting_id = 0;
 
         // Find an id of a non existing meeting
         for ($test_meeting_id; $test_meeting_id < $this->employee->meetings->count() + 1; $test_meeting_id++)
         {
-            if ($test_meeting_id == !$this->planner->meetings->where("id", $test_meeting_id)->id)
+            if ($test_meeting_id == !$this->employee->meetings->where("id", $test_meeting_id)->id())
             {
                 break;
             }
         }
 
-        $response = $this->actingAs($this->planner)->json('DELETE', '/employees/meetings/'.$test_meeting_id);
+        $response = $this->actingAs($this->employee)->json('GET', '/employees/meetings/'.$test_meeting_id);
         $response->seeStatusCode(404);
     }
 
-    public function testUpdateExistingMeeting()
-    {
-        $meeting_id = $this->employee->meetings()->first()->id;
-        $test_data = $this->data_non_repeat;
-        $test_data->title = "Different title";
-        $test_data->description = "Different description";
-
-        $response = $this->actingAs($this->planner)
-            ->json('POST', '/employees/meetings'.$meeting_id, $test_data);
-        $response->assertResponseOk();
-        $response->seeJson($test_data);
-    }
-
-    public function testEmployeeUpdateExistingMeeting()
-    {
-        // Assure the employee is not the groups planner
-        $test_group = $this->employee->groups->where($this->employee->id, '<>' , $this->planner->id)->first();
-        $test_planner = $test_group->planner;
-
-        $this->actingAs($test_planner)->json('POST', '/employees/meetings', $this->data_non_repeat);
-        $meeting_id = $this->employee->meetings()->first()->id;
-
-        $test_data = $this->data_non_repeat;
-        $test_data->title = "Different title";
-        $test_data->description = "Different description";
-
-        $response = $this->actingAs($this->employee)
-            ->json('POST', '/employees/meetings'.$meeting_id, $test_data);
-        $response->seeStatusCode(403);
-    }
 
     /*public function testCreateRepeatingMeeting()
     {
