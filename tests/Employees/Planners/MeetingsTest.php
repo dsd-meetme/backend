@@ -36,7 +36,7 @@ class MeetingsTest extends \TestCase
 
     public function testIndexAllMeetings()
     {
-        $response = $this->actingAs($this->employee->json('GET', '/employees/meetings'));
+        $response = $this->actingAs($this->employee)->json('GET', '/employees/meetings');
 
         $response->assertResponseOk();
         $response->seeJsonEquals($this->employee->meetings->toArray());
@@ -82,7 +82,7 @@ class MeetingsTest extends \TestCase
         // Find an id of a non existing meeting
         for ($test_meeting_id; $test_meeting_id < $this->employee->meetings->count() + 1; $test_meeting_id++)
         {
-            if (!$this->planner->meetings->where("id", $test_meeting_id)->id)
+            if ($test_meeting_id == !$this->planner->meetings->where("id", $test_meeting_id)->id)
             {
                 break;
             }
@@ -121,7 +121,7 @@ class MeetingsTest extends \TestCase
         // Find an id of a non existing meeting
         for ($test_meeting_id; $test_meeting_id < $this->employee->meetings->count() + 1; $test_meeting_id++)
         {
-            if (!$this->planner->meetings->where("id", $test_meeting_id)->id)
+            if ($test_meeting_id == !$this->planner->meetings->where("id", $test_meeting_id)->id)
             {
                 break;
             }
