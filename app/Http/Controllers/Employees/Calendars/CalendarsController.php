@@ -2,7 +2,8 @@
 
 namespace plunner\Http\Controllers\Employees\Calendars;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Request; //TODO fix this
 use it\thecsea\caldav_client_adapter\simple_caldav_client\SimpleCaldavAdapter;
 use plunner\Calendar;
 use plunner\Http\Controllers\Controller;
@@ -114,7 +115,7 @@ class CalendarsController extends Controller
             return array_keys($calendars);
         }catch (\it\thecsea\caldav_client_adapter\CaldavException $e)
         {
-            return \Response::json(['error' => $e->getMessage()],422);
+            return Response::json(['error' => $e->getMessage()],422);
         }
     }
 }
