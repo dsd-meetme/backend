@@ -114,7 +114,7 @@ class CalendarsController extends Controller
             return array_keys($calendars);
         }catch (\it\thecsea\caldav_client_adapter\CaldavException $e)
         {
-            return Response::json(['error' => $e->getMessage()],422);
+            return \Response::json(['error' => $e->getMessage()],422);
         }
     }
 }
