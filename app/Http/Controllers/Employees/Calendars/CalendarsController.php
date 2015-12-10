@@ -110,7 +110,7 @@ class CalendarsController extends Controller
         //TODO test this
         try {
             $caldavClient = new SimpleCaldavAdapter();
-            $caldavClient->connect($request->get('url'), $request->get('username'), $request->get('password'));
+            $caldavClient->connect($request->input('url'), $request->input('username'), $request->input('password'));
             $calendars = $caldavClient->findCalendars();
             return array_keys($calendars);
         }catch (\it\thecsea\caldav_client_adapter\CaldavException $e)
