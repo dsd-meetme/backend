@@ -73,6 +73,14 @@ class InitSeeder extends Seeder
     {
         factory(plunner\Calendar::class, 3)->make()->each(function ($calendar) use($employee){
             $employee->calendars()->save($calendar);
+            self::timeslots($calendar);
+        });
+    }
+
+    static private function timeslots($calendar)
+    {
+        factory(plunner\Timeslot::class, 3)->make()->each(function ($timeslot) use($calendar){
+            $calendar->timeslots()->save($timeslot);
         });
     }
 
