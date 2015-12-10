@@ -26,12 +26,13 @@ class MeetingRequest extends Request
         return [
             'title' => 'required|max:255|unique:meetings,title,'.$this->route('meetings').',id',
             'description' => 'required|max:255',
-            'start_time' => 'required|date',
-            'end_time' => 'required|date|after:meeting_start', //TODO I think taht the correct way is datae_format, but we have to define this with the frontend guys and test it with the database, we have also to consider timezone
+            'start_time' => 'required|date_format:"Y-m-d H:i:s"',
+            'end_time' => 'required|date_format:"Y-m-d H:i:s"|after:meeting_start', //TODO I think taht the correct way is datae_format, but we have to define this with the frontend guys and test it with the database, we have also to consider timezone
             'repeat' => 'required|integer',
             'repetition_end_time' => 'date',
             'is_scheduled' => 'required|boolean',
             'group_id' => 'required|exists:groups,id',
+            'employee_id' => 'required|exists:employees,id',
         ];
     }
 }
