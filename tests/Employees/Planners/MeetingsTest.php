@@ -27,10 +27,11 @@ class PlannersMeetingsTest extends \TestCase
             'description' => 'Errare humanum est!',
             'start_time' => '2015-12-07 12:00:00',
             'end_time' => '2015-12-07 14:00:00',
-            'repeat' => '0',
-            'is_scheduled' => false,
+            'employee_id' => $this->employee->id,
             'group_id' => $this->group->id,
-            'employee_id' => $this->employee->id
+            'repeat' => '0',
+            'repetition_end_time' => null,
+            'is_scheduled' => false,
         ];
     }
 
