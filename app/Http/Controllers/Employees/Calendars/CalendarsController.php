@@ -54,6 +54,26 @@ class CalendarsController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage with caldav.
+     *
+     * @param  CalendarRequest  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeCaldav(CalendarRequest $request)
+    {
+        //
+        $employee = \Auth::user();
+        $input = $request->all();
+        $calendar = $employee->calendars()->create($input);
+        $calendar->caldav()->create($input);
+        //TODO test
+        //TODO validator
+        //TODO return caldav info
+        //TODO supprot function to create simple calendar
+        return $calendar;
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -81,6 +101,9 @@ class CalendarsController extends Controller
         $this->authorize($calendar);
         $input = $request->all();
         $calendar->update($input);
+        //TODO test
+        //TODO validator
+        $calendar->caldav()->update($input);
         return $calendar;
     }
 
