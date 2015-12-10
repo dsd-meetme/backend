@@ -62,7 +62,7 @@ class CalendarsController extends Controller
     public function show($id)
     {
         //
-        $calendar = Calendar::findOrFail($id);
+        $calendar = Calendar::with('caldav')->findOrFail($id);
         $this->authorize($calendar);
         return $calendar;
     }

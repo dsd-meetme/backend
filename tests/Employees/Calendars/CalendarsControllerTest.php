@@ -69,7 +69,7 @@ class CalendarsControllerTest extends TestCase
     public function testDelete()
     {
         $employee = \plunner\Employee::findOrFail(1);
-        $calendar = $employee->calendars()->firstOrFail();
+        $calendar = $employee->calendars()->with('caldav')->firstOrFail();
         $id = $calendar->id;
 
         //calendar exists
@@ -93,7 +93,7 @@ class CalendarsControllerTest extends TestCase
     public function testUpdate()
     {
         $employee = \plunner\Employee::findOrFail(1);
-        $calendar = $employee->Calendars()->firstOrFail();
+        $calendar = $employee->Calendars()->with('caldav')->firstOrFail();
         $data = [
             'name' => 'test',
             'enabled' => '1',
@@ -115,7 +115,7 @@ class CalendarsControllerTest extends TestCase
     public function testShow()
     {
         $employee = \plunner\Employee::findOrFail(1);
-        $calendar = $employee->Calendars()->firstOrFail();
+        $calendar = $employee->Calendars()->with('caldav')->firstOrFail();
 
         $response = $this->actingAs($employee)->json('GET', '/employees/calendars/'.$calendar->id);
         $response->assertResponseOk();
