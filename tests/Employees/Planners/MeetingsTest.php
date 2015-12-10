@@ -5,7 +5,7 @@ namespace Employees;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tymon\JWTAuth\Support\testing\ActingAs;
 
-class MeetingsTest extends \TestCase
+class PlannersMeetingsTest extends \TestCase
 {
     use DatabaseTransactions, ActingAs;
 
