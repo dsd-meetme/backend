@@ -107,9 +107,14 @@ class CalendarsController extends Controller
     {
         //TODO VALIDATE
         //TODO test this
-        $caldavClient = new SimpleCaldavAdapter();
-        $caldavClient->connect($request->get('url'), $request->get('username'), $request->get('password'));
-        $calendars = $caldavClient->findCalendars();
-        return array_keys($calendars);
+        try {
+            $caldavClient = new SimpleCaldavAdapter();
+            $caldavClient->connect($request->get('url'), $request->get('username'), $request->get('password'));
+            $calendars = $caldavClient->findCalendars();
+            return array_keys($calendars);
+        }catch (\it\thecsea\caldav_client_adapter\CaldavException $e)
+        {
+            return Response::json(['error' => $e->getMessage()],422);
+        }
     }
 }
