@@ -48,8 +48,7 @@ class CalendarsController extends Controller
     {
         //
         $employee = \Auth::user();
-        $input = $request->all();
-        $calendar = $employee->calendars()->create($input);
+        $calendar = $employee->calendars()->create($request->only('name', 'enabled'));
         return $calendar;
     }
 
@@ -63,9 +62,8 @@ class CalendarsController extends Controller
     {
         //
         $employee = \Auth::user();
-        $input = $request->all();
-        $calendar = $employee->calendars()->create($input);
-        $calendar->caldav()->create($input);
+        $calendar = $employee->calendars()->create($request->only('name', 'enabled'));
+        $calendar->caldav()->create($request->only('url','username', 'password', 'calendar_name'));
         //TODO test
         //TODO validator
         //TODO return caldav info
@@ -99,10 +97,10 @@ class CalendarsController extends Controller
         //
         $calendar = Calendar::findOrFail($id);
         $this->authorize($calendar);
-        $input = $request->all();
         $calendar->update($request->only('name', 'enabled'));
         //TODO test
         //TODO validator
+        //TODO check if caldav exists?
         $calendar->caldav()->update($request->only('url','username', 'password', 'calendar_name'));
         return $calendar;
     }
