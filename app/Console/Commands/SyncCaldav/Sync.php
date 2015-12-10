@@ -73,7 +73,7 @@ class Sync
         $caldavClient = new SimpleCaldavAdapter();
         $caldavClient->connect($this->calendar->url, $this->calendar->username, \Crypt::decrypt($this->calendar->password));
         $calendars = $caldavClient->findCalendars();
-        $caldavClient->setCalendar($calendars[$this->calendar->calendar_name]);
+        $caldavClient->setCalendar($calendars[$this->calendar->calendar_name]);//TODO error if the calendar name is wrong
         /**
          * 26 hours before to avoid tiemezone problems and dst problems
          * 30 days after

@@ -3,6 +3,7 @@
 namespace plunner\Http\Controllers\Employees\Calendars;
 
 use Illuminate\Http\Request;
+use it\thecsea\caldav_client_adapter\simple_caldav_client\SimpleCaldavAdapter;
 use plunner\Calendar;
 use plunner\Http\Controllers\Controller;
 use plunner\Http\Requests\Employees\CalendarRequest;
@@ -95,5 +96,19 @@ class CalendarsController extends Controller
         $this->authorize($calendar);
         $calendar->delete();
         return $calendar;
+    }
+
+    /**
+     * Return a list of calendars name of a specif caldav calendar
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getCalendars(Request $request)
+    {
+        //TODO VALIDATE
+        $caldavClient = new SimpleCaldavAdapter();
+        $caldavClient->connect($request->get('url'), $request->get('username'), $request->get('password'));
+        $calendars = $caldavClient->findCalendars();
+        return array_keys($calendars);
     }
 }
