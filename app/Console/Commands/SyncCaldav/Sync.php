@@ -70,6 +70,7 @@ class Sync
      */
     private function getEvents()
     {
+        //TODO catch php errors like array key
         $caldavClient = new SimpleCaldavAdapter();
         $caldavClient->connect($this->calendar->url, $this->calendar->username, \Crypt::decrypt($this->calendar->password));
         $calendars = $caldavClient->findCalendars();

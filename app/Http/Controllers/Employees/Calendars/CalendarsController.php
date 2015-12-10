@@ -106,6 +106,7 @@ class CalendarsController extends Controller
     public function getCalendars(Request $request)
     {
         //TODO VALIDATE
+        //TODO test this
         $caldavClient = new SimpleCaldavAdapter();
         $caldavClient->connect($request->get('url'), $request->get('username'), $request->get('password'));
         $calendars = $caldavClient->findCalendars();
