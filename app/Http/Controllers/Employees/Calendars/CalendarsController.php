@@ -100,10 +100,10 @@ class CalendarsController extends Controller
         $calendar = Calendar::findOrFail($id);
         $this->authorize($calendar);
         $input = $request->all();
-        $calendar->update($input);
+        $calendar->update($request->only('name', 'enabled'));
         //TODO test
         //TODO validator
-        $calendar->caldav()->update($input);
+        $calendar->caldav()->update($request->only('url','username', 'password', 'calendar_name'));
         return $calendar;
     }
 
