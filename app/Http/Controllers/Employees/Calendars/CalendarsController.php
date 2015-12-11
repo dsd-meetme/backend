@@ -62,6 +62,7 @@ class CalendarsController extends Controller
     public function storeCaldav(CalendarRequest $request)
     {
         //
+        $this->validateCaldav($request);
         $employee = \Auth::user();
         $input = $request->all();
         $calendar = $employee->calendars()->create($input);
@@ -100,11 +101,14 @@ class CalendarsController extends Controller
         $calendar = Calendar::findOrFail($id);
         $this->authorize($calendar);
         $input = $request->all();
+        $caldav = $calendar->caldav;
+        if($caldav)
+            $this->validateCaldav($request);
         $calendar->update($input);
         //TODO test
         //TODO validator
         //TODO check if caldav exists?
-        $caldav = $calendar->caldav;
+
         if($caldav)
             $caldav->update($input);
         return $calendar;
@@ -143,5 +147,18 @@ class CalendarsController extends Controller
         {
             return Response::json(['error' => $e->getMessage()],422);
         }
+    }
+
+    /**
+     * @param Request $request
+     */
+    private function validateCaldav(Request $request)
+    {
+        $this->validate($request, [
+            'url' => 'required|active_url|max:255',
+            'username' => 'required|max:255',
+            'password' => ((\Route::current()->getName() == 'companies.calendars.caldav')?'required|':'').'confirmed',
+            'calendar_name' => 'required|max:255',
+        ]);
     }
 }

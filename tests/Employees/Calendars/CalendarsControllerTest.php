@@ -89,10 +89,10 @@ class CalendarsControllerTest extends TestCase
         $response->seeStatusCode(404);
     }
 
-    public function testUpdate()
+    public function testUpdateNoCaldav()
     {
         $employee = \plunner\Employee::findOrFail(1);
-        $calendar = $employee->Calendars()->with('caldav')->firstOrFail();
+        $calendar = $employee->Calendars()->has('caldav','=','0')->firstOrFail();//TODO fix thsi with the new seeds
         $data = [
             'name' => 'test',
             'enabled' => '1',
