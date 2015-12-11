@@ -30,34 +30,35 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer $repeat
  * @method static \Illuminate\Database\Query\Builder|\plunner\Meeting whereUtc($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Meeting whereRepeat($value)
+ * @property integer $group_id
+ * @property string $start_time
+ * @property integer $duration
+ * @property-read Group $group
+ * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\MeetingTimeslot[] $timeslots
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Meeting whereGroupId($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Meeting whereStartTime($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Meeting whereDuration($value)
  */
 class Meeting extends Model
 {
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
-    protected $table = 'meetings';
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['title', 'description', 'start_time',
-                    'end_time', 'repeat', 'repetition_end_time', 'is_scheduled', 'group_id', 'employee_id'];
+    protected $fillable = ['title', 'description', 'duration'];
+
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function employees()
-    {
-        return $this->belongsToMany(Employee::class);
-    }
-
     public function group()
     {
         return $this->belongsTo(Group::class);
+    }
+
+    public function timeslots()
+    {
+        return $this->hasMany('plunner\MeetingTimeslot');
     }
 }

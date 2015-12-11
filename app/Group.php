@@ -29,16 +29,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Query\Builder|\plunner\Group whereDescription($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Group whereCompanyId($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Group wherePlannerId($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|Meeting[] $meetings
  */
 class Group extends Model
 {
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
-    protected $table = 'groups';
-
     /**
      * The attributes that are mass assignable.
      *

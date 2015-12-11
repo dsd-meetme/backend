@@ -16,8 +16,6 @@ class CreateMeetingsTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->string('description');
-            $table->integer('planner_id')->unsigned();
-            $table->foreign('planner_id')->references('id')->on('employees')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('group_id')->unsigned();
             $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade')->onUpdate('cascade');
             $table->dateTime('start_time')->nullabe()->default(NULL);
