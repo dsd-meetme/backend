@@ -50,3 +50,18 @@ $factory->define(plunner\Group::class, function (Faker\Generator $faker) {
         'description' => $faker->sentence . $faker->sentence,
     ];
 });
+
+$factory->define(plunner\Meeting::class, function (Faker\Generator $faker) {
+    return [
+        'title' => $faker->name,
+        'description' => $faker->sentence . $faker->sentence,
+        'duration' => $faker->numberBetween(0,100),
+    ];
+});
+
+$factory->define(plunner\MeetingTimeslot::class, function (Faker\Generator $faker) {
+    return [
+        'time_start' => $faker->dateTime,
+        'time_end' => $faker->dateTime,
+    ];
+});
