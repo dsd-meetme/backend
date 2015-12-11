@@ -23,81 +23,84 @@ class MeetingsController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     *  @param int $groupId
+     * @return mixed
+     */
+    public function index($groupId)
+    {
+        $group = Group::findOrFail($groupId);
+        $this->authorize($group);
+        return $group->meetings;
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param int $groupId
+     * @param int $meetingId
+     * @return mixed
+     */
+    public function show($groupId, $meetingId)
+    {
+        $group = Group::findOrFail($groupId);
+        $this->authorize($group);
+        $meeting = Meeting::findOrFail($meetingId);
+        $this->authorize($meeting); //TODO implement meeting policy
+        //TODO check if the group is the same of the meeting or not?
+        return $meeting;
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param MeetingRequest $request
-     * @param $groupId
+     * @param int $groupId
      * @return static
      */
     public function store(MeetingRequest $request, $groupId)
     {
-        $employee = \Auth::user();
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
-
-        /**
-         * Check if the employee is the planner for the group.
-         */
-        if ($employee->id == $group->planner_id)
-        {
-            $input = $request->all();
-            $meeting = Meeting::create($input);
-            return $meeting;
-        }
-        return Response::json(['error' => 'groupId'],404);
+        $input = $request->all();
+        $meeting = $group->meetings()->store($input);
+        return $meeting;
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param MeetingRequest $request
-     * @param $meetingId
-     * @param $groupId
+     * @param int $meetingId
+     * @param int $groupId
      * @return mixed
      */
-    public function update(MeetingRequest $request, $meetingId, $groupId)
+    public function update(MeetingRequest $request, $groupId, $meetingId)
     {
-        $employee = \Auth::user();
         $meeting = Meeting::findOrFail($meetingId);
         $this->authorize($meeting);
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
-
-        /**
-         * Check if the employee is the planner for the group.
-         */
-        if ($employee->id == $group->planner_id)
-        {
-            $input = $request->all();
-            $meeting->update($input);
-            return $meeting;
-        }
-        return Response::json(['error' => 'meetingId'],404);
+        $input = $request->all();
+        $meeting->update($input);
+        return $meeting;
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param $meetingId
-     * @param $groupId
+     * @param int $groupId
      * @return mixed
      */
-    public function destroy($meetingId, $groupId)
+    public function destroy($groupId, $meetingId)
     {
-        $employee = \Auth::user();
         $meeting = Meeting::findOrFail($meetingId);
         $this->authorize($meeting);
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
-
-        /**
-         * Check if the employee is the planner for the group.
-         */
-        if ($employee->id == $group->planner_id)
-        {
-            $meeting->delete();
-            return $employee;
-        }
-        return Response::json(['error' => 'meetingId'],404);
+        $meeting = $meeting->delete();
+        return $meeting;
     }
 }

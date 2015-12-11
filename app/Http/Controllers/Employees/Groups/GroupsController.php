@@ -29,7 +29,7 @@ class GroupsController extends Controller
     public function index()
     {
         $employee = \Auth::user();
-        return $employee->Groups;
+        return $employee->groups()->with('meetings')->get();
     }
 
     /**
@@ -40,7 +40,8 @@ class GroupsController extends Controller
      */
     public function show($id)
     {
-        $group = Group::findOrFail($id);
+        //TODo fix tests
+        $group = Group::with('meetings')->findOrFail($id);
         $this->authorize($group);
         return $group;
     }

@@ -78,12 +78,6 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
         });
     });
 
-    Route::resource('meetings', 'MeetingsController', ['only' => ['show', 'index']]);
-
-    Route::group(['namespace' => 'Planners'], function() {
-        Route::resource('meetings', 'MeetingsController', ['only' => ['store', 'update', 'destroy']]); //TODO insert below. Caution: consider the prefix
-    });
-
     Route::group(['namespace' => 'Calendars'], function() {
         Route::resource('calendars', 'CalendarsController', ['except' => ['create', 'edit']]);
         Route::post('calendars/caldav', ['as' => 'employees.calendars.caldav','uses'=>'CalendarsController@storeCaldav']);
@@ -92,6 +86,7 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
 
     Route::group(['namespace' => 'Planners', 'prefix' => 'planners'], function() {
         Route::resource('groups', 'GroupsController', ['only' => ['index', 'show']]);
+        Route::resource('groups.meetings', 'MeetingsController', ['except' => ['create', 'edit']]);
     });
 
     Route::group(['namespace' => 'Groups'], function() {

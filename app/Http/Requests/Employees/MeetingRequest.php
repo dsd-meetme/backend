@@ -23,6 +23,7 @@ class MeetingRequest extends Request
      */
     public function rules()
     {
+        //TODO fix this with the new data
         return [
             'title' => 'required|max:255|unique:meetings,title,'.$this->route('meetings').',id',
             'description' => 'required|max:255',
