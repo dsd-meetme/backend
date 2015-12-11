@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePivotEmployeeMeeting extends Migration
+class CreateTimeslotsMeetingTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,15 @@ class CreatePivotEmployeeMeeting extends Migration
      */
     public function up()
     {
-        Schema::create('employee_meeting', function (Blueprint $table) {
-            $table->integer('employee_id')->unsigned();
-            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade')->onUpdate('cascade');
+        //
+        /*Schema::create('timeslots_meetings', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->dateTime('time_start');
+            $table->dateTime('time_end');
             $table->integer('meeting_id')->unsigned();
             $table->foreign('meeting_id')->references('id')->on('meetings')->onDelete('cascade')->onUpdate('cascade');
-        });
+            $table->timestamps();
+        });*/
     }
 
     /**
@@ -27,6 +30,7 @@ class CreatePivotEmployeeMeeting extends Migration
      */
     public function down()
     {
-        Schema::drop('employee_meeting');
+        //
+        //Schema::drop('timeslots_meetings');
     }
 }
