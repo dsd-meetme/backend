@@ -43,14 +43,15 @@ class InitSeeder extends Seeder
         self::groups($company, $company->employees->toArray());
 
         //add caldav
-        $calendar = $employee->calendars()->create(['name' => 'errors', 'type' => 'caldav']);
+        $calendar = $employee->calendars()->create(['name' => 'errors']);
         $calendar->caldav()->create(['url'=>'https://example.com', 'username'=>'caldav.test@plunner.com', 'password'=>Crypt::encrypt('wrong'), 'calendar_name' => 'test']);
         $examples = env('CALDAV_EXAMPLES', '[]');
         $examples = json_decode($examples, true);
         foreach($examples as $example) {
             $example['password'] = Crypt::encrypt($example['password']);
-            $employee->calendars()->create(['name' => 'caldavTes', 'type' => 'caldav'])->caldav()->create($example);
+            $employee->calendars()->create(['name' => 'caldavTes'])->caldav()->create($example);
         }
+        //TODO seed caldavs for all users
     }
 
     static private function company()
@@ -73,6 +74,14 @@ class InitSeeder extends Seeder
     {
         factory(plunner\Calendar::class, 3)->make()->each(function ($calendar) use($employee){
             $employee->calendars()->save($calendar);
+            self::timeslots($calendar);
+        });
+    }
+
+    static private function timeslots($calendar)
+    {
+        factory(plunner\Timeslot::class, 3)->make()->each(function ($timeslot) use($calendar){
+            $calendar->timeslots()->save($timeslot);
         });
     }
 

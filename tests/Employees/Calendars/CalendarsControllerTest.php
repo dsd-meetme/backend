@@ -24,7 +24,6 @@ class CalendarsControllerTest extends TestCase
         $employee = \plunner\Employee::findOrFail(1);
         $response = $this->actingAs($employee)->json('GET', '/employees/calendars');
         $response->assertResponseOk();
-        $response->response->content();
         $response->seeJsonEquals($employee->calendars->toArray());
     }
 
@@ -69,7 +68,7 @@ class CalendarsControllerTest extends TestCase
     public function testDelete()
     {
         $employee = \plunner\Employee::findOrFail(1);
-        $calendar = $employee->calendars()->firstOrFail();
+        $calendar = $employee->calendars()->with('caldav')->firstOrFail();
         $id = $calendar->id;
 
         //calendar exists
@@ -90,10 +89,10 @@ class CalendarsControllerTest extends TestCase
         $response->seeStatusCode(404);
     }
 
-    public function testUpdate()
+    public function testUpdateNoCaldav()
     {
         $employee = \plunner\Employee::findOrFail(1);
-        $calendar = $employee->Calendars()->firstOrFail();
+        $calendar = $employee->Calendars()->has('caldav','=','0')->firstOrFail();//TODO fix thsi with the new seeds
         $data = [
             'name' => 'test',
             'enabled' => '1',
@@ -115,7 +114,7 @@ class CalendarsControllerTest extends TestCase
     public function testShow()
     {
         $employee = \plunner\Employee::findOrFail(1);
-        $calendar = $employee->Calendars()->firstOrFail();
+        $calendar = $employee->Calendars()->with('caldav')->firstOrFail();
 
         $response = $this->actingAs($employee)->json('GET', '/employees/calendars/'.$calendar->id);
         $response->assertResponseOk();

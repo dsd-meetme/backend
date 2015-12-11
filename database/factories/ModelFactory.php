@@ -38,10 +38,9 @@ $factory->define(plunner\Calendar::class, function (Faker\Generator $faker) {
 
 
 $factory->define(plunner\Timeslot::class, function (Faker\Generator $faker) {
-    $date = $faker->dateTimeThisYear;
     return [
-        'time_start' => $date,
-        'time_end' => $date + 100,
+        'time_start' => $faker->dateTime,
+        'time_end' => $faker->dateTime,
     ];
 });
 

@@ -23,8 +23,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereEmployeeId($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereUpdatedAt($value)
- * @property string $type
- * @property string $sync_errors
  * @property boolean $enabled
  * @property-read \plunner\Employee $employee
  * @property-read Caldav $Caldav
@@ -62,8 +60,6 @@ class Calendar extends Model
      */
     public function Caldav()
     {
-        if($this->type == 'caldav')
-            return $this->hasOne(Caldav::class);
-        return null;
+        return $this->hasOne(Caldav::class);
     }
 }
