@@ -22,17 +22,14 @@ class CreateMeetingsTable extends Migration
             if the meeting is not yet scheduled, this are the earliest and latest meeting times
             and if the meeting is scheduled this are the start and end of the meeting
             */
-            $table->dateTime('start_time');
-            $table->dateTime('end_time');
 
             $table->integer('employee_id')->unsigned();
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('group_id')->unsigned();
             $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade')->onUpdate('cascade');
-
-            $table->integer('repeat');
-            $table->dateTime('repetition_end_time')->nullable();
-            $table->boolean('is_scheduled');
+            $table->dateTime('start_time')->nullabe()->default(NULL);
+            $table->integer('duartion'); //minutes
+            //TODO timeslots table for meetings
             $table->timestamps();
         });
     }
