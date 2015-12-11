@@ -16,20 +16,12 @@ class CreateMeetingsTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->string('description');
-
-            /*
-            'start_time' and 'end_time' can mean different things depending on 'is_scheduled'
-            if the meeting is not yet scheduled, this are the earliest and latest meeting times
-            and if the meeting is scheduled this are the start and end of the meeting
-            */
-
-            $table->integer('employee_id')->unsigned();
-            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade')->onUpdate('cascade');
+            $table->integer('planner_id')->unsigned();
+            $table->foreign('planner_id')->references('id')->on('employees')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('group_id')->unsigned();
             $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade')->onUpdate('cascade');
             $table->dateTime('start_time')->nullabe()->default(NULL);
-            $table->integer('duartion'); //minutes
-            //TODO timeslots table for meetings
+            $table->integer('duration'); //minutes
             $table->timestamps();
         });
     }
