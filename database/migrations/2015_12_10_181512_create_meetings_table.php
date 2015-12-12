@@ -15,10 +15,10 @@ class CreateMeetingsTable extends Migration
         Schema::create('meetings', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
-            $table->string('description');
+            $table->string('description'); //TODO improvement change with text? (remember to change request)
             $table->integer('group_id')->unsigned();
             $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade')->onUpdate('cascade');
-            $table->dateTime('start_time')->nullabe()->default(NULL);
+            $table->bigInteger('start_time')->unsigned()->nullable()->default(NULL);
             $table->integer('duration'); //minutes
             $table->timestamps();
         });

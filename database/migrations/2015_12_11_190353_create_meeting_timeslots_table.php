@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTimeslotsMeetingTable extends Migration
+class CreateMeetingTimeslotsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -21,6 +21,9 @@ class CreateTimeslotsMeetingTable extends Migration
             $table->foreign('meeting_id')->references('id')->on('meetings')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
+        Schema::table('meetings', function ($table) {
+           $table->foreign('start_time')->references('id')->on('meeting_timeslots')->onDelete('cascade')->onUpdate('cascade');
+        });
     }
 
     /**
@@ -31,6 +34,9 @@ class CreateTimeslotsMeetingTable extends Migration
     public function down()
     {
         //
+        Schema::table('meetings', function ($table) {
+            $table->dropForeign('meetings_start_time_foreign');
+        });
         Schema::drop('meeting_timeslots');
     }
 }
