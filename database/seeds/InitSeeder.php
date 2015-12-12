@@ -96,7 +96,7 @@ class InitSeeder extends Seeder
     {
         factory(plunner\Meeting::class, 3)->make()->each(function ($meeting) use($group){
             $group->meetings()->save($meeting);
-            self::timeslotsMeeting($meeting);
+            //self::timeslotsMeeting($meeting);
         });
     }
 
