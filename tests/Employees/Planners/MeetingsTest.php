@@ -57,12 +57,14 @@ class PlannersMeetingsTest extends \TestCase
         $response->seeJsonEquals($this->group->meetings->toArray());
     }
 
+    /*
     public function testErrorIndexNoMeetings()
     {
         $response = $this->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings');
 
         $response->seeStatusCode(401);
     }
+    */
 
     public function testShowNonRepeatingMeeting()
     {
