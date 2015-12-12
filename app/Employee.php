@@ -159,4 +159,14 @@ class Employee extends Model implements AuthenticatableContract,
         //TODO test this
         return $calendar->employee_id == $this->id;
     }
+
+    /**
+     * @param Meeting $meeting
+     * @return bool
+     */
+    public function verifyMeeting(Meeting $meeting)
+    {
+        //TODO implement and test this
+        return false;
+    }
 }

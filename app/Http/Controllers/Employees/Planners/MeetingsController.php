@@ -47,7 +47,7 @@ class MeetingsController extends Controller
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
         $meeting = Meeting::findOrFail($meetingId);
-        $this->authorize($meeting); //TODO implement meeting policy
+        $this->authorize($meeting);
         //TODO check if the group is the same of the meeting or not?
         return $meeting;
     }
@@ -90,8 +90,8 @@ class MeetingsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param $meetingId
      * @param int $groupId
+     * @param int $meetingId
      * @return mixed
      */
     public function destroy($groupId, $meetingId)

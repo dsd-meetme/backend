@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTimeslotsMeetingTable extends Migration
+class CreateMeetingTimeslotsTable extends Migration
 {
     /**
      * Run the migrations.

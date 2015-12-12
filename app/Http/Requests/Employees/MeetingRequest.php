@@ -23,17 +23,13 @@ class MeetingRequest extends Request
      */
     public function rules()
     {
-        //TODO fix this with the new data
+        //TODO test this with the new data
         return [
-            'title' => 'required|max:255|unique:meetings,title,'.$this->route('meetings').',id',
+            'title' => 'required|max:255',
             'description' => 'required|max:255',
-            'start_time' => 'required|date_format:Y-m-d H:i:s',
-            'end_time' => 'required|date_format:Y-m-d H:i:s|after:meeting_start', //TODO I think taht the correct way is datae_format, but we have to define this with the frontend guys and test it with the database, we have also to consider timezone
-            'repeat' => 'required|integer', //TODO we skip this functionality
-            'repetition_end_time' => 'date_format:Y-m-d', //TODO we skip this functionality
-            'is_scheduled' => 'required|boolean',
-            'group_id' => 'required|exists:groups,id',
-            'employee_id' => 'required|exists:employees,id',
+            'duration' => 'required|integer',
+            'end_time' => 'exists:meeting_timeslots,id', //this is not mandatory
+            //TODO check if the timeslot with end_time as id has this as meeting_id
         ];
     }
 }
