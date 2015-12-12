@@ -19,7 +19,7 @@ class GroupsControllerTest extends \TestCase
 
         $this->company = \plunner\Company::findOrFail(1);
         $this->employee = $this->company->employees()->with('groups')->firstOrFail();
-        $this->groups = $this->employee->groups()->with('meetings')->toArray();
+        $this->groups = $this->employee->groups()->with('meetings');
     }
 
 

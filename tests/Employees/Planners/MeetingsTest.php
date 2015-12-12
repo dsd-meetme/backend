@@ -73,7 +73,7 @@ class PlannersMeetingsTest extends \TestCase
         $response = $this->actingAs($this->planner)
             ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$meeting_id);
         $response->assertResponseOk();
-        $response->seeJsonEquals($this->group->meetings()->with('group')->first());
+        $response->seeJsonEquals($this->group->meetings()->with('group')->first()->toArray());
     }
 
     public function testShowNonExistingMeeting()
