@@ -38,7 +38,7 @@ class PlannersMeetingsTest extends \TestCase
         $response->seeJson($this->data);
     }
 
-    public function testCreateDuplicateNonRepeatingMeeting()
+    /*public function testCreateDuplicateNonRepeatingMeeting()
     {
         $this->actingAs($this->planner)
             ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);
@@ -122,7 +122,7 @@ class PlannersMeetingsTest extends \TestCase
         $response = $this->actingAs($this->employee)
             ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings'.$meeting_id, $test_data);
         $response->seeStatusCode(403);
-    }
+    }*/
 
     /*public function testCreateRepeatingMeeting()
     {
