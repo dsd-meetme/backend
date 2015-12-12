@@ -108,6 +108,7 @@ class PlannersMeetingsTest extends \TestCase
     public function testEmployeeDeleteMeeting()
     {
         // Find an employee in the group who is not a planner and set him as $test_employee
+        $test_employee = $this->employee;
         if ($this->employee->id == $this->planner->id) {
             foreach ($this->group->employees as $employee) {
                 if ($this->employee->id != $employee->id)
@@ -115,7 +116,6 @@ class PlannersMeetingsTest extends \TestCase
                     break;
             }
         }
-        else { $test_employee = $this->employee; }
 
         $this->actingAs($this->planner)
             ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);
@@ -165,6 +165,7 @@ class PlannersMeetingsTest extends \TestCase
     public function testEmployeeUpdateExistingMeeting()
     {
         // Find an employee in the group who is not a planner and set him as $test_employee
+        $test_employee = $this->employee;
         if ($this->employee->id == $this->planner->id) {
             foreach ($this->group->employees as $employee) {
                 if ($this->employee->id != $employee->id)
@@ -172,7 +173,6 @@ class PlannersMeetingsTest extends \TestCase
                 break;
             }
         }
-        else { $test_employee = $this->employee; }
 
         $this->actingAs($this->planner)
             ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);
