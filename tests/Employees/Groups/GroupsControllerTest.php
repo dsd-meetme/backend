@@ -28,7 +28,7 @@ class GroupsControllerTest extends \TestCase
             ->json('GET', '/employees/groups');
 
         $response->assertResponseOk();
-        $response->seeJsonEquals($this->employee->groups->toArray());
+        $response->seeJsonEquals($this->employee->groups->with('meetings')->toArray());
     }
 
     public function testErrorIndex()
@@ -44,7 +44,7 @@ class GroupsControllerTest extends \TestCase
             ->json('GET', '/employees/groups/'.$group_id);
 
         $response->assertResponseOk();
-        $response->seeJsonEquals($this->employee->groups->first()->toArray());
+        $response->seeJsonEquals($this->employee->groups->with('meetings')->first()->toArray());
     }
 
     public function testShowGroupNotInSameCompany()
