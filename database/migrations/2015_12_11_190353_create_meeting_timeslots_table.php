@@ -21,6 +21,11 @@ class CreateMeetingTimeslotsTable extends Migration
             $table->foreign('meeting_id')->references('id')->on('meetings')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
+
+        Schema::table('meetings', function (Blueprint $table) {
+            $table->bigInteger('start_time')->unsigned()->nullabe()->default(NULL);
+            $table->foreign('start_time')->references('id')->on('meeting_timeslots')->onDelete('cascade')->onUpdate('cascade');
+        });
     }
 
     /**
@@ -32,5 +37,10 @@ class CreateMeetingTimeslotsTable extends Migration
     {
         //
         Schema::drop('meeting_timeslots');
+
+        Schema::table('meetings', function($table)
+        {
+            $table->dropColumn('start_time');
+        });
     }
 }
