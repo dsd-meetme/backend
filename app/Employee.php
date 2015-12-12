@@ -46,13 +46,6 @@ class Employee extends Model implements AuthenticatableContract,
     use Authenticatable, Authorizable, CanResetPassword;
 
     /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
-     //protected $table = 'employees';
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -80,14 +73,6 @@ class Employee extends Model implements AuthenticatableContract,
     public function groups()
     {
         return $this->belongsToMany('plunner\Group', 'employee_group', 'employee_id'); //needed for planner model
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function meetings()
-    {
-        return $this->belongsToMany('plunner\Meeting');
     }
 
     /**

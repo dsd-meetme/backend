@@ -20,8 +20,8 @@ or simply
 1. Create database
 1. Configure database data in .env file
 1. Configure private keys in .env file
-    1. `JWT_SECRET` via `jwt:generate`
-    1. `APP_KEY` via `key:generate `
+    1. `JWT_SECRET` via `php artisan jwt:generate`
+    1. `APP_KEY` via `php artisan key:generate `
 1. perform `php artisan migrate`
 1. configure urls in `config/app.php` (this only for real environment)
 1. this must be installed on the root of the virtual host

@@ -30,6 +30,14 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer $repeat
  * @method static \Illuminate\Database\Query\Builder|\plunner\Meeting whereUtc($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Meeting whereRepeat($value)
+ * @property integer $group_id
+ * @property string $start_time
+ * @property integer $duration
+ * @property-read Group $group
+ * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\MeetingTimeslot[] $timeslots
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Meeting whereGroupId($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Meeting whereStartTime($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Meeting whereDuration($value)
  */
 class Meeting extends Model
 {
@@ -38,13 +46,19 @@ class Meeting extends Model
      *
      * @var array
      */
-    protected $fillable = ['title', 'description', 'meeting_start', 'meeting_end', 'repeat'];
+    protected $fillable = ['title', 'description', 'duration'];
+
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function employees()
+    public function group()
     {
-        return $this->belongsToMany('plunner\Employee');
+        return $this->belongsTo(Group::class);
+    }
+
+    public function timeslots()
+    {
+        return $this->hasMany('plunner\MeetingTimeslot');
     }
 }
