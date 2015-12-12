@@ -57,14 +57,12 @@ class PlannersMeetingsTest extends \TestCase
         $response->seeJsonEquals($this->group->meetings->toArray());
     }
 
-    /*
     public function testErrorIndexNoMeetings()
     {
         $response = $this->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings');
 
         $response->seeStatusCode(401);
     }
-    */
 
     public function testShowNonRepeatingMeeting()
     {
@@ -85,10 +83,10 @@ class PlannersMeetingsTest extends \TestCase
         // Find an id of a non existing meeting
         for ($test_meeting_id; $test_meeting_id < $this->group->meetings->count() + 1; $test_meeting_id++)
         {
-            if ($test_meeting_id == !$this->group->meetings->where("id", $test_meeting_id)->id)
-            {
+            $meeting = $this->group->meetings->where("id", $test_meeting_id);
+            if (is_null($meeting))
+                // If $meeting is null that means the $test_meeting_id is an id of non-existing meeting and we can break
                 break;
-            }
         }
 
         $response = $this->actingAs($this->planner)
@@ -129,10 +127,10 @@ class PlannersMeetingsTest extends \TestCase
         // Find an id of a non existing meeting
         for ($test_meeting_id; $test_meeting_id < $this->group->meetings->count() + 1; $test_meeting_id++)
         {
-            if ($test_meeting_id == !$this->group->meetings->where("id", $test_meeting_id)->id)
-            {
+            $meeting = $this->group->meetings->where("id", $test_meeting_id);
+            if (is_null($meeting))
+                // If $meeting is null that means the $test_meeting_id is an id of non-existing meeting and we can break
                 break;
-            }
         }
 
         $response = $this->actingAs($this->planner)
@@ -142,13 +140,13 @@ class PlannersMeetingsTest extends \TestCase
 
     public function testUpdateExistingMeeting()
     {
-        $meeting_id = $this->group->meetings()->first()->id;
+        $meeting = $this->group->meetings()->first();
         $test_data = $this->data;
         $test_data->title = "Different title";
         $test_data->description = "Different description";
 
         $response = $this->actingAs($this->planner)
-            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings'.$meeting_id, $test_data);
+            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings'.$meeting->id, $test_data);
         $response->assertResponseOk();
         $response->seeJson($test_data);
     }
@@ -161,14 +159,14 @@ class PlannersMeetingsTest extends \TestCase
 
         $this->actingAs($test_planner)
             ->json('POST', 'employees/planners/groups/'.$test_group->id.'/meetings', $this->data);
-        $meeting_id = $this->group->meetings()->first()->id;
+        $meeting = $this->group->meetings()->first();
 
         $test_data = $this->data;
         $test_data->title = "Different title";
         $test_data->description = "Different description";
 
         $response = $this->actingAs($this->employee)
-            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings'.$meeting_id, $test_data);
+            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings'.$meeting->id, $test_data);
         $response->seeStatusCode(403);
     }
 
