@@ -80,4 +80,9 @@ class Group extends Model
     {
         return $this->belongsTo(Company::class);
     }
+
+    public function meetings()
+    {
+        return $this->hasMany(Meeting::class);
+    }
 }
