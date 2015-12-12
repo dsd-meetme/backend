@@ -21,6 +21,9 @@ class CreateMeetingTimeslotsTable extends Migration
             $table->foreign('meeting_id')->references('id')->on('meetings')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
+        Schema::table('meetings', function ($table) {
+            $table->foreign('start_time')->references('id')->on('meeting_timeslots')->onDelete('cascade')->onUpdate('cascade');
+        });
     }
 
     /**
