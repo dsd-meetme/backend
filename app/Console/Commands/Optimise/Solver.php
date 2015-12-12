@@ -68,7 +68,7 @@ class Solver
      */
     private $usersMeetings;
 
-    /*
+    /**
     * @var Schedule laravel schedule object needed to perform command in background
     */
     private $schedule;
@@ -164,10 +164,12 @@ class Solver
 
     /**
      * @param Schedule $schedule
+     * @return Solver
      */
     public function setSchedule($schedule)
     {
         $this->schedule = $schedule;
+        return $this;
     }
 
     /**
@@ -180,10 +182,12 @@ class Solver
 
     /**
      * @param \string[] $users
+     * @return Solver
      */
     public function setUsers($users)
     {
         $this->users = $users;
+        return $this;
     }
 
     /**
@@ -196,10 +200,12 @@ class Solver
 
     /**
      * @param \string[] $meetings
+     * @return Solver
      */
     public function setMeetings($meetings)
     {
         $this->meetings = $meetings;
+        return $this;
     }
 
     /**
@@ -212,6 +218,7 @@ class Solver
 
     /**
      * @param int $timeSlots
+     * @return Solver
      * @throws OptimiseException
      */
     public function setTimeSlots($timeSlots)
@@ -220,6 +227,7 @@ class Solver
             throw new OptimiseException('$timeSlots is not integer or it is not >0');
 
         $this->timeSlots = $timeSlots;
+        return $this;
     }
 
     /**
@@ -232,6 +240,7 @@ class Solver
 
     /**
      * @param int $maxTimeSlots
+     * @return Solver
      * @throws OptimiseException
      */
     public function setMaxTimeSlots($maxTimeSlots)
@@ -240,6 +249,7 @@ class Solver
             throw new OptimiseException('$maxTimeSlots is not integer or it is not >0');
 
         $this->maxTimeSlots = $maxTimeSlots;
+        return $this;
     }
 
     /**
@@ -252,6 +262,7 @@ class Solver
 
     /**
      * @param \string[] $meetingsAvailability
+     * @return Solver
      * @throws OptimiseException
      */
     public function setMeetingsAvailability($meetingsAvailability)
@@ -267,6 +278,7 @@ class Solver
         }
 
         $this->meetingsAvailability = $meetingsAvailability;
+        return $this;
     }
 
     /**
@@ -279,6 +291,7 @@ class Solver
 
     /**
      * @param \string[] $meetingsDuration
+     * @return Solver
      * @throws OptimiseException
      */
     public function setMeetingsDuration($meetingsDuration)
@@ -294,6 +307,7 @@ class Solver
         }
 
         $this->meetingsDuration = $meetingsDuration;
+        return $this;
     }
 
     /**
@@ -306,6 +320,7 @@ class Solver
 
     /**
      * @param \string[] $usersAvailability
+     * @return Solver
      * @throws OptimiseException
      */
     public function setUsersAvailability($usersAvailability)
@@ -322,6 +337,7 @@ class Solver
         }
 
         $this->usersAvailability = $usersAvailability;
+        return $this;
     }
 
     /**
@@ -334,6 +350,7 @@ class Solver
 
     /**
      * @param \string[] $usersMeetings
+     * @return Solver
      * @throws OptimiseException
      */
     public function setUsersMeetings($usersMeetings)
@@ -348,6 +365,7 @@ class Solver
         }
 
         $this->usersMeetings = $usersMeetings;
+        return $this;
     }
 
     /**
@@ -355,7 +373,7 @@ class Solver
      */
     private function writeUsers()
     {
-        self::writeCSVArray($this->getUsersPath(), $this->users, 'Users');
+        self::writeCSVArrayNoKey($this->getUsersPath(), $this->users);
     }
 
     /**
@@ -363,7 +381,7 @@ class Solver
      */
     private function writeMeetings()
     {
-        self::writeCSVArray($this->getMeetingsPath(), $this->meetings, 'Meetings');
+        self::writeCSVArrayNoKey($this->getMeetingsPath(), $this->meetings);
     }
 
     /**
@@ -396,6 +414,22 @@ class Solver
     private function writeUsersMeetings()
     {
         self::writeCSVMatrix($this->getUsersMeetingsPath(), $this->usersMeetings, 'UsersMeetings');
+    }
+
+    /**
+     * @param string $file
+     * @param array $data
+     * @throws OptimiseException
+     */
+    static private function writeCSVArrayNoKey($file, $data)
+    {
+        $f = function ($fp, $data){
+            foreach ($data as $field) {
+                fputcsv($fp, [$field]);
+            }
+        };
+
+        self::writeCSV($file, $data, ['i'], $f);
     }
 
     /**
@@ -506,11 +540,9 @@ class Solver
      */
     public function getOutput()
     {
-        $handle = @fopen($this->getOutputPath(),"r");
-        if(!$handle)
+        if(!($data = file_get_contents($this->getOutputPath())))
             throw new OptimiseException('problems during reading the file');
-        fclose($handle);
-        return file_get_contents($this->getOutputPath());
+        return $data;
     }
 
     /**

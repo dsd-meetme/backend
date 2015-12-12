@@ -18,8 +18,8 @@ class SolverTest extends \TestCase
         $solver = new Solver(new Schedule(), \App::getInstance());
         $solver->setTimeSlots(4);
         $solver->setMaxTimeSlots(4);
-        $solver->setUsers([1=>1,2,3]);
-        $solver->setMeetings([1=>1,2]);
+        $solver->setUsers([1,2,3]);
+        $solver->setMeetings([1,2]);
         $solver->setMeetingsDuration([1=>1,3]);
         $solver->setMeetingsAvailability([
             1=>[1=>1,0,0,0],

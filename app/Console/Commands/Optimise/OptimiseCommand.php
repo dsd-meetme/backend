@@ -31,7 +31,7 @@ class OptimiseCommand extends Command
      */
     protected $description = 'Optimise meetings';
 
-    /*
+    /**
     * @var Schedule laravel schedule object needed to perform command in background
     */
     private $schedule;
