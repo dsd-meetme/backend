@@ -107,8 +107,21 @@ class PlannersMeetingsTest extends \TestCase
 
     public function testEmployeeDeleteMeeting()
     {
+        if ($this->employee->id == $this->planner->id) {
+            foreach ($this->employee->groups as $group) {
+                if ($group->planner->id != $this->employee->id) {
+                    $test_group = $group;
+                }
+            }
+        }
+
+        else {
+            $test_group = $this->group;
+        }
+
         // Assure the employee is not the groups planner
-        $test_group = $this->employee->groups->where($this->employee->id, '<>' , $this->planner->id)->first();
+        //$test_group = $this->employee->groups->where($this->employee->id, '<>' , $this->planner->id)->first();
+
         $test_planner = $test_group->planner;
 
         $this->actingAs($test_planner)
