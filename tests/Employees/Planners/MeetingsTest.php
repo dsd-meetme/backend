@@ -48,6 +48,52 @@ class PlannersMeetingsTest extends \TestCase
         $response->seeStatusCode(422);
     }
 
+    public function testIndexAllMeetings()
+    {
+        $response = $this->actingAs($this->planner)
+            ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings');
+
+        $response->assertResponseOk();
+        $response->seeJsonEquals($this->group->meetings->toArray());
+    }
+
+    public function testErrorIndexNoMeetings()
+    {
+        $response = $this->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings');
+
+        $response->seeStatusCode(401);
+    }
+
+    public function testShowNonRepeatingMeeting()
+    {
+        $this->actingAs($this->planner)
+            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);
+        $meeting_id = $this->group->meetings->first()->id;
+
+        $response = $this->actingAs($this->planner)
+            ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings'.$meeting_id);
+        $response->assertResponseOk();
+        $response->seeJsonEquals($this->data->toArray());
+    }
+
+    public function testShowNonExistingMeeting()
+    {
+        $test_meeting_id = 0;
+
+        // Find an id of a non existing meeting
+        for ($test_meeting_id; $test_meeting_id < $this->group->meetings->count() + 1; $test_meeting_id++)
+        {
+            if ($test_meeting_id == !$this->group->meetings->where("id", $test_meeting_id)->id)
+            {
+                break;
+            }
+        }
+
+        $response = $this->actingAs($this->planner)
+            ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$test_meeting_id);
+        $response->seeStatusCode(404);
+    }
+
     public function testPlannerDeleteMeeting()
     {
         $this->actingAs($this->planner)
