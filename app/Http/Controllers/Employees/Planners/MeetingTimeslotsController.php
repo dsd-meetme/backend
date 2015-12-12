@@ -3,12 +3,14 @@
 namespace plunner\Http\Controllers\Employees\Planners;
 
 use Illuminate\Http\Request;
-
+use plunner\Employee;
 use plunner\Http\Requests;
-use plunner\Http\Requests\Employees\MeetingRequest;
-use plunner\Http\Controllers\Controller;
-
 use plunner\Meeting;
+use plunner\Group;
+use plunner\MeetingTimeslot;
+use plunner\Http\Controllers\Controller;
+use plunner\Http\Requests\Employees\MeetingTimeslotRequest;
+
 
 class MeetingTimeslotsController extends Controller
 {
@@ -23,16 +25,19 @@ class MeetingTimeslotsController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     *  @param int $groupId
-     *  @param int $meetingId
-     *  @param int $timeslotId
+     * @param $groupId
+     * @param $meetingId
      * @return mixed
      */
-    public function index($groupId, $meetingId, $timeslotId)
+    public function index($groupId, $meetingId)
     {
+        $group = Group::findOrFail($groupId);
+        $this->authorize($group);
+        $meeting = Meeting::findOrFail($meetingId);
+        $this->authorize($meeting);
 
+        if ($meeting->group_id == $groupId)
+            return $meeting->meeting_timeslots;
     }
 
     /**
@@ -45,33 +50,58 @@ class MeetingTimeslotsController extends Controller
      */
     public function show($groupId, $meetingId, $timeslotId)
     {
+        $group = Group::findOrFail($groupId);
+        $this->authorize($group);
+        $meeting = Meeting::findOrFail($meetingId);
+        $this->authorize($meeting);
+        $timeslot = MeetingTimeslot::findOrFail($timeslotId);
+        $this->authorize($timeslot);
 
+        if ($meeting->group_id == $groupId && $timeslot->meeting_id == $meetingId)
+            return $timeslot;
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param MeetingRequest $request
-     * @param int $groupId
-     * @param int $meetingId
-     * @return static
-     */
-    public function store(MeetingRequest $request, $groupId, $meetingId)
-    {
-        //TODO create the right request
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param MeetingRequest $request
-     * @param int $groupId
-     * @param int $meetingId
-     * @param int $timeslotId
+     * @param MeetingTimeslotRequest $request
+     * @param $groupId
+     * @param $meetingId
      * @return mixed
      */
-    public function update(MeetingRequest $request, $groupId, $meetingId, $timeslotId)
+    public function store(MeetingTimeslotRequest $request, $groupId, $meetingId)
     {
+        $group = Group::findOrFail($groupId);
+        $this->authorize($group);
+        $meeting = Meeting::findOrFail($meetingId);
+        $this->authorize($meeting);
+
+        $input = $request->all();
+
+        if ($meeting->group_id == $groupId) {
+            $timeslot = $group->$meeting->meeting_timeslots()->create($input);
+            return $timeslot;
+        }
+    }
+
+    /**
+     * @param MeetingTimeslotRequest $request
+     * @param $groupId
+     * @param $meetingId
+     * @param $timeslotId
+     */
+    public function update(MeetingTimeslotRequest $request, $groupId, $meetingId, $timeslotId)
+    {
+        $group = Group::findOrFail($groupId);
+        $this->authorize($group);
+        $meeting = Meeting::findOrFail($meetingId);
+        $this->authorize($meeting);
+        $timeslot = MeetingTimeslot::findOrFail($timeslotId);
+        $this->authorize($timeslot);
+
+        $input = $request->all();
+        if ($meeting->group_id == $groupId && $timeslot->meeting_id == $meetingId) {
+            $timeslot->update($input);
+            return $timeslot;
+        }
     }
 
     /**
@@ -84,6 +114,16 @@ class MeetingTimeslotsController extends Controller
      */
     public function destroy($groupId, $meetingId, $timeslotId)
     {
+        $group = Group::findOrFail($groupId);
+        $this->authorize($group);
+        $meeting = Meeting::findOrFail($meetingId);
+        $this->authorize($meeting);
+        $timeslot = MeetingTimeslot::findOrFail($timeslotId);
+        $this->authorize($timeslot);
 
+        if ($meeting->group_id == $groupId && $timeslot->meeting_id == $meetingId) {
+            $timeslot = $timeslot->delete();
+            return $timeslot;
+        }
     }
 }
