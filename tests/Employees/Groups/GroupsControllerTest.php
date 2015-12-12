@@ -29,7 +29,7 @@ class GroupsControllerTest extends \TestCase
             ->json('GET', '/employees/groups');
 
         $response->assertResponseOk();
-        $response->seeJsonEquals($this->groups));
+        $response->seeJsonEquals($this->groups);
     }
 
     public function testErrorIndex()
