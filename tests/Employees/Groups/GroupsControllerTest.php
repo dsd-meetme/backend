@@ -19,7 +19,6 @@ class GroupsControllerTest extends \TestCase
 
         $this->company = \plunner\Company::findOrFail(1);
         $this->employee = $this->company->employees()->with('groups')->firstOrFail();
-        $this->groups = $this->employee->groups()->with('meetings');
     }
 
 
@@ -29,7 +28,7 @@ class GroupsControllerTest extends \TestCase
             ->json('GET', '/employees/groups');
 
         $response->assertResponseOk();
-        $response->seeJsonEquals($this->groups);
+        $response->seeJsonEquals($this->employee->groups()->with('meetings')->toArray());
     }
 
     public function testErrorIndex()
@@ -45,7 +44,7 @@ class GroupsControllerTest extends \TestCase
             ->json('GET', '/employees/groups/'.$group_id);
 
         $response->assertResponseOk();
-        $response->seeJsonEquals($this->groups->first());
+        $response->seeJsonEquals($this->employee->groups()->with('meetings')->first()->toArray());
     }
 
     public function testShowGroupNotInSameCompany()
