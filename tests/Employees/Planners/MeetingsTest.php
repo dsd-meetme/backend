@@ -73,24 +73,18 @@ class PlannersMeetingsTest extends \TestCase
         $response = $this->actingAs($this->planner)
             ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$meeting_id);
         $response->assertResponseOk();
-        $response->seeJsonEquals($this->group->meetings->first()->toArray());
+        $response->seeJsonEquals($this->group->meetings()->with("groups")->first()->toArray());
     }
 
     public function testShowNonExistingMeeting()
     {
-        $test_meeting_id = 0;
+        $test_meeting = $this->group->meetings->orderBy('created_at', 'desc')->first();
 
         // Find an id of a non existing meeting
-        for ($test_meeting_id; $test_meeting_id < $this->group->meetings->count() + 1; $test_meeting_id++)
-        {
-            $meeting = $this->group->meetings->where("id", $test_meeting_id);
-            if (is_null($meeting))
-                // If $meeting is null that means the $test_meeting_id is an id of non-existing meeting and we can break
-                break;
-        }
+        $non_existing_meeting_id = $test_meeting->id + 1;
 
         $response = $this->actingAs($this->planner)
-            ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$test_meeting_id);
+            ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$non_existing_meeting_id);
         $response->seeStatusCode(404);
     }
 
