@@ -71,7 +71,7 @@ class PlannersMeetingsTest extends \TestCase
         $meeting_id = $this->group->meetings->first()->id;
 
         $response = $this->actingAs($this->planner)
-            ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings'.$meeting_id);
+            ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$meeting_id);
         $response->assertResponseOk();
         $response->seeJsonEquals($this->data->toArray());
     }
