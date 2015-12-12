@@ -155,9 +155,9 @@ class CalendarsController extends Controller
     private function validateCaldav(Request $request)
     {
         $this->validate($request, [
-            'url' => 'required|active_url|max:255',
+            'url' => 'required|max:255',
             'username' => 'required|max:255',
-            'password' => ((\Route::current()->getName() == 'companies.calendars.caldav')?'required|':'').'confirmed',
+            'password' => ((\Route::current()->getName() == 'companies.calendars.caldav')?'required':''),
             'calendar_name' => 'required|max:255',
         ]);
     }
