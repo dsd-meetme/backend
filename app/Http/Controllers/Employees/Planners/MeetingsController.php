@@ -9,6 +9,7 @@ use plunner\Http\Requests\Employees\MeetingRequest;
 use plunner\Http\Controllers\Controller;
 
 use plunner\Meeting;
+use plunner\Group;
 
 class MeetingsController extends Controller
 {
@@ -64,7 +65,7 @@ class MeetingsController extends Controller
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
         $input = $request->all();
-        $meeting = $group->meetings()->store($input);
+        $meeting = $group->meetings()->create($input);
         return $meeting;
     }
 
