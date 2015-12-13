@@ -179,4 +179,14 @@ class Employee extends Model implements AuthenticatableContract,
         //TODO implement and test this
         return false;
     }
+
+    /**
+     * @param MeetingTimeslot $meetingTimeslot
+     * @return bool
+     */
+    public function verifyMeetingTimeslot(MeetingTimeslot $meetingTimeslot)
+    {
+        //TODO implement and test this
+        return false;
+    }
 }
