@@ -22,9 +22,11 @@ use plunner\Events\Optimise\ErrorEvent;
 class Optimise
 {
     //TODO insert MAX timeslots limit during meeting creation
-    const MAX_TIME_SLOTS = 4; //max duration of a meeting in term of timeslots //20
+    //TODo max timeslots can be an environment var
     const TIME_SLOT_DURATION = 900; //seconds -> 15 minutes
-    const TIME_SLOTS = 4; //total amount of timeslots that must be optimised -> one week 4*24*7 = 672
+
+    private $max_time_slots = 20; //max duration of a meeting in term of timeslots //20
+    private $time_slots = 672; //total amount of timeslots that must be optimised -> one week 4*24*7 = 672
 
     //TODO timezone
     //TODO fix here
@@ -73,9 +75,7 @@ class Optimise
         $this->laravel = $laravel;
 
         //TODO tmp
-        $this->startTime = new \DateTime(); //TODO this must be a precise time every 15 minutes
-        $this->endTime = clone $this->startTime;
-        $this->endTime->add(new \DateInterval('P7D')); //TODO calculate this from timesltos const
+        $this->setStartTime(new \DateTime()); //TODO this must be a precise time every 15 minutes
     }
 
 
@@ -86,8 +86,41 @@ class Optimise
     {
         $this->startTime = $startTime;
         $this->endTime = clone $this->startTime;
-        $this->endTime->add(new \DateInterval('PT'.((self::MAX_TIME_SLOTS+self::TIME_SLOTS)*self::TIME_SLOT_DURATION).'S'));
+        $this->endTime->add(new \DateInterval('PT'.(($this->max_time_slots+$this->time_slots)*self::TIME_SLOT_DURATION).'S'));
     }
+
+    /**
+     * @return int
+     */
+    public function getMaxTimeSlots()
+    {
+        return $this->max_time_slots;
+    }
+
+    /**
+     * @param int $max_time_slots
+     */
+    public function setMaxTimeSlots($max_time_slots)
+    {
+        $this->max_time_slots = $max_time_slots;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTimeSlots()
+    {
+        return $this->time_slots;
+    }
+
+    /**
+     * @param int $time_slots
+     */
+    public function setTimeSlots($time_slots)
+    {
+        $this->time_slots = $time_slots;
+    }
+
 
     /**
      * @return Company
@@ -189,7 +222,7 @@ class Optimise
         //TODO...
         //TODO get avalability only of this week
 
-        $solver = $this->setTimeSlots($solver);
+        $solver = $this->setTimeSlotsSolver($solver);
         $solver = $this->setUsers($solver);
         $solver = $this->setAllMeetingsInfo($solver);
         $solver = $this->setUserAvailability($solver);
@@ -202,9 +235,9 @@ class Optimise
      * @return Solver
      * @throws OptimiseException
      */
-    private function setTimeSlots(Solver $solver)
+    private function setTimeSlotsSolver(Solver $solver)
     {
-        return $solver->setTimeSlots(self::TIME_SLOTS)->setMaxTimeSlots(self::MAX_TIME_SLOTS);
+        return $solver->setTimeSlots($this->time_slots)->setMaxTimeSlots($this->max_time_slots);
     }
 
     /**
@@ -233,7 +266,7 @@ class Optimise
             });
         return $solver->setMeetings($timeslots->keys()->toArray())
             ->setMeetingsDuration($meetings->pluck('duration','id')->toArray())
-            ->setMeetingsAvailability(self::getAvailabilityArray($timeslots));
+            ->setMeetingsAvailability(self::getAvailabilityArray($timeslots, $this->time_slots));
     }
 
     /**
@@ -250,7 +283,7 @@ class Optimise
         $timeslots = $users->groupBy('id')->map(function($item) { //convert timeslots
                 return $this->timeSlotsConverter($item);
             });
-        return $solver->setUsersAvailability(self::getAvailabilityArray($timeslots, false));
+        return $solver->setUsersAvailability(self::getAvailabilityArray($timeslots, $this->time_slots, false));
     }
 
     /**
@@ -309,13 +342,13 @@ class Optimise
      * @param bool|true $free if true the array is filled with 1 for timeslots values else with 0 for timeslots values
      * @return array
      */
-    static private function getAvailabilityArray(\Illuminate\Support\Collection $timeSlots, $free=true)
+    static private function getAvailabilityArray(\Illuminate\Support\Collection $timeSlots, $timeslotsN, $free=true)
     {
         $ret = [];
         foreach($timeSlots as $id=>$timeSlots2)
         {
             $ret = self::fillTimeSlots($ret, $id, $timeSlots2, $free?'1':'0');
-            $ret = self::fillRow($ret, $id, $free?'0':'1');
+            $ret = self::fillRow($ret, $id, $timeslotsN, $free?'0':'1');
         }
 
         return $ret;
@@ -344,9 +377,9 @@ class Optimise
      * @param string $fill
      * @return array
      */
-    static private function fillRow(array $array, $id, $fill = '0')
+    static private function fillRow(array $array, $id, $until, $fill = '0')
     {
-        for($i = 1; $i <= self::TIME_SLOTS; $i++){
+        for($i = 1; $i <= $until; $i++){
             if(!isset($array[$id][$i]))
                 $array[$id][$i] = $fill;
         }

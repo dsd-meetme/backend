@@ -18,6 +18,9 @@ class OptimiseTest extends \TestCase
         if(!$this->doConsole())
             return;
         $company = factory(\plunner\Company::class)->create();
+        $optimise = new Optimise($company, new Schedule(), \App::getInstance());
+        $optimise->setTimeSlots(4);
+        $optimise->setMaxTimeSlots(4);
         $employees = factory(\plunner\Employee::class, 3)->make()->each(function ($employee) use($company){
             $company->employees()->save($employee);
             $employee->calendars()->save(factory(\plunner\Calendar::class)->make());
@@ -41,17 +44,13 @@ class OptimiseTest extends \TestCase
         $timeslots2 = ['time_start' => clone $now, 'time_end'=>self::addTimeInterval(clone $now, 3)];
         $meeting1->timeslots()->create($timeslots1);
         $meeting2->timeslots()->create($timeslots2);
-        $timeslotsE = ['time_start' => self::addTimeInterval(clone $now, 4), 'time_end'=>self::addTimeInterval(clone $now, Optimise::TIME_SLOTS)];
-        $timeslotsENo = ['time_start' => self::addTimeInterval(clone $now, 1), 'time_end'=>self::addTimeInterval(clone $now, Optimise::TIME_SLOTS)];
+        $timeslotsE = ['time_start' => self::addTimeInterval(clone $now, 4), 'time_end'=>self::addTimeInterval(clone $now, $optimise->getTimeSlots())];
+        $timeslotsENo = ['time_start' => self::addTimeInterval(clone $now, 1), 'time_end'=>self::addTimeInterval(clone $now, $optimise->getTimeSlots())];
         $employees->each(function($employee) use ($timeslotsE){
             $employee->calendars()->first()->timeslots()->create($timeslotsE);
         });
         $employeeNo->calendars()->first()->timeslots()->create($timeslotsENo);
 
-        //print_r($company->employees()->with('calendars.timeslots')->with('groups')->get()->toArray());
-        //print_r($company->groups()->with('meetings.timeslots')->get()->toArray());
-        // new Solver(new Schedule(), \App::getInstance());
-        $optimise = new Optimise($company, new Schedule(), \App::getInstance());
         $optimise->setStartTime(clone $now);
         $optimise->optimise();
 
