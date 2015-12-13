@@ -30,6 +30,7 @@ class GroupsController extends Controller
     {
         $employee = \Auth::user();
         return $employee->groups()->with('meetings')->get();
+        //TODO get only current meetings
     }
 
     /**

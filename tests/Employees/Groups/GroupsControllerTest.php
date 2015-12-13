@@ -9,7 +9,7 @@ class GroupsControllerTest extends \TestCase
 {
     use DatabaseTransactions, ActingAs;
 
-    private $company, $employee;
+    private $company, $employee, $groups;
 
     public function setUp()
     {
@@ -18,7 +18,7 @@ class GroupsControllerTest extends \TestCase
         config(['jwt.user' => \plunner\Employee::class]);
 
         $this->company = \plunner\Company::findOrFail(1);
-        $this->employee = $this->company->employees()->has('groups')->firstOrFail();
+        $this->employee = $this->company->employees()->with('groups')->firstOrFail();
     }
 
 
@@ -28,7 +28,7 @@ class GroupsControllerTest extends \TestCase
             ->json('GET', '/employees/groups');
 
         $response->assertResponseOk();
-        $response->seeJsonEquals($this->employee->groups->toArray());
+        $response->seeJsonEquals($this->employee->groups()->with('meetings')->toArray());
     }
 
     public function testErrorIndex()
@@ -44,7 +44,7 @@ class GroupsControllerTest extends \TestCase
             ->json('GET', '/employees/groups/'.$group_id);
 
         $response->assertResponseOk();
-        $response->seeJsonEquals($this->employee->groups->first()->toArray());
+        $response->seeJsonEquals($this->employee->groups()->with('meetings')->first()->toArray());
     }
 
     public function testShowGroupNotInSameCompany()

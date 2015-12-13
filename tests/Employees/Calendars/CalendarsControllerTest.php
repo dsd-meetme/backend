@@ -24,7 +24,7 @@ class CalendarsControllerTest extends TestCase
         $employee = \plunner\Employee::findOrFail(1);
         $response = $this->actingAs($employee)->json('GET', '/employees/calendars');
         $response->assertResponseOk();
-        $response->seeJsonEquals($employee->calendars->toArray());
+        $response->seeJsonEquals($employee->calendars()->with('caldav')->get()->toArray());
     }
 
     public function testErrorIndex()
