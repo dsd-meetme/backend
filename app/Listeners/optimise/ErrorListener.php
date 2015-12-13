@@ -27,5 +27,7 @@ class ErrorListener
     public function handle(ErrorEvent $event)
     {
         //
+        \Log::info('problems during optimise (company id = '.$event->getCompany()->id.'): '.$event->getError());
+        //TODO communicate errors
     }
 }

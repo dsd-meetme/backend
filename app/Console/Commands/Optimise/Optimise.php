@@ -10,6 +10,7 @@ namespace plunner\Console\Commands\Optimise;
 
 use Illuminate\Console\Scheduling\Schedule;
 use plunner\company;
+use plunner\Events\optimise\ErrorEvent;
 
 /**
  * Class Optimise
@@ -136,8 +137,10 @@ class Optimise
      */
     public function save()
     {
-        if(!($this->solver instanceof Solver))
-            return;//TODO errors
+        if(!($this->solver instanceof Solver)) {
+            \Event::fire(new ErrorEvent($this->company, 'solver is not an instace of Solver'));
+            return;
+        }
         //TODO try catch solver
         //TODO check results before save them
         $this->saveMeetings($this->solver);
