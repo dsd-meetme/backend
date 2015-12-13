@@ -181,7 +181,7 @@ class Optimise
         /**
          * @var $usersMeetings \Illuminate\Support\Collection
          */
-        $usersMeetings = collect($this->company->getUsersMeetings($users, $meetings));
+        $usersMeetings = collect($this->company->getUsersMeetings($users, $meetings))->groupBy('employee_id');
 
         return $solver->setUsersAvailability(self::getUsersMeetingsArray($usersMeetings));
     }
@@ -197,8 +197,9 @@ class Optimise
         $ret = [];
         foreach($users as $user)
         {
+            $usersMeetingsTmp = $usersMeetings->get($user);
             foreach($meetings as $meeting){
-                if($usersMeetings->contains(function($key, $value) use($user, $meeting){return $value->employee_id==$user && $value->meeting_id==$meeting;})){
+                if($usersMeetingsTmp->contains('meeting_id', $meeting)){
                     $ret[$user][$meeting] = 1;
                 }else{
                     $ret[$user][$meeting] = 0;
