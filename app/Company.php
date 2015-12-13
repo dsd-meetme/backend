@@ -108,7 +108,6 @@ class Company extends Model implements AuthenticatableContract,
     }
 
     /**
-<<<<<<< HEAD
      * @param Meeting $meeting
      * @return bool
      */
