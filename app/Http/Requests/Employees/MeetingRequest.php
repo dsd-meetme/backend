@@ -1,6 +1,6 @@
 <?php
 
-namespace plunner\Http\Requests;
+namespace plunner\Http\Requests\Employees;
 
 use plunner\Http\Requests\Request;
 
@@ -23,13 +23,13 @@ class MeetingRequest extends Request
      */
     public function rules()
     {
+        //TODO test this with the new data
         return [
-            'title' => 'required|max:255|unique:groups,name,NULL,id,company_id,',
+            'title' => 'required|max:255|unique:meetings',
             'description' => 'required|max:255',
-            'meeting_start' => 'required|date',
-            'meeting_end' => 'required|date|after:meeting_start',
-            'utc' => 'required|integer|max:12|min:-12',
-            'repeat' => 'required|integer',
+            'duration' => 'required|integer',
+            'end_time' => 'exists:meeting_timeslots,id', //this is not mandatory
+            //TODO check if the timeslot with end_time as id has this as meeting_id
         ];
     }
 }
