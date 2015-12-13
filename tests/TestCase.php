@@ -23,4 +23,9 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
         return $app;
     }
+
+    static protected function doConsole()
+    {
+        return env('DO_CONSOLE_TESTS', true);
+    }
 }

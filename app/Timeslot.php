@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Query\Builder|\plunner\Timeslot whereCalendarId($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Timeslot whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Timeslot whereUpdatedAt($value)
+ * @property-read \plunner\Calendar $Calendar
  */
 class Timeslot extends Model
 {
@@ -37,7 +38,7 @@ class Timeslot extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function employees()
+    public function Calendar()
     {
         return $this->belongsTo('plunner\Calendar');
     }

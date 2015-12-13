@@ -56,8 +56,8 @@ Route::group(['namespace' => 'Companies', 'prefix' => 'companies'], function() {
  * Employees
  */
 Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
-    //\Auth
 
+    //\Auth
     Route::group(['namespace' => 'Auth'], function() {
         Route::group(['prefix' => 'auth'], function () {
             // Authentication routes...
@@ -79,7 +79,16 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
 
     Route::group(['namespace' => 'Calendars'], function() {
         Route::resource('calendars', 'CalendarsController', ['except' => ['create', 'edit']]);
+        Route::post('calendars/caldav', ['as' => 'employees.calendars.caldav','uses'=>'CalendarsController@storeCaldav']);
+        Route::post('calendars/calendars', ['as' => 'employees.calendars.calendars','uses'=>'CalendarsController@getCalendars']); //TODO it's correct post? or not
         Route::resource('calendars.timeslots', 'TimeslotsController', ['except' => ['create', 'edit']]);
     });
 
+    Route::group(['namespace' => 'Planners', 'prefix' => 'planners'], function() {
+        Route::resource('groups', 'GroupsController', ['only' => ['index', 'show']]);
+    });
+
+    Route::group(['namespace' => 'Groups'], function() {
+        Route::resource('groups', 'GroupsController', ['only' => ['index', 'show']]);
+    });
 });

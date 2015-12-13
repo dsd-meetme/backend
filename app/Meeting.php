@@ -26,6 +26,18 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Query\Builder|\plunner\Meeting whereMeetingEnd($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Meeting whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Meeting whereUpdatedAt($value)
+ * @property integer $utc
+ * @property integer $repeat
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Meeting whereUtc($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Meeting whereRepeat($value)
+ * @property integer $group_id
+ * @property string $start_time
+ * @property integer $duration
+ * @property-read Group $group
+ * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\MeetingTimeslot[] $timeslots
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Meeting whereGroupId($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Meeting whereStartTime($value)
+ * @method static \Illuminate\Database\Query\Builder|\plunner\Meeting whereDuration($value)
  */
 class Meeting extends Model
 {
@@ -34,13 +46,39 @@ class Meeting extends Model
      *
      * @var array
      */
-    protected $fillable = ['title', 'description', 'meeting_time'];
+    protected $fillable = ['title', 'description', 'duration'];
 
     /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
+     */
+    protected $hidden = ['pivot'];
+
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function timeslots()
+    {
+        return $this->hasMany('plunner\MeetingTimeslot');
+    }
+
+    /**
+     * get employees that partecipate to the meetings.
+     * for all employees invited use groups with employees
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function employees()
     {
-        return $this->belongsToMany('plunner\Employee');
+        return $this->belongsToMany(Employee::class);
     }
 }

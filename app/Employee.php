@@ -46,13 +46,6 @@ class Employee extends Model implements AuthenticatableContract,
     use Authenticatable, Authorizable, CanResetPassword;
 
     /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
-     //protected $table = 'employees';
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -64,7 +57,7 @@ class Employee extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = ['password', 'remember_token', 'pivot'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -83,19 +76,21 @@ class Employee extends Model implements AuthenticatableContract,
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function meetings()
-    {
-        return $this->belongsToMany('plunner\Meeting');
-    }
-
-    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function calendars()
     {
         return $this->hasMany('plunner\Calendar');
+    }
+
+    /**
+     * meetings where the user participates
+     * to get all meetings where the user can go user groups with meetings
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function meetings(){
+        //TODO durign the inserting chek if the meeting is of a group of the user
+        return $this->belongsToMany(Meeting::class);
     }
 
     /**

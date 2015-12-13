@@ -44,13 +44,6 @@ class Company extends Model implements AuthenticatableContract,
     use Authenticatable, Authorizable, CanResetPassword;
 
     /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
-    //protected $table = 'users';
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -111,6 +104,6 @@ class Company extends Model implements AuthenticatableContract,
     public function verifyCalendar(Calendar $calendar)
     {
         //TODO test this
-        return $calendar->Employee->Company->id == $this->id;
+        return $calendar->employee->company->id == $this->id;
     }
 }
