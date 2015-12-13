@@ -66,6 +66,8 @@ class CalendarsController extends Controller
         $employee = \Auth::user();
         $input = $request->all();
         $calendar = $employee->calendars()->create($input);
+        if(isset($input['password']))
+            $input['password'] = \Crypt::encrypt($input['password']);
         $calendar->caldav()->create($input);
         //TODO test
         //TODO validator
@@ -102,8 +104,11 @@ class CalendarsController extends Controller
         $this->authorize($calendar);
         $input = $request->all();
         $caldav = $calendar->caldav;
-        if($caldav)
+        if($caldav){
             $this->validateCaldav($request);
+        }
+        if(isset($input['password']))
+            $input['password'] = \Crypt::encrypt($input['password']);
         $calendar->update($input);
         //TODO test
         //TODO validator
