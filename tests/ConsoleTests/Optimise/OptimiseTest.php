@@ -31,9 +31,9 @@ class OptimiseTest extends \TestCase
         $employeeNo = $employees->pop();
         $group2->employees()->attach($employees->pluck('id')->toArray());
 
-        $meeting1 = factory(\plunner\Meeting::class)->make();
+        $meeting1 = factory(\plunner\Meeting::class)->make(['duration'=>1]);
         $group1->meetings()->save($meeting1);
-        $meeting2 = factory(\plunner\Meeting::class)->make();
+        $meeting2 = factory(\plunner\Meeting::class)->make(['duration'=>3]);
         $group2->meetings()->save($meeting2);
 
         $now = new \DateTime();
@@ -41,8 +41,8 @@ class OptimiseTest extends \TestCase
         $timeslots2 = ['time_start' => clone $now, 'time_end'=>self::addTimeInterval(clone $now, 3)];
         $meeting1->timeslots()->create($timeslots1);
         $meeting2->timeslots()->create($timeslots2);
-        $timeslotsE = ['time_start' => self::addTimeInterval(clone $now, 4), 'time_end'=>self::addTimeInterval(clone $now, Optimise::TIME_SLOTS-1)];
-        $timeslotsENo = ['time_start' => self::addTimeInterval(clone $now, 2), 'time_end'=>self::addTimeInterval(clone $now, Optimise::TIME_SLOTS-1)];
+        $timeslotsE = ['time_start' => self::addTimeInterval(clone $now, 4), 'time_end'=>self::addTimeInterval(clone $now, Optimise::TIME_SLOTS)];
+        $timeslotsENo = ['time_start' => self::addTimeInterval(clone $now, 1), 'time_end'=>self::addTimeInterval(clone $now, Optimise::TIME_SLOTS)];
         $employees->each(function($employee) use ($timeslotsE){
             $employee->calendars()->first()->timeslots()->create($timeslotsE);
         });
@@ -52,7 +52,7 @@ class OptimiseTest extends \TestCase
         //print_r($company->groups()->with('meetings.timeslots')->get()->toArray());
         // new Solver(new Schedule(), \App::getInstance());
         $optmise = new Optimise($company, new Schedule(), \App::getInstance());
-        $optmise->startTime = $now;
+        $optmise->setStartTime(clone $now);
         $optmise->optmise();
         //TODO set duration
        // $status = \Artisan::call('sync:caldav');

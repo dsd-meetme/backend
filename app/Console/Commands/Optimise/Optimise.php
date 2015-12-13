@@ -21,16 +21,16 @@ use plunner\company;
 class Optimise
 {
     //TODO insert MAX timeslots limit during meeting creation
-    const MAX_TIME_SLOTS = 20; //max duration of a meeting in term of timeslots
+    const MAX_TIME_SLOTS = 4; //max duration of a meeting in term of timeslots //20
     const TIME_SLOT_DURATION = 900; //seconds -> 15 minutes
-    const TIME_SLOTS = 672; //total amount of timeslots that must be optimised -> one week 4*24*7
+    const TIME_SLOTS = 4; //total amount of timeslots that must be optimised -> one week 4*24*7 = 672
 
     //TODO timezone
     //TODO fix here
     /**
      * @var \DateTime
      */
-    public $startTime;
+    private $startTime;
     /**
      * @var \DateTime
      */
@@ -69,6 +69,12 @@ class Optimise
         $this->endTime->add(new \DateInterval('P7D')); //TODO calculate this from timesltos const
     }
 
+    public function setStartTime(\DateTime $startTime)
+    {
+        $this->startTime = $startTime;
+        $this->endTime = clone $this->startTime;
+        $this->endTime->add(new \DateInterval('PT'.((self::MAX_TIME_SLOTS+self::TIME_SLOTS)*self::TIME_SLOT_DURATION).'S'));
+    }
 
     /**
      * @return Company
@@ -92,6 +98,7 @@ class Optimise
         $solver = new Solver($this->schedule, $this->laravel);
         $solver = $this->setData($solver);
         $solver = $solver->solve();
+        print_r($solver->getOutput());
         print_r($solver->getXResults());
         print_r($solver->getYResults());
         //TODO try...catch
@@ -168,7 +175,7 @@ class Optimise
         $timeslots = $users->groupBy('id')->map(function($item) { //convert timeslots
                 return $this->timeSlotsConverter($item);
             });
-        return $solver->setUsersAvailability(self::getAvailabilityArray($timeslots));
+        return $solver->setUsersAvailability(self::getAvailabilityArray($timeslots, false));
     }
 
     /**
@@ -214,7 +221,7 @@ class Optimise
 
     private function timeSlotsConverter($item)
     {
-        return $item->each(function($item2, $key2){
+        return $item->each(function($item2){
             $item2->time_start = $this->toTimeSlot($item2->time_start);
             $item2->time_end = $this->toTimeSlot($item2->time_end);
             return $item2;
@@ -224,6 +231,7 @@ class Optimise
 
     /**
      * @param \Illuminate\Support\Collection $timeSlots
+     * @param bool|true $free if true the array is filled with 1 for timeslots values else with 0 for timeslots values
      * @return array
      */
     static private function getAvailabilityArray(\Illuminate\Support\Collection $timeSlots, $free=true)
@@ -280,7 +288,7 @@ class Optimise
      */
     static private function arrayPadInterval(array $array, $from, $to, $pad = '0')
     {
-        for($i = $from; $i<=$to; $i++)
+        for($i = $from; $i<$to; $i++)
             $array[$i] = $pad;
         return $array;
     }
