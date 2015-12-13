@@ -1,6 +1,6 @@
 <?php
 
-namespace plunner\Http\Controllers\Employees\Groups;
+namespace plunner\Http\Controllers\Employees\Meetings;
 
 use Illuminate\Http\Request;
 
