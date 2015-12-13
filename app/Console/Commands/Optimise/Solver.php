@@ -302,6 +302,7 @@ class Solver
             throw new OptimiseException('meetings different from meetings set');
         }
         foreach($meetingsDuration as $duration) {
+            $duration = (int) $duration; //TODO fix this (fix for optimise)
             if(!is_int($duration) || $duration <=0)
                 throw new OptimiseException('duration is not integer or it is not >0');
         }
