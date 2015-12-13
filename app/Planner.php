@@ -96,4 +96,14 @@ class Planner extends Employee
         return $meeting->group->planner_id == $this->id;
     }
 
+
+    /**
+     * @param MeetingTimeslot $meetingTimeslot
+     * @return bool
+     */
+    public function verifyMeetingTimeslot(MeetingTimeslot $meetingTimeslot)
+    {
+        //TODO test this
+        return $this->verifyMeeting($meetingTimeslot->meeting);
+    }
 }

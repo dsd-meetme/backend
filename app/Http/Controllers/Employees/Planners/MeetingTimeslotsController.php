@@ -38,6 +38,7 @@ class MeetingTimeslotsController extends Controller
 
         if ($meeting->group_id == $groupId)
             return $meeting->meeting_timeslots;
+        //TODO else?
     }
 
     /**
@@ -59,6 +60,7 @@ class MeetingTimeslotsController extends Controller
 
         if ($meeting->group_id == $groupId && $timeslot->meeting_id == $meetingId)
             return $timeslot;
+        //TODO else?
     }
 
     /**
@@ -80,6 +82,7 @@ class MeetingTimeslotsController extends Controller
             $timeslot = $group->$meeting->meeting_timeslots()->create($input);
             return $timeslot;
         }
+        //TODO else?
     }
 
     /**
@@ -102,6 +105,7 @@ class MeetingTimeslotsController extends Controller
             $timeslot->update($input);
             return $timeslot;
         }
+        //TODO else?
     }
 
     /**
@@ -125,5 +129,6 @@ class MeetingTimeslotsController extends Controller
             $timeslot = $timeslot->delete();
             return $timeslot;
         }
+        //TODO else?
     }
 }
