@@ -93,4 +93,8 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
     Route::group(['namespace' => 'Groups'], function() {
         Route::resource('groups', 'GroupsController', ['only' => ['index', 'show']]);
     });
+
+    Route::group(['namespace' => 'Meetings'], function() {
+        Route::resource('meetings', 'meetingsController', ['only' => ['index', 'show']]);
+    });
 });
