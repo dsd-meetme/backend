@@ -118,6 +118,17 @@ class Company extends Model implements AuthenticatableContract,
     }
 
     /**
+     * @param Timeslot $timeslot
+     * @return bool
+     */
+    public function verifyTimeslot(Timeslot $timeslot)
+    {
+        //TODO implement and test this
+        return false;
+    }
+
+
+    /**
      * @param MeetingTimeslot $meetingTimeslot
      * @return bool
      */

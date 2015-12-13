@@ -7,7 +7,7 @@ use Illuminate\Http\Request; //TODO fix this
 use it\thecsea\caldav_client_adapter\simple_caldav_client\SimpleCaldavAdapter;
 use plunner\Calendar;
 use plunner\Http\Controllers\Controller;
-use plunner\Http\Requests\Employees\CalendarRequest;
+use plunner\Http\Requests\Employees\Calendar\CalendarRequest;
 
 
 class CalendarsController extends Controller
