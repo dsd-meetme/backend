@@ -23,6 +23,7 @@ use it\thecsea\caldav_client_adapter\simple_caldav_client\SimpleCaldavAdapter;
 use \it\thecsea\caldav_client_adapter\EventInterface;
 use plunner\Caldav;
 use plunner\Events\CaldavErrorEvent;
+use plunner\Events\CaldavSyncOkEvent;
 
 /**
  * Class Sync
@@ -106,12 +107,15 @@ class Sync
 
         //remove old timeslots
         $calendarMain->timeslots()->delete();
+
+        //insert new timeslots
         foreach($events as $event){
             if(!($event = $this->parseEvent($event)))
                 \Event::fire(new CaldavErrorEvent($this->calendar, 'problem during the parsing an event'));
             else
                 $calendarMain->timeslots()->create($event);
         }
+        \Event::fire(new CaldavSyncOkEvent($this->calendar));
     }
 
     /**

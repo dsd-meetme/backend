@@ -20,4 +20,5 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !git_receiver.php
 RewriteCond %{REQUEST_FILENAME} !update.php
 RewriteCond %{REQUEST_FILENAME} !routes.php
+RewriteCond %{REQUEST_FILENAME} !sync.php
 RewriteRule ^ public/ [L]
