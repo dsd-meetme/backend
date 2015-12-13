@@ -85,4 +85,14 @@ class Planner extends Employee
         //TODO implement and test
         return false;
     }
+
+    /**
+     * @param Timeslot $timeslot
+     * @return bool
+     */
+    public function verifyTimeslot(Timeslot $timeslot)
+    {
+        //TODO implement and test this
+        return false;
+    }
 }

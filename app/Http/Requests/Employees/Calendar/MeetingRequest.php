@@ -1,6 +1,6 @@
 <?php
 
-namespace plunner\Http\Requests\Employees;
+namespace plunner\Http\Requests\Employees\Calendar;
 
 use plunner\Http\Requests\Request;
 
@@ -24,8 +24,8 @@ class CalendarRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'required|max:255',
-            'enabled'=>'required|boolean',
+            'time_start' => 'required', //TODO define datetime
+            'time_end'=>'required', //TODO define datetime
         ];
     }
 }

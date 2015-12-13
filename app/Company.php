@@ -106,4 +106,14 @@ class Company extends Model implements AuthenticatableContract,
         //TODO test this
         return $calendar->employee->company->id == $this->id;
     }
+
+    /**
+     * @param Timeslot $timeslot
+     * @return bool
+     */
+    public function verifyTimeslot(Timeslot $timeslot)
+    {
+        //TODO implement and test this
+        return false;
+    }
 }

@@ -5,7 +5,8 @@ namespace plunner\Http\Controllers\Employees\Calendars;
 use Illuminate\Http\Request;
 use plunner\Calendar;
 use plunner\Http\Controllers\Controller;
-use plunner\Http\Requests\Employees\CalendarRequest;
+use plunner\Http\Requests\Employees\Calendar\TimeslotRequest;
+use plunner\Timeslot;
 
 
 class TimeslotsController extends Controller
@@ -25,10 +26,12 @@ class TimeslotsController extends Controller
         $this->middleware('jwt.authandrefresh:mode-en');
     }
 
+    //TODO check that the calendar is not a caldav calendar
 
     /**
      * Display a listing of the resource.
      *
+     * @param  int  $calendarId
      * @return \Illuminate\Http\Response
      */
     public function index($calendarId)
@@ -45,63 +48,75 @@ class TimeslotsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  CalendarRequest  $request
+     * @param  TimeslotRequest  $request
+     * @param  int  $calendarId
      * @return \Illuminate\Http\Response
      */
-    public function store(CalendarRequest $request)
+    public function store(TimeslotRequest $request, $calendarId)
     {
         //TODO check that end is after start and start is after now
         //TODO CHECK
-        $employee = \Auth::user();
+        $calendar = Calendar::findOrFail($calendarId);
+        $this->authorize($calendar);
         $input = $request->all();
-        $timeslot = $employee->calendars()->id->timeslots->create($input);
-        if( time_start($timeslot) > time_end($timeslot) )
+        $timeslot = $calendar->timeslots()->create($input);
+        if( $timeslot->time_start > $timeslot->time_end)
         return $timeslot;
+        //TODO else
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $calendarId
+     * @param  int  $timeslotId
      * @return \Illuminate\Http\Response
      */
     public function show($calendarId, $timeslotId)
     {
         //
-        $calendar = Calendar::findOrFail($id);
+        $calendar = Calendar::findOrFail($calendarId);
         $this->authorize($calendar);
-        return $calendar;
+        $timeslot = Timeslot::findOrFail($timeslotId);
+        $this->authorize($timeslot);
+        return $timeslot;
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  CalendarRequest  $request
-     * @param  int  $id
+     * @param  TimeslotRequest  $request
+     * @param  int  $calendarId
+     * @param  int  $timeslotId
      * @return \Illuminate\Http\Response
      */
-    public function update(CalendarRequest $request, $calendarId, $timeslotId)
+    public function update(TimeslotRequest $request, $calendarId, $timeslotId)
     {
         //
-        $calendar = Calendar::findOrFail($id);
+        $calendar = Calendar::findOrFail($calendarId);
         $this->authorize($calendar);
+        $timeslot = Timeslot::findOrFail($timeslotId);
+        $this->authorize($timeslot);
         $input = $request->all();
-        $calendar->update($input);
-        return $calendar;
+        $timeslot->update($input);
+        return $timeslot;
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $calendarId
+     * @param  int  $timeslotId
      * @return \Illuminate\Http\Response
      */
     public function destroy($calendarId, $timeslotId)
     {
         //
-        $calendar = Calendar::findOrFail($id);
+        $calendar = Calendar::findOrFail($calendarId);
         $this->authorize($calendar);
-        $calendar->delete();
-        return $calendar;
+        $timeslot = Timeslot::findOrFail($timeslotId);
+        $this->authorize($timeslot);
+        $timeslot->delete();
+        return $timeslot;
     }
 }

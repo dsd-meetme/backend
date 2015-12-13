@@ -32,4 +32,5 @@ interface PolicyCheckable
     public function verifyEmployee(Employee $employee);
     public function verifyCompany(Company $company);
     public function verifyCalendar(Calendar $calendar);
+    public function verifyTimeslot(Timeslot $timeslot);
 }
