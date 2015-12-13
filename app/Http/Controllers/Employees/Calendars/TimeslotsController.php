@@ -51,10 +51,12 @@ class TimeslotsController extends Controller
     public function store(CalendarRequest $request)
     {
         //TODO check that end is after start and start is after now
+        //TODO CHECK
         $employee = \Auth::user();
         $input = $request->all();
-        $calendar = $employee->calendars()->create($input);
-        return $calendar;
+        $timeslot = $employee->calendars()->id->timeslots->create($input);
+        if( time_start($timeslot) > time_end($timeslot) )
+        return $timeslot;
     }
 
     /**

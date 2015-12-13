@@ -30,7 +30,7 @@ class TimeslotsControllerTest extends TestCase
 
     public function testErrorIndex()
     {
-        $response = $this->json('GET', '/employees/calendars');
+        $response = $this->json('GET', '/employees/calendars/'.$calendar->id.'/timeslots');
         $response->seeStatusCode(401);
     }
 
@@ -46,17 +46,17 @@ class TimeslotsControllerTest extends TestCase
         ];
 
         //correct request
-        $response = $this->actingAs($employee)->json('POST', '/employees/calendars/',$data);
+        $response = $this->actingAs($employee)->json('POST', '/employees/calendars/'.$calendar->id.'/timeslots',$data);
         $response->assertResponseOk();
         $response->seeJson($data);
 
-        //duplicate employee
-        $response = $this->actingAs($employee)->json('POST', '/employees/calendars/',[]);
+        //duplicate timeslot
+        $response = $this->actingAs($employee)->json('POST', '/employees/calendars/'.$calendar->id.'/timeslots');
         $response->seeStatusCode(422);
 
         //force field
         $data['employee_id'] = 2;
-        $response = $this->actingAs($employee)->json('POST', '/employees/calendars/',$data);
+        $response = $this->actingAs($employee)->json('POST', '/employees/calendars/'.$calendar->id.'/timeslots',$data);
         $response->assertResponseOk();
         $json = $response->response->content();
         $json = json_decode($json, true);
@@ -72,21 +72,21 @@ class TimeslotsControllerTest extends TestCase
         $calendar = $employee->calendars()->firstOrFail();
         $id = $calendar->id;
 
-        //calendar exists
+        //timeslot exists
         $response = $this->actingAs($employee)->json('GET', '/employees/calendars/'.$id);
         $response->assertResponseOk();
         $response->seeJsonEquals($calendar->toArray());
 
         //remove
-        $response = $this->actingAs($employee)->json('DELETE', '/employees/calendars/'.$id);
+        $response = $this->actingAs($employee)->json('DELETE', '/employees/calendars/'.$calendar->id.'/timeslots');
         $response->assertResponseOk();
 
-        //calendar doesn't exist
-        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/'.$id);
+        //timeslot doesn't exist
+        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/'.$calendar->id.'/timeslots');
         $response->seeStatusCode(404);
 
-        //I cannot remove a removed calendar
-        $response = $this->actingAs($employee)->json('DELETE', '/employees/calendars/'.$id);
+        //I cannot remove a removed timeslot
+        $response = $this->actingAs($employee)->json('DELETE', '/employees/calendars/'.$calendar->id.'/timeslots');
         $response->seeStatusCode(404);
     }
 
@@ -100,14 +100,14 @@ class TimeslotsControllerTest extends TestCase
         ];
 
         //correct request
-        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/'.$calendar->id,$data);
+        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/'.$calendar->id.'/timeslots',$data);
         $response->assertResponseOk();
         $response->seeJson($data);
 
 
         //same calendar update
         //correct request
-        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/'.$calendar->id,$data);
+        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/'.$calendar->id.'/timeslots',$data);
         $response->assertResponseOk();
         $response->seeJson($data);
     }
