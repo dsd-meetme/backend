@@ -65,7 +65,7 @@ class Optimise
         $this->laravel = $laravel;
 
         //TODO tmp
-        $this->startTime = new \DateTime();
+        $this->startTime = new \DateTime(); //TODO this must be a precise time every 15 minutes
         $this->endTime = clone $this->startTime;
         $this->endTime->add(new \DateInterval('P7D'));
     }
@@ -91,7 +91,10 @@ class Optimise
     {
         //TODO ...
         $solver = new Solver($this->schedule, $this->laravel);
-        $this->setData($solver);
+        $solver = $this->setData($solver);
+        $solver = $solver->solve();
+        print_r($solver->getXResults());
+        print_r($solver->getYResults());
         //TODO try...catch
     }
 

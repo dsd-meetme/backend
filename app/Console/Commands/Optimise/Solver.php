@@ -490,6 +490,7 @@ class Solver
     }
 
     /**
+     * @return Solver
      * @throws OptimiseException
      */
     public function solve()
@@ -500,6 +501,7 @@ class Solver
         if($event->isDue($this->laravel))
             $event->run($this->laravel);
         //TODO catch glpsol errors
+        return $this;
     }
 
     /**
