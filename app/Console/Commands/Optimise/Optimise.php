@@ -28,7 +28,13 @@ class Optimise
 
     //TODO timezone
     //TODO fix here
+    /**
+     * @var \DateTime
+     */
     private $startTime;
+    /**
+     * @var \DateTime
+     */
     private $endTime;
 
     /**
@@ -103,6 +109,7 @@ class Optimise
         $solver = $this->setUsers($solver);
         $solver = $this->setMeetings($solver);
         $solver = $this->setUserAvailability($solver);
+        $solver = $this->setMeetingsAvailability($solver);
         return $solver;
     }
 
@@ -133,7 +140,9 @@ class Optimise
     private function setMeetings(Solver $solver)
     {
         //this is not the most efficient way, but the simplest. The best way is using directly sql
-        $meetings = $this->company->groups()->with('meetings')->get()->pluck('meetings')->collapse()->pluck('id')->toArray();
+        $meetings = $this->company->groups()->with('meetings')
+            ->whereHas('meetings.timeslots',function($query){return $this->timeSlotsFilter($query);})
+            ->get()->pluck('meetings')->collapse()->pluck('id')->toArray();
         return $solver->setMeetings($meetings);
     }
 
@@ -153,7 +162,7 @@ class Optimise
             })->whereHas('calendars.timeslots',function($query){return $this->timeSlotsFilter($query);})->get(); //TODO do in a better way
         //get only timeslots data
         $timeSlots = $timeSlots->pluck('calendars','id')
-            ->map(function($item, $key){ //cloppase timeslots
+            ->map(function($item, $key){ //collapse timeslots
                 return $item->pluck('timeslots')->collpase()
                     ->map(function($item, $key){ //convert timeslots
                         $this->timeSlotsConverter($item);
@@ -168,6 +177,7 @@ class Optimise
     {
         //this is not the most efficient way, but the simplest. The best way is using directly sql
 
+        //TODO use meeting list
         //get timeslots from db
         $timeSlots = $this->company->groups()
             ->with('meetings.timeslots')
@@ -178,6 +188,23 @@ class Optimise
                 $this->timeSlotsConverter($item);
             });
 
+        return $solver->setMeetingsAvailability(self::getAvailabilityArray($timeSlots));
+    }
+
+    private function setMeetingsDuration(Solver $solver)
+    {
+        //this is not the most efficient way, but the simplest. The best way is using directly sql
+
+        $timeSlots = $this->company->groups()
+            ->with('meetings')
+            ->whereHas('meetings.timeslots',function($query){return $this->timeSlotsFilter($query);})->get(); //TODO do in a better way
+        //get only timeslots data
+        $timeSlots = $timeSlots->pluck('meetings')->collapse()->pluck('timeslots','id')
+            ->map(function($item, $key){ //convert timeslots
+                $this->timeSlotsConverter($item);
+            });
+
+        //TODO implement inside availability
         return $solver->setMeetingsAvailability(self::getAvailabilityArray($timeSlots));
     }
 
