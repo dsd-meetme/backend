@@ -51,9 +51,23 @@ class OptimiseTest extends \TestCase
         //print_r($company->employees()->with('calendars.timeslots')->with('groups')->get()->toArray());
         //print_r($company->groups()->with('meetings.timeslots')->get()->toArray());
         // new Solver(new Schedule(), \App::getInstance());
-        $optmise = new Optimise($company, new Schedule(), \App::getInstance());
-        $optmise->setStartTime(clone $now);
-        $optmise->optmise();
+        $optimise = new Optimise($company, new Schedule(), \App::getInstance());
+        $optimise->setStartTime(clone $now);
+        $optimise->optimise();
+
+        $x = [];
+        foreach($employees as $employee)
+            $x[$employee->id] = [$meeting1->id=>0,$meeting2->id=>1];
+        $x[$employeeNo->id] = [$meeting1->id=>1,$meeting2->id=>0];
+
+        $this->assertEquals($x, $optimise->getSolver()->getXResults());
+
+        $y = [];
+        $y[$meeting1->id] = [1=>1,0,0,0];
+        $y[$meeting2->id] = [1=>1,0,0,0];
+
+        $this->assertEquals($y, $optimise->getSolver()->getYResults());
+
         //TODO set duration
        // $status = \Artisan::call('sync:caldav');
     }

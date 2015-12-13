@@ -52,6 +52,11 @@ class Optimise
     private $laravel;
 
     /**
+     * @var Solver
+     */
+    private $solver = null;
+
+    /**
      * Optimise constructor.
      * @param company $company
 * @param Schedule $schedule
@@ -92,15 +97,30 @@ class Optimise
         $this->company = $company;
     }
 
-    public function optmise()
+    /**
+     * @return Solver
+     */
+    public function getSolver()
+    {
+        return $this->solver;
+    }
+
+
+    //TODo fix php doc
+    /**
+     * @return Optimise
+     */
+    public function optimise()
     {
         //TODO ...
         $solver = new Solver($this->schedule, $this->laravel);
         $solver = $this->setData($solver);
         $solver = $solver->solve();
-        print_r($solver->getOutput());
-        print_r($solver->getXResults());
-        print_r($solver->getYResults());
+        $this->solver = $solver;
+        return $this;
+        //print_r($solver->getOutput());
+        //print_r($solver->getXResults());
+        //print_r($solver->getYResults());
         //TODO try...catch
     }
 
