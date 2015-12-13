@@ -107,9 +107,9 @@ class Optimise
 
         $solver = $this->setTimeSlots($solver);
         $solver = $this->setUsers($solver);
-        $solver = $this->setMeetings($solver);
+        $solver = $this->setAllMeetingsInfo($solver);
         $solver = $this->setUserAvailability($solver);
-        $solver = $this->setMeetingsAvailability($solver);
+        $solver = $this->setUsersMeetings($solver);
         return $solver;
     }
 
@@ -129,6 +129,7 @@ class Optimise
      */
     private function setUsers(Solver $solver)
     {
+        //since we consider busy timeslots, we need to get all users
         $users = $this->company->employees->pluck('id')->toArray();
         return $solver->setUsers($users);
     }
@@ -137,13 +138,18 @@ class Optimise
      * @param Solver $solver
      * @return Solver
      */
-    private function setMeetings(Solver $solver)
+    private function setAllMeetingsInfo(Solver $solver)
     {
-        //this is not the most efficient way, but the simplest. The best way is using directly sql
-        $meetings = $this->company->groups()->with('meetings')
-            ->whereHas('meetings.timeslots',function($query){return $this->timeSlotsFilter($query);})
-            ->get()->pluck('meetings')->collapse()->pluck('id')->toArray();
-        return $solver->setMeetings($meetings);
+        /**
+         * @var $meetings \Illuminate\Support\Collection
+         */
+        $meetings = collect($this->company->getMeetingsTimeSlots($this->startTime, $this->endTime));
+        $timeslots = $meetings->groupBy('id')>map(function($item, $key) { //convert timeslots
+                $this->timeSlotsConverter($item);
+            });
+        return $solver->setMeetings($timeslots->keys())
+            ->setMeetingsDuration($meetings->pluck('duration','id'))
+            ->setMeetingsAvailability(self::getAvailabilityArray($timeslots));
     }
 
     /**
@@ -153,72 +159,51 @@ class Optimise
      */
     private function setUserAvailability(Solver $solver)
     {
-        //this is not the most efficient way, but the simplest. The best way is using directly sql
-
-        //get timeslots from db
-        $timeSlots = $this->company->employees()->with('calendars.timeslots')
-            ->whereHas('calendars',function($query){ //enable filter
-                $query->where('enabled','=','1');
-            })->whereHas('calendars.timeslots',function($query){return $this->timeSlotsFilter($query);})->get(); //TODO do in a better way
-        //get only timeslots data
-        $timeSlots = $timeSlots->pluck('calendars','id')
-            ->map(function($item, $key){ //collapse timeslots
-                return $item->pluck('timeslots')->collpase()
-                    ->map(function($item, $key){ //convert timeslots
-                        $this->timeSlotsConverter($item);
-                });
-            });
-
-        //set solver
-        return $solver->setUsersAvailability(self::getAvailabilityArray($timeSlots));
-    }
-
-    private function setMeetingsAvailability(Solver $solver)
-    {
-        //this is not the most efficient way, but the simplest. The best way is using directly sql
-
-        //TODO use meeting list
-        //get timeslots from db
-        $timeSlots = $this->company->groups()
-            ->with('meetings.timeslots')
-            ->whereHas('meetings.timeslots',function($query){return $this->timeSlotsFilter($query);})->get(); //TODO do in a better way
-        //get only timeslots data
-        $timeSlots = $timeSlots->pluck('meetings')->collapse()->pluck('timeslots','id')
-            ->map(function($item, $key){ //convert timeslots
+        /**
+         * @var $users \Illuminate\Support\Collection
+         */
+        $users = collect($this->company->getEmployeesTimeSlots($this->startTime, $this->endTime));
+        $timeslots = $users->groupBy('id')>map(function($item, $key) { //convert timeslots
                 $this->timeSlotsConverter($item);
             });
-
-        return $solver->setMeetingsAvailability(self::getAvailabilityArray($timeSlots));
-    }
-
-    private function setMeetingsDuration(Solver $solver)
-    {
-        //this is not the most efficient way, but the simplest. The best way is using directly sql
-
-        $timeSlots = $this->company->groups()
-            ->with('meetings')
-            ->whereHas('meetings.timeslots',function($query){return $this->timeSlotsFilter($query);})->get(); //TODO do in a better way
-        //get only timeslots data
-        $timeSlots = $timeSlots->pluck('meetings')->collapse()->pluck('timeslots','id')
-            ->map(function($item, $key){ //convert timeslots
-                $this->timeSlotsConverter($item);
-            });
-
-        //TODO implement inside availability
-        return $solver->setMeetingsAvailability(self::getAvailabilityArray($timeSlots));
+        return $solver->setUsersAvailability(self::getAvailabilityArray($timeslots));
     }
 
     /**
-     * @param \Illuminate\Support\Collection $timeSlots
+     * @param Solver $solver
+     * @return Solver
+     * @throws OptimiseException
+     */
+    private function setUsersMeetings(Solver $solver)
+    {
+        $users = $solver->getUsers();
+        $meetings = $solver->getMeetings();
+        /**
+         * @var $usersMeetings \Illuminate\Support\Collection
+         */
+        $usersMeetings = collect($this->company->getUsersMeetings($users, $meetings));
+
+        return $solver->setUsersAvailability(self::getUsersMeetingsArray($usersMeetings));
+    }
+
+    /**
+     * @param array $users
+     * @param array $meetings
+     * @param \Illuminate\Support\Collection $usersMeetings
      * @return array
      */
-    static private function getAvailabilityArray($timeSlots)
+    static private function getUsersMeetingsArray($users, $meetings, $usersMeetings)
     {
         $ret = [];
-        foreach($timeSlots as $id=>$timeSlots2)
+        foreach($users as $user)
         {
-            $ret = self::fillTimeSlots($ret, $id, $timeSlots2);
-            $ret = self::fillZero($ret, $id);
+            foreach($meetings as $meeting){
+                if($usersMeetings->contains(function($key, $value) use($user, $meeting){return $value->employee_id==$user && $value->meeting_id==$meeting;})){
+                    $ret[$user][$meeting] = 1;
+                }else{
+                    $ret[$user][$meeting] = 0;
+                }
+            }
         }
 
         return $ret;
@@ -231,26 +216,35 @@ class Optimise
         //TODO try catch
     }
 
-    private function timeSlotsFilter($query)
+    /**
+     * @param \Illuminate\Support\Collection $timeSlots
+     * @return array
+     */
+    static private function getAvailabilityArray($timeSlots)
     {
-        $query->where('time_start','>=',$this->startTime);
-        $query->where('time_end','<=',$this->endTime);
+        $ret = [];
+        foreach($timeSlots as $id=>$timeSlots2)
+        {
+            $ret = self::fillTimeSlots($ret, $id, $timeSlots2);
+            $ret = self::fillRow($ret, $id, '1');
+        }
+
+        return $ret;
     }
 
     static private function fillTimeSlots($array, $id, $timeSlots)
     {
-        foreach($timeSlots as $timeSlot)
-        {
+        foreach($timeSlots as $timeSlot) {
             $array[$id] = self::arrayPadInterval($array[$id], $timeSlot->time_start, $timeSlot->time_end);
         }
         return $array;
     }
 
-    static private function fillZero($array, $id)
+    static private function fillRow($array, $id, $fill = '0')
     {
         for($i = 0; $i < self::TIME_SLOTS; $i++){
             if(!isset($array[$id][$i]))
-                $array[$id][$i] = 0;
+                $array[$id][$i] = $fill;
         }
 
         return $array;
