@@ -5,19 +5,32 @@ namespace plunner\Events\optimise;
 use plunner\Events\Event;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use plunner\Company;
 
 class OkEvent extends Event
 {
     use SerializesModels;
 
     /**
-     * Create a new event instance.
-     *
-     * @return void
+     * @var Company
      */
-    public function __construct()
+    private $company;
+
+    /**
+     * OkEvent constructor.
+     * @param Company $company
+     */
+    public function __construct(Company $company)
     {
-        //
+        $this->company = $company;
+    }
+
+    /**
+     * @return Company
+     */
+    public function getCompany()
+    {
+        return $this->company;
     }
 
     /**
