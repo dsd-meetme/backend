@@ -56,6 +56,9 @@ class Optimise
      */
     private $solver = null;
 
+    //TODO clone
+    //TODO to_string
+
     /**
      * Optimise constructor.
      * @param company $company
@@ -74,6 +77,10 @@ class Optimise
         $this->endTime->add(new \DateInterval('P7D')); //TODO calculate this from timesltos const
     }
 
+
+    /**
+     * @param \DateTime $startTime
+     */
     public function setStartTime(\DateTime $startTime)
     {
         $this->startTime = $startTime;
@@ -123,6 +130,51 @@ class Optimise
         //print_r($solver->getYResults());
         //TODO try...catch
     }
+
+    /**
+     * @return Optimise
+     */
+    public function save()
+    {
+        if(!($this->solver instanceof Solver))
+            return;//TODO errors
+        //TODO try catch solver
+        //TODO check results before save them
+        $this->saveMeetings($this->solver);
+        $this->saveEmployeesMeetings($this->solver);
+        return $this;
+    }
+
+    /**
+     * @param Solver $solver
+     */
+    private function saveMeetings(Solver $solver)
+    {
+        $meetings = $solver->getYResults();
+        foreach($meetings as $id=>$meeting){
+            $meetingO = \plunner\Meeting::findOrFail($id);//TODO catch error
+            $meetingO->start_time = $this->toDateTime(array_search('1', $meeting));
+            $meetingO->save();
+        }
+    }
+
+    /**
+     * @param Solver $solver
+     */
+    private function saveEmployeesMeetings(Solver $solver)
+    {
+        $employeesMeetings = $solver->getXResults();
+        foreach($employeesMeetings as $eId =>$employeeMeetings)
+        {
+            $employee = \plunner\Employee::findOrFail($eId);
+            $employeeMeetings = collect($employeeMeetings);
+            $employeeMeetings = $employeeMeetings->filter(function ($item) {
+                return $item == 1;
+            });
+            $employee->meetings()->attach($employeeMeetings->keys()->toArray());
+        }
+    }
+
 
     /**
      * @param Solver $solver
@@ -315,7 +367,7 @@ class Optimise
 
 
     /**
-     * @param $time
+     * @param mixed $time
      * @return int
      * @throws OptimiseException
      */
@@ -331,5 +383,15 @@ class Optimise
         //TODO check if diff makes sense
         //TODO check upper limit
         return (int)(round($diff/self::TIME_SLOT_DURATION)+1); //TODO can round cause overlaps?
+    }
+
+    /**
+     * @param int $timeslot
+     * @return \DateTime
+     */
+    private function toDateTime($timeslot)
+    {
+        $ret = clone $this->startTime;
+        return $ret->add(new \DateInterval('PT'.(($timeslot-1)*self::TIME_SLOT_DURATION).'S'));
     }
 }

@@ -68,8 +68,14 @@ class OptimiseTest extends \TestCase
 
         $this->assertEquals($y, $optimise->getSolver()->getYResults());
 
-        //TODO set duration
-       // $status = \Artisan::call('sync:caldav');
+        //save results in db
+        $this->assertEquals(NULL, $meeting1->fresh()->start_time);
+        $optimise->save();
+        $this->assertEquals($now, new \DateTime($meeting1->fresh()->start_time));
+        $this->assertEquals($now, new \DateTime($meeting2->fresh()->start_time));
+        foreach($employees as $employee)
+            $this->assertEquals([$meeting2->id], $employee->meetings->pluck('id')->toArray());
+        $this->assertEquals([$meeting1->id], $employeeNo->meetings->pluck('id')->toArray());
     }
 
 

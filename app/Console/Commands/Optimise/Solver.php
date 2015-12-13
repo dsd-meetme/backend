@@ -83,7 +83,7 @@ class Solver
     //TODO check no duplicates
     //TODO exception if glpsol return erros
     //TODO intercept all erros of system calls like mkdir
-
+    //TODO to_string
 
     /**
      * Solver constructor.
