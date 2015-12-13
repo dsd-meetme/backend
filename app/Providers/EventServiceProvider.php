@@ -19,6 +19,12 @@ class EventServiceProvider extends ServiceProvider
         'plunner\Events\CaldavSyncOkEvent' => [
             'plunner\Listeners\CaldavSyncOkListener',
         ],
+        'plunner\Events\optimise\ErrorEvent' => [
+            'plunner\Listeners\optimise\ErrorListener',
+        ],
+        'plunner\Events\optimise\OkEvent' => [
+            'plunner\Listeners\optimise\OkListener',
+        ],
     ];
 
     /**
