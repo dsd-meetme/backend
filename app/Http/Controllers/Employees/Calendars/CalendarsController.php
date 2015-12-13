@@ -35,7 +35,7 @@ class CalendarsController extends Controller
          * @var $employee Employee
          */
         $employee = \Auth::user();
-        return $employee->calendars;
+        return $employee->calendars()->with('caldav')->get();
     }
 
     /**
