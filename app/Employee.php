@@ -84,6 +84,16 @@ class Employee extends Model implements AuthenticatableContract,
     }
 
     /**
+     * meetings where the user participates
+     * to get all meetings where the user can go user groups with meetings
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function meetings(){
+        //TODO durign the inserting chek if the meeting is of a group of the user
+        return $this->belongsToMany(Meeting::class);
+    }
+
+    /**
      * Get the e-mail address where password reset links are sent.
      * This is needed for multiple user type login
      *

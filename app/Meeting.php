@@ -48,6 +48,13 @@ class Meeting extends Model
      */
     protected $fillable = ['title', 'description', 'duration'];
 
+    /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
+     */
+    protected $hidden = ['pivot'];
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -57,8 +64,21 @@ class Meeting extends Model
         return $this->belongsTo(Group::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function timeslots()
     {
         return $this->hasMany('plunner\MeetingTimeslot');
+    }
+
+    /**
+     * get employees that partecipate to the meetings.
+     * for all employees invited use groups with employees
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function employees()
+    {
+        return $this->belongsToMany(Employee::class);
     }
 }
