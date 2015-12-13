@@ -1,8 +1,8 @@
 <?php
 
-namespace plunner\Listeners\optimise;
+namespace plunner\Listeners\Optimise;
 
-use plunner\Events\optimise\OkEvent;
+use plunner\Events\Optimise\OkEvent;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 

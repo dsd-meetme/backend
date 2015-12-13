@@ -10,7 +10,7 @@ namespace plunner\Console\Commands\Optimise;
 
 use Illuminate\Console\Scheduling\Schedule;
 use plunner\company;
-use plunner\Events\optimise\ErrorEvent;
+use plunner\Events\Optimise\ErrorEvent;
 
 /**
  * Class Optimise

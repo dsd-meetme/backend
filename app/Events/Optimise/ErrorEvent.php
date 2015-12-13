@@ -1,6 +1,6 @@
 <?php
 
-namespace plunner\Events\optimise;
+namespace plunner\Events\Optimise;
 
 use plunner\Events\Event;
 use Illuminate\Queue\SerializesModels;
