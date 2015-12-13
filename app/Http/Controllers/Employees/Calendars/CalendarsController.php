@@ -35,7 +35,7 @@ class CalendarsController extends Controller
          * @var $employee Employee
          */
         $employee = \Auth::user();
-        return $employee->calendars;
+        return $employee->calendars()->with('caldav')->get();
     }
 
     /**
@@ -66,6 +66,8 @@ class CalendarsController extends Controller
         $employee = \Auth::user();
         $input = $request->all();
         $calendar = $employee->calendars()->create($input);
+        if(isset($input['password']))
+            $input['password'] = \Crypt::encrypt($input['password']);
         $calendar->caldav()->create($input);
         //TODO test
         //TODO validator
@@ -102,8 +104,11 @@ class CalendarsController extends Controller
         $this->authorize($calendar);
         $input = $request->all();
         $caldav = $calendar->caldav;
-        if($caldav)
+        if($caldav){
             $this->validateCaldav($request);
+        }
+        if(isset($input['password']))
+            $input['password'] = \Crypt::encrypt($input['password']);
         $calendar->update($input);
         //TODO test
         //TODO validator
@@ -155,9 +160,9 @@ class CalendarsController extends Controller
     private function validateCaldav(Request $request)
     {
         $this->validate($request, [
-            'url' => 'required|active_url|max:255',
+            'url' => 'required|max:255',
             'username' => 'required|max:255',
-            'password' => ((\Route::current()->getName() == 'companies.calendars.caldav')?'required|':'').'confirmed',
+            'password' => ((\Route::current()->getName() == 'companies.calendars.caldav')?'required':''),
             'calendar_name' => 'required|max:255',
         ]);
     }
