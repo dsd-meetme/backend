@@ -43,7 +43,7 @@ class OptimisationDemoSeeder extends Seeder
         $timeslots2 = ['time_start' => clone $now, 'time_end'=>self::addTimeInterval(clone $now, 3)];
         $meeting1->timeslots()->create($timeslots1);
         $meeting2->timeslots()->create($timeslots2);
-        $timeslotsE = ['time_start' => self::addTimeInterval(clone $now, 4), 'time_end'=>self::addTimeInterval(clone $now, Optimise::DEFAULT_TIME_SLOTS)];
+        $timeslotsE = ['time_start' => self::addTimeInterval(clone $now, 3), 'time_end'=>self::addTimeInterval(clone $now, Optimise::DEFAULT_TIME_SLOTS)];
         $timeslotsENo = ['time_start' => self::addTimeInterval(clone $now, 1), 'time_end'=>self::addTimeInterval(clone $now, Optimise::DEFAULT_TIME_SLOTS)];
         $employees->each(function($employee) use ($timeslotsE){
             $employee->calendars()->first()->timeslots()->create($timeslotsE);
