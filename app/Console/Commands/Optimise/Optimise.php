@@ -83,7 +83,7 @@ class Optimise
      */
     public function setStartTime(\DateTime $startTime)
     {
-        $this->startTime = $startTime;
+        $this->startTime = clone $startTime;
         $this->endTime = clone $this->startTime;
         $this->endTime->add(new \DateInterval('PT'.(($this->max_time_slots+$this->time_slots)*self::TIME_SLOT_DURATION).'S'));
     }
