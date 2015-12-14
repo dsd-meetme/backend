@@ -28,7 +28,7 @@ class ErrorEvent extends Event
      */
     public function __construct(Company $company, $error)
     {
-        $this->company = $company;
+        $this->company = clone $company;
         $this->error = $error;
     }
 

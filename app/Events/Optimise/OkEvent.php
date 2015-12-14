@@ -22,7 +22,7 @@ class OkEvent extends Event
      */
     public function __construct(Company $company)
     {
-        $this->company = $company;
+        $this->company = clone $company;
     }
 
     /**
