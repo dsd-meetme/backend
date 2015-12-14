@@ -19,8 +19,8 @@ class OptimisationDemoSeeder extends Seeder
 
     static private function  simpleModel()
     {
-        $company = factory(\plunner\Company::class)->create();
-        $employees = factory(\plunner\Employee::class, 3)->make()->each(function ($employee) use($company){
+        $company = factory(\plunner\Company::class)->create(['password' => bcrypt('test')]);
+        $employees = factory(\plunner\Employee::class, 3)->make(['password' => bcrypt('test')])->each(function ($employee) use($company){
             $company->employees()->save($employee);
             $employee->calendars()->save(factory(\plunner\Calendar::class)->make());
         });
@@ -49,6 +49,10 @@ class OptimisationDemoSeeder extends Seeder
             $employee->calendars()->first()->timeslots()->create($timeslotsE);
         });
         $employeeNo->calendars()->first()->timeslots()->create($timeslotsENo);
+
+        print_r($company->toArray());
+        print_r($employees->toArray());
+        print_r($employeeNo->toArray());
     }
 
     /**
