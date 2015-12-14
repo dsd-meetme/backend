@@ -21,15 +21,15 @@ use plunner\Events\Optimise\ErrorEvent;
  */
 class Optimise
 {
-    //TODO insert MAX timeslots limit during meeting creation
     //TODo max timeslots can be an environment var
     const TIME_SLOT_DURATION = 900; //seconds -> 15 minutes
+    const DEFAULT_MAX_TIME_SLOTS = 20; //max duration of a meeting in term of timeslots //20
+    const DEFAULT_TIME_SLOTS = 672;  //total amount of timeslots that must be optimised -> one week 4*24*7 = 672
 
-    private $max_time_slots = 20; //max duration of a meeting in term of timeslots //20
-    private $time_slots = 672; //total amount of timeslots that must be optimised -> one week 4*24*7 = 672
+    private $max_time_slots = self::DEFAULT_MAX_TIME_SLOTS;
+    private $time_slots = self::DEFAULT_TIME_SLOTS;
 
     //TODO timezone
-    //TODO fix here
     /**
      * @var \DateTime
      */
@@ -83,7 +83,7 @@ class Optimise
      */
     public function setStartTime(\DateTime $startTime)
     {
-        $this->startTime = $startTime;
+        $this->startTime = clone $startTime;
         $this->endTime = clone $this->startTime;
         $this->endTime->add(new \DateInterval('PT'.(($this->max_time_slots+$this->time_slots)*self::TIME_SLOT_DURATION).'S'));
     }
@@ -146,22 +146,23 @@ class Optimise
     }
 
 
-    //TODo fix php doc
     /**
      * @return Optimise
      */
     public function optimise()
     {
-        //TODO ...
-        $solver = new Solver($this->schedule, $this->laravel);
-        $solver = $this->setData($solver);
-        $solver = $solver->solve();
-        $this->solver = $solver;
+        try {
+            $solver = new Solver($this->schedule, $this->laravel);
+            $solver = $this->setData($solver);
+            $solver = $solver->solve();
+            $this->solver = $solver;
+        }catch(\Exception $e)
+        {
+            \Event::fire(new ErrorEvent($this->company, $e->getMessage()));
+            throw new OptimiseException('Optimising error', 0, $e);
+            //TODO catch specif exception
+        }
         return $this;
-        //print_r($solver->getOutput());
-        //print_r($solver->getXResults());
-        //print_r($solver->getYResults());
-        //TODO try...catch
     }
 
     /**
@@ -171,14 +172,24 @@ class Optimise
     {
         if(!($this->solver instanceof Solver)) {
             \Event::fire(new ErrorEvent($this->company, 'solver is not an instace of Solver'));
+            throw new OptimiseException('solver is not an instance of Solver');
             return;
         }
-        //TODO try catch solver
         //TODO check results before save them
-        $this->saveMeetings($this->solver);
-        $this->saveEmployeesMeetings($this->solver);
+
+        try {
+            $this->saveMeetings($this->solver);
+            $this->saveEmployeesMeetings($this->solver);
+        }catch(\Exception $e)
+        {
+            \Event::fire(new ErrorEvent($this->company, $e->getMessage()));
+            throw new OptimiseException('Optimising error', 0, $e);
+            //TODO catch specif exception
+        }
         return $this;
     }
+
+    //TODO fix php doc with exceptions
 
     /**
      * @param Solver $solver
@@ -218,9 +229,6 @@ class Optimise
      */
     private function setData(Solver $solver)
     {
-        //TODO...
-        //TODO get avalability only of this week
-
         $solver = $this->setTimeSlotsSolver($solver);
         $solver = $this->setUsers($solver);
         $solver = $this->setAllMeetingsInfo($solver);

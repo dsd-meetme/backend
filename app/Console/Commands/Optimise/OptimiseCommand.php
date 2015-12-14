@@ -55,11 +55,7 @@ class OptimiseCommand extends Command
     public function handle()
     {
         //
-        //TODO check if glpk is installed
-        //TODO multithreads
-        //TODO log exceptions and fire
         //TODO insert a timeout
-
         //TODO try...catch with destruct
         $companyId = $this->argument('companyId');
         if(is_numeric($companyId))

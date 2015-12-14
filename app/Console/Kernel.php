@@ -29,5 +29,6 @@ class Kernel extends ConsoleKernel
         //$schedule->command('inspire')
         //         ->hourly();
         $schedule->command('sync:caldav --background')->withoutOverlapping()->everyTenMinutes();
+        $schedule->command('optimise:meetings --background')->withoutOverlapping()->weekly()->sundays()->at('00:00');
     }
 }

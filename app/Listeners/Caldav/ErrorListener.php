@@ -29,6 +29,7 @@ class ErrorListener
     {
         //
         \Log::info('problems during caldav (calendar id = '.$event->getCalendar()->calendar_id.') sync: '.$event->getError());
+        $event->getCalendar()->fresh();
         $event->getCalendar()->sync_errors = $event->getError();
         $event->getCalendar()->save();
     }
