@@ -13,11 +13,11 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'plunner\Events\CaldavErrorEvent' => [
-            'plunner\Listeners\CaldavErrorListener',
+        'plunner\Events\Caldav\ErrorEvent' => [
+            'plunner\Listeners\Caldav\ErrorListener',
         ],
-        'plunner\Events\CaldavSyncOkEvent' => [
-            'plunner\Listeners\CaldavSyncOkListener',
+        'plunner\Events\Caldav\OkEvent' => [
+            'plunner\Listeners\Caldav\OkListener',
         ],
     ];
 

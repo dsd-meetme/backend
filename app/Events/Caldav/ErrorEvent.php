@@ -1,11 +1,12 @@
 <?php
 
-namespace plunner\Events;
+namespace plunner\Events\Caldav;
 
+use plunner\Events\Event;
 use plunner\Caldav;
 use Illuminate\Queue\SerializesModels;
 
-class CaldavErrorEvent extends Event
+class ErrorEvent extends Event
 {
     use SerializesModels;
 
@@ -27,7 +28,7 @@ class CaldavErrorEvent extends Event
      */
     public function __construct(Caldav $calendar, $error)
     {
-        $this->calendar = $calendar;
+        $this->calendar = clone $calendar;
         $this->error = $error;
     }
 
