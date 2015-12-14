@@ -4,7 +4,7 @@ namespace plunner\Http\Requests\Employees\Calendar;
 
 use plunner\Http\Requests\Request;
 
-class CalendarRequest extends Request
+class TimeslotRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
