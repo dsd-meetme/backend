@@ -269,7 +269,7 @@ class Optimise
          */
         $meetings = collect($this->company->getMeetingsTimeSlots($this->startTime, $this->endTime));
         $timeslots = $meetings->groupBy('id')->map(function($item) { //convert timeslots
-                return $this->timeSlotsConverter($item);
+                return $this->durationConverter($this->timeSlotsConverter($item));
             });
         return $solver->setMeetings($timeslots->keys()->toArray())
             ->setMeetingsDuration($meetings->pluck('duration','id')->toArray())
@@ -334,6 +334,23 @@ class Optimise
         return $ret;
     }
 
+    /**
+     * @param mixed $item
+     * @return mixed
+     */
+    private function durationConverter($item)
+    {
+        return $item->each(function($item2){
+            $item2->duration = $this->convertDuration((int) $item2->duration);
+            return $item2;
+            //TODO try catch
+        });
+    }
+
+    /**
+     * @param mixed $item
+     * @return mixed
+     */
     private function timeSlotsConverter($item)
     {
         return $item->each(function($item2){
@@ -436,5 +453,14 @@ class Optimise
     {
         $ret = clone $this->startTime;
         return $ret->add(new \DateInterval('PT'.(($timeslot-1)*self::TIME_SLOT_DURATION).'S'));
+    }
+
+    /**
+     * @param int $duration
+     * @return int
+     */
+    static private function convertDuration($duration)
+    {
+        return (int)ceil($duration/self::TIME_SLOT_DURATION);
     }
 }
