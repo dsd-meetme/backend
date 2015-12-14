@@ -74,8 +74,7 @@ class Optimise
         $this->schedule = $schedule;
         $this->laravel = $laravel;
 
-        //TODO tmp
-        $this->setStartTime(new \DateTime()); //TODO this must be a precise time every 15 minutes
+        $this->setStartTime((new \DateTime())->modify('next monday'));
     }
 
 
