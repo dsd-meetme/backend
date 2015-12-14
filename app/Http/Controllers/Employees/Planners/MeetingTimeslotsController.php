@@ -79,7 +79,7 @@ class MeetingTimeslotsController extends Controller
         $input = $request->all();
 
         if ($meeting->group_id == $groupId) {
-            $timeslot = $group->$meeting->meeting_timeslots()->create($input);
+            $timeslot = $group->meeting()->timeslots()->create($input);
             return $timeslot;
         }
         //TODO else?
