@@ -33,9 +33,9 @@ class OptimisationDemoSeeder extends Seeder
         $employeeNo = $employees->pop();
         $group2->employees()->attach($employees->pluck('id')->toArray());
 
-        $meeting1 = factory(\plunner\Meeting::class)->make(['duration'=>1]);
+        $meeting1 = factory(\plunner\Meeting::class)->make(['duration'=>1*Optimise::TIME_SLOT_DURATION]);
         $group1->meetings()->save($meeting1);
-        $meeting2 = factory(\plunner\Meeting::class)->make(['duration'=>3]);
+        $meeting2 = factory(\plunner\Meeting::class)->make(['duration'=>3*Optimise::TIME_SLOT_DURATION]);
         $group2->meetings()->save($meeting2);
 
         $now = (new \DateTime())->modify('next monday');
