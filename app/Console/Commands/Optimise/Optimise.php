@@ -21,7 +21,6 @@ use plunner\Events\Optimise\ErrorEvent;
  */
 class Optimise
 {
-    //TODO insert MAX timeslots limit during meeting creation
     //TODo max timeslots can be an environment var
     const TIME_SLOT_DURATION = 900; //seconds -> 15 minutes
 
@@ -29,7 +28,6 @@ class Optimise
     private $time_slots = 672; //total amount of timeslots that must be optimised -> one week 4*24*7 = 672
 
     //TODO timezone
-    //TODO fix here
     /**
      * @var \DateTime
      */
@@ -229,8 +227,6 @@ class Optimise
      */
     private function setData(Solver $solver)
     {
-        //TODO get avalability only of this week
-
         $solver = $this->setTimeSlotsSolver($solver);
         $solver = $this->setUsers($solver);
         $solver = $this->setAllMeetingsInfo($solver);
