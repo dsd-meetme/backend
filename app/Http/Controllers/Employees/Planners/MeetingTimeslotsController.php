@@ -36,8 +36,9 @@ class MeetingTimeslotsController extends Controller
         $meeting = Meeting::findOrFail($meetingId);
         $this->authorize($meeting);
 
+        //TODO check if
         if ($meeting->group_id == $groupId)
-            return $meeting->meeting_timeslots;
+            return $meeting->timeslots;
         //TODO else?
     }
 
@@ -58,6 +59,7 @@ class MeetingTimeslotsController extends Controller
         $timeslot = MeetingTimeslot::findOrFail($timeslotId);
         $this->authorize($timeslot);
 
+        //TODO check if
         if ($meeting->group_id == $groupId && $timeslot->meeting_id == $meetingId)
             return $timeslot;
         //TODO else?
@@ -78,8 +80,9 @@ class MeetingTimeslotsController extends Controller
 
         $input = $request->all();
 
+        //TODO check if
         if ($meeting->group_id == $groupId) {
-            $timeslot = $group->meeting()->timeslots()->create($input);
+            $timeslot = $meeting->timeslots()->create($input);
             return $timeslot;
         }
         //TODO else?
@@ -101,6 +104,7 @@ class MeetingTimeslotsController extends Controller
         $this->authorize($timeslot);
 
         $input = $request->all();
+        //TODO check if
         if ($meeting->group_id == $groupId && $timeslot->meeting_id == $meetingId) {
             $timeslot->update($input);
             return $timeslot;
@@ -125,6 +129,7 @@ class MeetingTimeslotsController extends Controller
         $timeslot = MeetingTimeslot::findOrFail($timeslotId);
         $this->authorize($timeslot);
 
+        //TODO check if
         if ($meeting->group_id == $groupId && $timeslot->meeting_id == $meetingId) {
             $timeslot = $timeslot->delete();
             return $timeslot;
