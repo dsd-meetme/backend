@@ -27,6 +27,7 @@ class OkListener
     public function handle(OkEvent $event)
     {
         //
+        $event->getCalendar()->fresh();
         $event->getCalendar()->sync_errors = '';
         $event->getCalendar()->save();
     }
