@@ -28,8 +28,6 @@ class MeetingRequest extends Request
             'title' => 'required|max:255|unique:meetings',
             'description' => 'required|max:255',
             'duration' => 'required|integer',
-            'end_time' => 'exists:meeting_timeslots,id', //this is not mandatory
-            //TODO check if the timeslot with end_time as id has this as meeting_id
         ];
     }
 }
