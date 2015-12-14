@@ -27,5 +27,6 @@ class OkListener
     public function handle(OkEvent $event)
     {
         //
+        //$event->getCompany()->fresh();
     }
 }
