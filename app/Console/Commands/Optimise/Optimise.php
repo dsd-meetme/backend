@@ -23,9 +23,11 @@ class Optimise
 {
     //TODo max timeslots can be an environment var
     const TIME_SLOT_DURATION = 900; //seconds -> 15 minutes
+    const DEFAULT_MAX_TIME_SLOTS = 20; //max duration of a meeting in term of timeslots //20
+    const DEFAULT_TIME_SLOTS = 672;  //total amount of timeslots that must be optimised -> one week 4*24*7 = 672
 
-    private $max_time_slots = 20; //max duration of a meeting in term of timeslots //20
-    private $time_slots = 672; //total amount of timeslots that must be optimised -> one week 4*24*7 = 672
+    private $max_time_slots = self::DEFAULT_MAX_TIME_SLOTS;
+    private $time_slots = self::DEFAULT_TIME_SLOTS;
 
     //TODO timezone
     /**
