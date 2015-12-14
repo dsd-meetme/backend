@@ -97,7 +97,7 @@ class OptimiseCommand extends Command
     private function makeForeground(Company $company)
     {
         $this->info('Optimisation company '. $company->id.' started');
-        (new Optimise($company))->optimise()->save();
+        (new Optimise($company, $this->schedule, $this->laravel))->optimise()->save();
         $this->info('Optimisation '. $company->id.' completed');
     }
 }
