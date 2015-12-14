@@ -169,7 +169,7 @@ class Company extends Model implements AuthenticatableContract,
             ->where('meeting_timeslots.time_start', '>=', $from)
             ->where('meeting_timeslots.time_end', '<=', $to)
             ->where('groups.company_id','=', $this->id)
-            //->where('meetings.start_time','=', 'NULL')
+            ->where('meetings.start_time','=', NULL)
             ->select('meetings.id', 'meetings.duration','meeting_timeslots.time_start','meeting_timeslots.time_end')
             ->get();
     }
