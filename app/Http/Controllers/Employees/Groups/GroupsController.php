@@ -30,7 +30,7 @@ class GroupsController extends Controller
     {
         $employee = \Auth::user();
         return $employee->groups()->with(['meetings'=>function($query) {
-            $query->where('start_time', '=', 'NULL');
+            $query->where('start_time', '=', NULL);
         }])->get();
         //TODO get only current meetings
     }
