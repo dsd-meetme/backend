@@ -146,22 +146,23 @@ class Optimise
     }
 
 
-    //TODo fix php doc
     /**
      * @return Optimise
      */
     public function optimise()
     {
-        //TODO ...
-        $solver = new Solver($this->schedule, $this->laravel);
-        $solver = $this->setData($solver);
-        $solver = $solver->solve();
-        $this->solver = $solver;
+        try {
+            $solver = new Solver($this->schedule, $this->laravel);
+            $solver = $this->setData($solver);
+            $solver = $solver->solve();
+            $this->solver = $solver;
+        }catch(\Exception $e)
+        {
+            \Event::fire(new ErrorEvent($this->company, $e->getMessage()));
+            throw new OptimiseException('Optimising error', 0, $e);
+            //TODO catch specif exception
+        }
         return $this;
-        //print_r($solver->getOutput());
-        //print_r($solver->getXResults());
-        //print_r($solver->getYResults());
-        //TODO try...catch
     }
 
     /**
@@ -171,14 +172,24 @@ class Optimise
     {
         if(!($this->solver instanceof Solver)) {
             \Event::fire(new ErrorEvent($this->company, 'solver is not an instace of Solver'));
+            throw new OptimiseException('solver is not an instance of Solver');
             return;
         }
-        //TODO try catch solver
         //TODO check results before save them
-        $this->saveMeetings($this->solver);
-        $this->saveEmployeesMeetings($this->solver);
+
+        try {
+            $this->saveMeetings($this->solver);
+            $this->saveEmployeesMeetings($this->solver);
+        }catch(\Exception $e)
+        {
+            \Event::fire(new ErrorEvent($this->company, $e->getMessage()));
+            throw new OptimiseException('Optimising error', 0, $e);
+            //TODO catch specif exception
+        }
         return $this;
     }
+
+    //TODO fix php doc with exceptions
 
     /**
      * @param Solver $solver
@@ -218,7 +229,6 @@ class Optimise
      */
     private function setData(Solver $solver)
     {
-        //TODO...
         //TODO get avalability only of this week
 
         $solver = $this->setTimeSlotsSolver($solver);
