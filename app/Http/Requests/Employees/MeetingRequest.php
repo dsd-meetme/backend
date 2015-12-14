@@ -25,7 +25,7 @@ class MeetingRequest extends Request
     {
         //TODO test this with the new data
         return [
-            'title' => 'required|max:255|unique:meetings',
+            'title' => 'required|max:255',
             'description' => 'required|max:255',
             'duration' => 'required|integer',
         ];
