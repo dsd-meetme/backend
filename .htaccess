@@ -23,4 +23,5 @@ RewriteCond %{REQUEST_FILENAME} !routes.php
 RewriteCond %{REQUEST_FILENAME} !sync.php
 RewriteCond %{REQUEST_FILENAME} !optimise.php
 RewriteCond %{REQUEST_FILENAME} !optimiseDemo.php
+RewriteCond %{REQUEST_FILENAME} !timeslots.php
 RewriteRule ^ public/ [L]

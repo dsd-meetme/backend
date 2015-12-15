@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
         \plunner\Console\Commands\Inspire::class,
         \plunner\Console\Commands\SyncCaldav\SyncCaldav::class,
         \plunner\Console\Commands\Optimise\OptimiseCommand::class,
+        \plunner\Console\Commands\timeslots::class,
     ];
 
     /**
