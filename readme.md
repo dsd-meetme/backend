@@ -53,3 +53,4 @@ After cloning and installing repository:
 * [laravel noredirect traits for JWT](https://github.com/thecsea/jwt-auth)
 * [laravel cors library](https://github.com/barryvdh/laravel-cors)
 * [caldav client adapter library](https://github.com/thecsea/caldav-client-adapter)
+* [mailgun](http://www.mailgun.com/)
