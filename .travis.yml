@@ -13,6 +13,11 @@ php:
 env:
   - DB=mysql
 
+addons:
+  apt:
+    packages:
+    - glpk-utils
+
 # Commands to be run before your environment runs.
 before_script:
   - composer self-update
