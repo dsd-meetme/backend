@@ -67,7 +67,7 @@ class Meeting extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function meeting_timeslots()
+    public function timeslots()
     {
         return $this->hasMany('plunner\MeetingTimeslot');
     }

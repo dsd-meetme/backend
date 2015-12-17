@@ -27,7 +27,7 @@ class MeetingTimeslotsTest extends \TestCase
         $this->group = $this->employee->groups->first();
         $this->planner = $this->group->planner;
         $this->meeting = $this->group->meetings()->with('meeting_timeslots')->first();
-        $this->meeting_timeslot = $this->meeting->meeting_timeslots->first();
+        $this->meeting_timeslot = $this->meeting->timeslots->first();
 
         $this->data= [
             'time_start' => '2015-12-17 12:00:00',
@@ -40,7 +40,7 @@ class MeetingTimeslotsTest extends \TestCase
         $response = $this->actingAs($this->planner)
             ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$this->meeting->id.'/timeslots');
         $response->assertResponseOk();
-        $response->seeJsonEquals($this->meeting->meeting_timeslots->toArray());
+        $response->seeJsonEquals($this->meeting->timeslots->toArray());
     }
 
     public function testEmployeeViewIndex()
@@ -72,7 +72,7 @@ class MeetingTimeslotsTest extends \TestCase
             ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$this->meeting->id.'/timeslots/'
                 .$this->meeting_timeslot->id);
         $response->assertResponseOk();
-        $response->seeJsonEquals($this->meeting->toArray());
+        $response->seeJsonEquals($this->meeting_timeslot->toArray());
     }
 
     public function testEmployeeViewShow()
