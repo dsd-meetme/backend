@@ -141,7 +141,7 @@ class PlannersMeetingsTest extends \TestCase
     public function testUpdateExistingMeeting()
     {
         $this->actingAs($this->planner)
-            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);
+            ->json('PUT', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);
         $meeting = $this->group->meetings()->first();
 
         $test_data = [
@@ -169,7 +169,7 @@ class PlannersMeetingsTest extends \TestCase
         }
 
         $this->actingAs($this->planner)
-            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);
+            ->json('PUT', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);
         $meeting = $this->group->meetings()->first();
 
         $test_data = [
@@ -179,7 +179,7 @@ class PlannersMeetingsTest extends \TestCase
         ];
 
         $response = $this->actingAs($test_employee)
-            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings'.$meeting->id, $test_data);
+            ->json('PUT', 'employees/planners/groups/'.$this->group->id.'/meetings'.$meeting->id, $test_data);
         $response->seeStatusCode(403);
     }
 

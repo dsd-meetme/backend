@@ -10,6 +10,7 @@ use plunner\Group;
 use plunner\MeetingTimeslot;
 use plunner\Http\Controllers\Controller;
 use plunner\Http\Requests\Employees\MeetingTimeslotRequest;
+use Illuminate\Support\Facades\Response;
 
 
 class MeetingTimeslotsController extends Controller
@@ -36,10 +37,9 @@ class MeetingTimeslotsController extends Controller
         $meeting = Meeting::findOrFail($meetingId);
         $this->authorize($meeting);
 
-        //TODO check if
         if ($meeting->group_id == $groupId)
             return $meeting->timeslots;
-        //TODO else?
+        return Response::json(['error' => 'meeting->group_id <> groupId'], 404);
     }
 
     /**
@@ -59,10 +59,9 @@ class MeetingTimeslotsController extends Controller
         $timeslot = MeetingTimeslot::findOrFail($timeslotId);
         $this->authorize($timeslot);
 
-        //TODO check if
         if ($meeting->group_id == $groupId && $timeslot->meeting_id == $meetingId)
             return $timeslot;
-        //TODO else?
+        return Response::json(['error' => 'meeting->group_id <> groupId || timeslot->meeting_id <> meetingId'], 404);
     }
 
     /**
@@ -80,12 +79,11 @@ class MeetingTimeslotsController extends Controller
 
         $input = $request->all();
 
-        //TODO check if
         if ($meeting->group_id == $groupId) {
             $timeslot = $meeting->timeslots()->create($input);
             return $timeslot;
         }
-        //TODO else?
+        return Response::json(['error' => 'meeting->group_id <> groupId'], 404);
     }
 
     /**
@@ -104,12 +102,12 @@ class MeetingTimeslotsController extends Controller
         $this->authorize($timeslot);
 
         $input = $request->all();
-        //TODO check if
+
         if ($meeting->group_id == $groupId && $timeslot->meeting_id == $meetingId) {
             $timeslot->update($input);
             return $timeslot;
         }
-        //TODO else?
+        return Response::json(['error' => 'meeting->group_id <> groupId || timeslot->meeting_id <> meetingId'], 404);
     }
 
     /**
@@ -129,11 +127,10 @@ class MeetingTimeslotsController extends Controller
         $timeslot = MeetingTimeslot::findOrFail($timeslotId);
         $this->authorize($timeslot);
 
-        //TODO check if
         if ($meeting->group_id == $groupId && $timeslot->meeting_id == $meetingId) {
             $timeslot = $timeslot->delete();
             return $timeslot;
         }
-        //TODO else?
+        return Response::json(['error' => 'meeting->group_id <> groupId || timeslot->meeting_id <> meetingId'], 404);
     }
 }
