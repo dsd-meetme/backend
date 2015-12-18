@@ -102,7 +102,7 @@ class Solver
     /**
      * @throws OptimiseException
      */
-    function __destruct()
+    public function __destruct()
     {
         if ($this->path && is_dir($this->path) && !self::delTree($this->path))
             throw new OptimiseException('problems during removing of path directory');
@@ -181,7 +181,7 @@ class Solver
     }
 
     /**
-     * @param \string[] $users
+     * @param string[] $users
      * @return Solver
      */
     public function setUsers($users)
@@ -191,7 +191,7 @@ class Solver
     }
 
     /**
-     * @return \string[]
+     * @return string[]
      */
     public function getMeetings()
     {
@@ -199,7 +199,7 @@ class Solver
     }
 
     /**
-     * @param \string[] $meetings
+     * @param string[] $meetings
      * @return Solver
      */
     public function setMeetings($meetings)
@@ -253,7 +253,7 @@ class Solver
     }
 
     /**
-     * @return \string[]
+     * @return string[]
      */
     public function getMeetingsAvailability()
     {
@@ -261,7 +261,7 @@ class Solver
     }
 
     /**
-     * @param \string[] $meetingsAvailability
+     * @param string[] $meetingsAvailability
      * @return Solver
      * @throws OptimiseException
      */
@@ -282,7 +282,7 @@ class Solver
     }
 
     /**
-     * @return \string[]
+     * @return string[]
      */
     public function getMeetingsDuration()
     {
@@ -290,7 +290,7 @@ class Solver
     }
 
     /**
-     * @param \string[] $meetingsDuration
+     * @param string[] $meetingsDuration
      * @return Solver
      * @throws OptimiseException
      */
@@ -312,7 +312,7 @@ class Solver
     }
 
     /**
-     * @return \string[]
+     * @return string[]
      */
     public function getUsersAvailability()
     {
@@ -320,7 +320,7 @@ class Solver
     }
 
     /**
-     * @param \string[] $usersAvailability
+     * @param string[] $usersAvailability
      * @return Solver
      * @throws OptimiseException
      */
@@ -342,7 +342,7 @@ class Solver
     }
 
     /**
-     * @return \string[]
+     * @return string[]
      */
     public function getUsersMeetings()
     {
@@ -350,7 +350,7 @@ class Solver
     }
 
     /**
-     * @param \string[] $usersMeetings
+     * @param string[] $usersMeetings
      * @return Solver
      * @throws OptimiseException
      */
