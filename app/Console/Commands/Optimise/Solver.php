@@ -32,7 +32,7 @@ use \Illuminate\Foundation\Application;
 class Solver
 {
     /**
-     * @var string
+     * @var Path
      */
     private $path;
     /**
@@ -78,7 +78,7 @@ class Solver
      */
     private $laravel;
 
-    //TODo clone function
+    //TODo clone function rmemeber to clone also path or create a new one
     //TODO mehtod to check if all variables are correctly set
     //TODO check no duplicates
     //TODO exception if glpsol return erros
@@ -94,7 +94,7 @@ class Solver
     public function __construct(Schedule $schedule, Application $laravel)
     {
         self::checkGlpsol();
-        $this->createPath();
+        $this->path = Path::createPath();
         $this->schedule = $schedule;
         $this->laravel = $laravel;
     }
@@ -102,10 +102,9 @@ class Solver
     /**
      * @throws OptimiseException
      */
-    function __destruct()
+    public function __destruct()
     {
-        if ($this->path && is_dir($this->path) && !self::delTree($this->path))
-            throw new OptimiseException('problems during removing of path directory');
+        $this->path = null; //call the path destruct
     }
 
     /**
@@ -118,40 +117,11 @@ class Solver
     }
 
     /**
-     * remove a no empty dir
-     * @param $dir
-     * @return bool
-     */
-    private static function delTree($dir) {
-        $files = array_diff(scandir($dir), array('.','..'));
-        foreach ($files as $file) {
-            (is_dir("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file");
-        }
-        return rmdir($dir);
-    }
-
-
-    /**
-     * @throws OptimiseException on problems during creation of tmp dir
-     */
-    private function createPath()
-    {
-        $this->path = tempnam(sys_get_temp_dir(), 'OPT'); //TODO check the return in case of errors this return false on failure
-        unlink($this->path); //remove file to create a dir
-        if(file_exists($this->path))
-            throw new OptimiseException('problem during creation of tmp dir (the directory already exists)');
-        if(!@mkdir($this->path))
-            throw new OptimiseException('problem during creation of tmp dir (mkdir problem)');;
-        if(! is_dir($this->path))
-            throw new OptimiseException('problem during creation of tmp dir (it is not possible to create directory)');
-    }
-
-    /**
-     * @return string
+     * @return Path
      */
     public function getPath()
     {
-        return $this->path;
+        return clone $this->path;
     }
 
     /**
@@ -181,7 +151,7 @@ class Solver
     }
 
     /**
-     * @param \string[] $users
+     * @param string[] $users
      * @return Solver
      */
     public function setUsers($users)
@@ -191,7 +161,7 @@ class Solver
     }
 
     /**
-     * @return \string[]
+     * @return string[]
      */
     public function getMeetings()
     {
@@ -199,7 +169,7 @@ class Solver
     }
 
     /**
-     * @param \string[] $meetings
+     * @param string[] $meetings
      * @return Solver
      */
     public function setMeetings($meetings)
@@ -253,7 +223,7 @@ class Solver
     }
 
     /**
-     * @return \string[]
+     * @return string[]
      */
     public function getMeetingsAvailability()
     {
@@ -261,7 +231,7 @@ class Solver
     }
 
     /**
-     * @param \string[] $meetingsAvailability
+     * @param string[] $meetingsAvailability
      * @return Solver
      * @throws OptimiseException
      */
@@ -282,7 +252,7 @@ class Solver
     }
 
     /**
-     * @return \string[]
+     * @return string[]
      */
     public function getMeetingsDuration()
     {
@@ -290,7 +260,7 @@ class Solver
     }
 
     /**
-     * @param \string[] $meetingsDuration
+     * @param string[] $meetingsDuration
      * @return Solver
      * @throws OptimiseException
      */
@@ -312,7 +282,7 @@ class Solver
     }
 
     /**
-     * @return \string[]
+     * @return string[]
      */
     public function getUsersAvailability()
     {
@@ -320,7 +290,7 @@ class Solver
     }
 
     /**
-     * @param \string[] $usersAvailability
+     * @param string[] $usersAvailability
      * @return Solver
      * @throws OptimiseException
      */
@@ -342,7 +312,7 @@ class Solver
     }
 
     /**
-     * @return \string[]
+     * @return string[]
      */
     public function getUsersMeetings()
     {
@@ -350,7 +320,7 @@ class Solver
     }
 
     /**
-     * @param \string[] $usersMeetings
+     * @param string[] $usersMeetings
      * @return Solver
      * @throws OptimiseException
      */
@@ -374,7 +344,7 @@ class Solver
      */
     private function writeUsers()
     {
-        self::writeCSVArrayNoKey($this->getUsersPath(), $this->users);
+        self::writeCSVArrayNoKey($this->path->getUsersPath(), $this->users);
     }
 
     /**
@@ -382,7 +352,7 @@ class Solver
      */
     private function writeMeetings()
     {
-        self::writeCSVArrayNoKey($this->getMeetingsPath(), $this->meetings);
+        self::writeCSVArrayNoKey($this->path->getMeetingsPath(), $this->meetings);
     }
 
     /**
@@ -390,7 +360,7 @@ class Solver
      */
     private function writeMeetingsDuration()
     {
-        self::writeCSVArray($this->getMeetingsDurationPath(), $this->meetingsDuration, 'MeetingsDuration');
+        self::writeCSVArray($this->path->getMeetingsDurationPath(), $this->meetingsDuration, 'MeetingsDuration');
     }
 
     /**
@@ -398,7 +368,7 @@ class Solver
      */
     private function writeMeetingsAvailability()
     {
-        self::writeCSVMatrix($this->getMeetingsAvailabilityPath(), $this->meetingsAvailability, 'MeetingsAvailability');
+        self::writeCSVMatrix($this->path->getMeetingsAvailabilityPath(), $this->meetingsAvailability, 'MeetingsAvailability');
     }
 
     /**
@@ -406,7 +376,7 @@ class Solver
      */
     private function writeUsersAvailability()
     {
-        self::writeCSVMatrix($this->getUsersAvailabilityPath(), $this->usersAvailability, 'UsersAvailability');
+        self::writeCSVMatrix($this->path->getUsersAvailabilityPath(), $this->usersAvailability, 'UsersAvailability');
     }
 
     /**
@@ -414,7 +384,7 @@ class Solver
      */
     private function writeUsersMeetings()
     {
-        self::writeCSVMatrix($this->getUsersMeetingsPath(), $this->usersMeetings, 'UsersMeetings');
+        self::writeCSVMatrix($this->path->getUsersMeetingsPath(), $this->usersMeetings, 'UsersMeetings');
     }
 
     /**
@@ -498,7 +468,7 @@ class Solver
     {
         $this->writeData();
         $this->writeModelFile();
-        $event = $this->schedule->exec('glpsol --math '.$this->getModelPath())->sendOutputTo($this->getOutputPath())->after(function () { }); //this just to execute in foreground
+        $event = $this->schedule->exec('glpsol --math '.$this->path->getModelPath())->sendOutputTo($this->path->getOutputPath())->after(function () { }); //this just to execute in foreground
         if($event->isDue($this->laravel))
             $event->run($this->laravel);
         //TODO catch glpsol errors
@@ -511,8 +481,8 @@ class Solver
     private function writeModelFile()
     {
         $strReplaceS = array('{USERS_PATH}', '{MEETINGS_PATH}', '{USER_AVAILABILITY_PATH}', '{MEETINGS_AVAILABILITY_PATH}', '{USER_MEETINGS_PATH}', '{MEETINGS_DURATION_PATH}', '{TIME_SLOTS}', '{MAX_TIME_SLOTS}', '{X_OUT_PATH}', '{Y_OUT_PATH}');
-        $strReplaceR = array($this->getUsersPath(), $this->getMeetingsPath(), $this->getUsersAvailabilityPath(), $this->getMeetingsAvailabilityPath(), $this->getUsersMeetingsPath(), $this->getMeetingsDurationPath(), $this->timeSlots, $this->maxTimeSlots, $this->getXPath(), $this->getYPath());
-        $f = @fopen($this->getModelPath(), "w");
+        $strReplaceR = array($this->path->getUsersPath(), $this->path->getMeetingsPath(), $this->path->getUsersAvailabilityPath(), $this->path->getMeetingsAvailabilityPath(), $this->path->getUsersMeetingsPath(), $this->path->getMeetingsDurationPath(), $this->timeSlots, $this->maxTimeSlots, $this->path->getXPath(), $this->path->getYPath());
+        $f = @fopen($this->path->getModelPath(), "w");
         if(!$f)
             throw new OptimiseException('problem during creation of a file');
         fwrite($f, str_replace($strReplaceS, $strReplaceR, file_get_contents(__DIR__ . "/model.stub")));
@@ -525,7 +495,7 @@ class Solver
      */
     public function getXResults()
     {
-        return self::readCSVFile($this->getXPath());
+        return self::readCSVFile($this->path->getXPath());
     }
 
     /**
@@ -534,7 +504,7 @@ class Solver
      */
     public function getYResults()
     {
-        return self::readCSVFile($this->getYPath());
+        return self::readCSVFile($this->path->getYPath());
     }
 
     /**
@@ -543,7 +513,7 @@ class Solver
      */
     public function getOutput()
     {
-        if(!($data = file_get_contents($this->getOutputPath())))
+        if(!($data = file_get_contents($this->path->getOutputPath())))
             throw new OptimiseException('problems during reading the file');
         return $data;
     }
@@ -576,86 +546,6 @@ class Solver
         fclose($handle);
 
         return $ret;
-    }
-
-    /**
-     * @return string
-     */
-    private function getModelPath()
-    {
-        return $this->path.'/model.mod';
-    }
-
-    /**
-     * @return string
-     */
-    private function getUsersPath()
-    {
-        return $this->path.'/Users.csv';
-    }
-
-    /**
-     * @return string
-     */
-    private function getMeetingsPath()
-    {
-        return $this->path.'/Meeting.csv';
-    }
-
-    /**
-     * @return string
-     */
-    private function getMeetingsDurationPath()
-    {
-        return $this->path.'/MeetingsDuration.csv';
-    }
-
-    /**
-     * @return string
-     */
-    private function getMeetingsAvailabilityPath()
-    {
-        return $this->path.'/MeetingsAvailability.csv';
-    }
-
-    /**
-     * @return string
-     */
-    private function getUsersAvailabilityPath()
-    {
-        return $this->path.'/UsersAvailability.csv';
-    }
-
-    /**
-     * @return string
-     */
-    private function getUsersMeetingsPath()
-    {
-        return $this->path.'/UsersMeetings.csv';
-    }
-
-    /**
-     * @return string
-     */
-    private function getXPath()
-    {
-        return $this->path.'/x.csv';
-    }
-
-    /**
-     * @return string
-     */
-    private function getYPath()
-    {
-        return $this->path.'/y.csv';
-    }
-
-    /**
-     * @return string
-     */
-    private function getOutputPath()
-    {
-        return $this->path.'/out.txt';
     }
 
     /**

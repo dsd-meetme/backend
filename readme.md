@@ -60,3 +60,4 @@ After cloning and installing repository:
 * [laravel cors library](https://github.com/barryvdh/laravel-cors)
 * [caldav client adapter library](https://github.com/thecsea/caldav-client-adapter)
 * [GLPK](https://www.gnu.org/software/glpk/)
+* [mailgun](http://www.mailgun.com/)
