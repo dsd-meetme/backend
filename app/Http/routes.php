@@ -90,4 +90,8 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
     Route::group(['namespace' => 'Groups'], function() {
         Route::resource('groups', 'GroupsController', ['only' => ['index', 'show']]);
     });
+
+    Route::group(['namespace' => 'Employee'], function() {
+        Route::controller('employee', 'EmployeeController');
+    });
 });
