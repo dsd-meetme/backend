@@ -107,7 +107,7 @@ class MeetingTimeslotsTest extends \TestCase
 
         $response = $this->actingAs($this->planner)
             ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$test_meeting->id.'/timeslots'.$this->meeting_timeslot->id);
-        $response->seeStatusCode(403);
+        $response->seeStatusCode(404);
     }
 
     public function testCreate()
