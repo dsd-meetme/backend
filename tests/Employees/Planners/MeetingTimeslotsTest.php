@@ -26,7 +26,7 @@ class MeetingTimeslotsTest extends \TestCase
         $this->employee = $this->company->employees()->with('groups')->first();
         $this->group = $this->employee->groups->first();
         $this->planner = $this->group->planner;
-        $this->meeting = $this->group->meetings()->with('timeslots')->first();
+        $this->meeting = $this->group->meetings->first();
         $this->meeting_timeslot = $this->meeting->timeslots->first();
 
         $this->data= [
@@ -79,8 +79,7 @@ class MeetingTimeslotsTest extends \TestCase
     public function testShow()
     {
         $response = $this->actingAs($this->planner)
-            ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$this->meeting->id.'/timeslots/'
-                .$this->meeting_timeslot->id);
+            ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$this->meeting->id.'/timeslots/'.$this->meeting_timeslot->id);
         $response->assertResponseOk();
         $response->seeJsonEquals($this->meeting_timeslot->toArray());
     }
@@ -98,8 +97,7 @@ class MeetingTimeslotsTest extends \TestCase
         }
 
         $response = $this->actingAs($test_employee)
-            ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$this->meeting->id.'/timeslots/'
-                .$this->meeting_timeslot->id);
+            ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$this->meeting->id.'/timeslots/'.$this->meeting_timeslot->id);
         $response->seeStatusCode(403);
     }
 
