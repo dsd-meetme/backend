@@ -45,7 +45,17 @@ class MeetingTimeslotsTest extends \TestCase
 
     public function testEmployeeViewIndex()
     {
-        $response = $this->actingAs($this->employee)
+        // Find an employee in the group who is not a planner and set him as $test_employee
+        $test_employee = $this->employee;
+        if ($this->employee->id == $this->planner->id) {
+            foreach ($this->group->employees as $employee) {
+                if ($this->employee->id != $employee->id)
+                    $test_employee = $employee;
+                break;
+            }
+        }
+
+        $response = $this->actingAs($test_employee)
             ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$this->meeting->id.'/timeslots');
         $response->seeStatusCode(403);
     }
@@ -56,7 +66,7 @@ class MeetingTimeslotsTest extends \TestCase
 
         $response = $this->actingAs($this->planner)
             ->json('GET', 'employees/planners/groups/'.$test_group->id.'/meetings/'.$this->meeting->id.'/timeslots');
-        $response->seeStatusCode(404);
+        $response->seeStatusCode(403);
     }
 
     public function testErrorIndex()
@@ -77,7 +87,17 @@ class MeetingTimeslotsTest extends \TestCase
 
     public function testEmployeeViewShow()
     {
-        $response = $this->actingAs($this->employee)
+        // Find an employee in the group who is not a planner and set him as $test_employee
+        $test_employee = $this->employee;
+        if ($this->employee->id == $this->planner->id) {
+            foreach ($this->group->employees as $employee) {
+                if ($this->employee->id != $employee->id)
+                    $test_employee = $employee;
+                break;
+            }
+        }
+
+        $response = $this->actingAs($test_employee)
             ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$this->meeting->id.'/timeslots/'
                 .$this->meeting_timeslot->id);
         $response->seeStatusCode(403);
@@ -90,7 +110,7 @@ class MeetingTimeslotsTest extends \TestCase
         $response = $this->actingAs($this->planner)
             ->json('GET', 'employees/planners/groups/'.$test_group->id.'/meetings/'.$this->meeting->id.'/timeslots'
                 .$this->meeting_timeslot->id);
-        $response->seeStatusCode(404);
+        $response->seeStatusCode(403);
 
 
         $test_meeting = Meeting::where('id', '<>', $this->meeting->id)->firstOrFail();
@@ -98,7 +118,7 @@ class MeetingTimeslotsTest extends \TestCase
         $response = $this->actingAs($this->planner)
             ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$test_meeting->id.'/timeslots'
                 .$this->meeting_timeslot->id);
-        $response->seeStatusCode(404);
+        $response->seeStatusCode(403);
     }
 
     public function testCreate()
@@ -112,7 +132,17 @@ class MeetingTimeslotsTest extends \TestCase
 
     public function testEmployeeCreate()
     {
-        $response = $this->actingAs($this->employee)
+        // Find an employee in the group who is not a planner and set him as $test_employee
+        $test_employee = $this->employee;
+        if ($this->employee->id == $this->planner->id) {
+            foreach ($this->group->employees as $employee) {
+                if ($this->employee->id != $employee->id)
+                    $test_employee = $employee;
+                break;
+            }
+        }
+
+        $response = $this->actingAs($test_employee)
             ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$this->meeting->id.'/timeslots',
                 $this->data);
         $response->seeStatusCode(403);
@@ -125,7 +155,7 @@ class MeetingTimeslotsTest extends \TestCase
         $response = $this->actingAs($this->planner)
             ->json('POST', 'employees/planners/groups/'.$test_group->id.'/meetings/'.$this->meeting->id.'/timeslots',
                 $this->data);
-        $response->seeStatusCode(404);
+        $response->seeStatusCode(403);
     }
 
     public function testUpdate()
@@ -146,11 +176,22 @@ class MeetingTimeslotsTest extends \TestCase
 
     public function testEmployeeUpdate()
     {
+        // Find an employee in the group who is not a planner and set him as $test_employee
+        $test_employee = $this->employee;
+        if ($this->employee->id == $this->planner->id) {
+            foreach ($this->group->employees as $employee) {
+                if ($this->employee->id != $employee->id)
+                    $test_employee = $employee;
+                break;
+            }
+        }
+
         $test_data = [
             'time_start' => '2015-12-17 14:00:00',
             'time_end' => '2015-12-17 15:00:00',
         ];
-        $response = $this->actingAs($this->employee)
+
+        $response = $this->actingAs($test_employee)
             ->json('PUT', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$this->meeting->id.'/timeslots/'
                 .$this->meeting_timeslot->id, $test_data);
         $response->seeStatusCode(403);
@@ -168,7 +209,7 @@ class MeetingTimeslotsTest extends \TestCase
         $response = $this->actingAs($this->planner)
             ->json('PUT', 'employees/planners/groups/'.$test_group->id.'/meetings/'.$this->meeting->id.'/timeslots/'
                 .$this->meeting_timeslot->id, $test_data);
-        $response->seeStatusCode(404);
+        $response->seeStatusCode(403);
 
 
         $test_meeting = Meeting::where('id', '<>', $this->meeting->id)->firstOrFail();
@@ -176,7 +217,7 @@ class MeetingTimeslotsTest extends \TestCase
         $response = $this->actingAs($this->planner)
             ->json('PUT', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$test_meeting->id.'/timeslots/'
                 .$this->meeting_timeslot->id, $test_data);
-        $response->seeStatusCode(404);
+        $response->seeStatusCode(403);
     }
 
     public function testDestroy()
@@ -204,7 +245,17 @@ class MeetingTimeslotsTest extends \TestCase
 
     public function testEmployeeDestroy()
     {
-        $response = $this->actingAs($this->employee)
+        // Find an employee in the group who is not a planner and set him as $test_employee
+        $test_employee = $this->employee;
+        if ($this->employee->id == $this->planner->id) {
+            foreach ($this->group->employees as $employee) {
+                if ($this->employee->id != $employee->id)
+                    $test_employee = $employee;
+                break;
+            }
+        }
+
+        $response = $this->actingAs($test_employee)
             ->json('DELETE', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$this->meeting->id.'/timeslots/'
                 .$this->meeting_timeslot->id);
         $response->seeStatusCode(403);
@@ -217,7 +268,7 @@ class MeetingTimeslotsTest extends \TestCase
         $response = $this->actingAs($this->planner)
             ->json('DESTROY', 'employees/planners/groups/'.$test_group->id.'/meetings/'.$this->meeting->id.'/timeslots/'
                 .$this->meeting_timeslot->id);
-        $response->seeStatusCode(404);
+        $response->seeStatusCode(403);
 
 
         $test_meeting = Meeting::where('id', '<>', $this->meeting->id)->firstOrFail();
@@ -225,7 +276,7 @@ class MeetingTimeslotsTest extends \TestCase
         $response = $this->actingAs($this->planner)
             ->json('DESTROY', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$test_meeting->id.'/timeslots/'
                 .$this->meeting_timeslot->id);
-        $response->seeStatusCode(404);
+        $response->seeStatusCode(403);
     }
 
 }

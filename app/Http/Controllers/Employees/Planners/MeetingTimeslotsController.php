@@ -39,7 +39,7 @@ class MeetingTimeslotsController extends Controller
 
         if ($meeting->group_id == $groupId)
             return $meeting->timeslots;
-        return Response::json(['error' => 'meeting->group_id <> groupId'], 404);
+        return Response::json(['error' => 'meeting->group_id <> groupId'], 403);
     }
 
     /**
@@ -61,7 +61,7 @@ class MeetingTimeslotsController extends Controller
 
         if ($meeting->group_id == $groupId && $timeslot->meeting_id == $meetingId)
             return $timeslot;
-        return Response::json(['error' => 'meeting->group_id <> groupId || timeslot->meeting_id <> meetingId'], 404);
+        return Response::json(['error' => 'meeting->group_id <> groupId || timeslot->meeting_id <> meetingId'], 403);
     }
 
     /**
@@ -83,7 +83,7 @@ class MeetingTimeslotsController extends Controller
             $timeslot = $meeting->timeslots()->create($input);
             return $timeslot;
         }
-        return Response::json(['error' => 'meeting->group_id <> groupId'], 404);
+        return Response::json(['error' => 'meeting->group_id <> groupId'], 403);
     }
 
     /**
@@ -107,7 +107,7 @@ class MeetingTimeslotsController extends Controller
             $timeslot->update($input);
             return $timeslot;
         }
-        return Response::json(['error' => 'meeting->group_id <> groupId || timeslot->meeting_id <> meetingId'], 404);
+        return Response::json(['error' => 'meeting->group_id <> groupId || timeslot->meeting_id <> meetingId'], 403);
     }
 
     /**
@@ -131,6 +131,6 @@ class MeetingTimeslotsController extends Controller
             $timeslot = $timeslot->delete();
             return $timeslot;
         }
-        return Response::json(['error' => 'meeting->group_id <> groupId || timeslot->meeting_id <> meetingId'], 404);
+        return Response::json(['error' => 'meeting->group_id <> groupId || timeslot->meeting_id <> meetingId'], 403);
     }
 }
