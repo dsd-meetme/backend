@@ -153,7 +153,7 @@ class MeetingTimeslotsTest extends \TestCase
             'time_start' => '2015-12-17 14:00:00',
             'time_end' => '2015-12-17 15:00:00',
         ];
-        
+
         $response = $this->actingAs($this->planner)
             ->json('PUT', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$this->meeting->id.'/timeslots/'.$this->meeting_timeslot->id, $test_data);
         $response->assertResponseOk();
