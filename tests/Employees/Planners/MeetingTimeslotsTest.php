@@ -74,7 +74,7 @@ class MeetingTimeslotsTest extends \TestCase
         $response = $this->actingAs($this->planner)
             ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$this->meeting->id.'/timeslots/'.$this->meeting_timeslot->id);
         $response->assertResponseOk();
-        $response->seeJsonEquals($this->meeting_timeslot));
+        $response->seeJsonEquals($this->meeting_timeslot);
     }
 
     public function testEmployeeViewShow()
