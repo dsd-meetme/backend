@@ -22,8 +22,8 @@ namespace plunner\Console\Commands\SyncCaldav;
 use it\thecsea\caldav_client_adapter\simple_caldav_client\SimpleCaldavAdapter;
 use \it\thecsea\caldav_client_adapter\EventInterface;
 use plunner\Caldav;
-use plunner\Events\CaldavErrorEvent;
-use plunner\Events\CaldavSyncOkEvent;
+use plunner\Events\Caldav\ErrorEvent;
+use plunner\Events\Caldav\OkEvent;
 
 /**
  * Class Sync
@@ -93,10 +93,10 @@ class Sync
             $events = $this->getEvents();
         }catch (\it\thecsea\caldav_client_adapter\CaldavException $e)
         {
-            \Event::fire(new CaldavErrorEvent($this->calendar, $e->getMessage()));
+            \Event::fire(new ErrorEvent($this->calendar, $e->getMessage()));
             return ;
         }catch(\Illuminate\Contracts\Encryption\DecryptException $e){
-            \Event::fire(new CaldavErrorEvent($this->calendar, $e->getMessage()));
+            \Event::fire(new ErrorEvent($this->calendar, $e->getMessage()));
             return ;
         }
 
@@ -111,11 +111,11 @@ class Sync
         //insert new timeslots
         foreach($events as $event){
             if(!($event = $this->parseEvent($event)))
-                \Event::fire(new CaldavErrorEvent($this->calendar, 'problem during the parsing an event'));
+                \Event::fire(new ErrorEvent($this->calendar, 'problem during the parsing an event'));
             else
                 $calendarMain->timeslots()->create($event);
         }
-        \Event::fire(new CaldavSyncOkEvent($this->calendar));
+        \Event::fire(new OkEvent($this->calendar));
     }
 
     /**
