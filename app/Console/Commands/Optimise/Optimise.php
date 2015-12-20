@@ -11,6 +11,7 @@ namespace plunner\Console\Commands\Optimise;
 use Illuminate\Console\Scheduling\Schedule;
 use plunner\company;
 use plunner\Events\Optimise\ErrorEvent;
+use plunner\Events\Optimise\OkEvent;
 
 /**
  * Class Optimise
@@ -186,6 +187,8 @@ class Optimise
             throw new OptimiseException('Optimising error', 0, $e);
             //TODO catch specif exception
         }
+        //TODO Is this the correct place?
+        \Event::fire(new OkEvent($this->company));
         return $this;
     }
 
