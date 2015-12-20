@@ -92,6 +92,7 @@ class PlannersMeetingsTest extends \TestCase
     {
         $this->actingAs($this->planner)
             ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);
+        //TODO set it via code not via rest call
         $meeting_id = $this->group->meetings()->first()->id;
 
         $response = $this->actingAs($this->planner)
@@ -110,6 +111,7 @@ class PlannersMeetingsTest extends \TestCase
                     break;
             }
         }
+        //TODO use sql that is more elegant and efficient
 
         $this->actingAs($this->planner)
             ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);
