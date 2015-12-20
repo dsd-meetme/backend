@@ -38,7 +38,7 @@ class MeetingTimeslot extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function Meeting()
+    public function meeting()
     {
         return $this->belongsTo('plunner\Meeting');
     }

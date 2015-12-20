@@ -137,7 +137,7 @@ class Company extends Model implements AuthenticatableContract,
         //TODO implement and test this
         return false;
     }
-
+    
     /**
      * @param \DateTime $from
      * @param \DateTime $to

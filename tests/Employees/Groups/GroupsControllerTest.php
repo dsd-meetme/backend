@@ -28,7 +28,7 @@ class GroupsControllerTest extends \TestCase
             ->json('GET', '/employees/groups');
 
         $response->assertResponseOk();
-        $response->seeJsonEquals($this->employee->groups()->with('meetings')->toArray());
+        $response->seeJsonEquals($this->employee->groups()->with('meetings')->get()->toArray());
     }
 
     public function testErrorIndex()

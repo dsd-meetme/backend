@@ -12,7 +12,7 @@ use plunner\PolicyCheckable;
  * @copyright 2015 Claudio Cardinale
  * @version 1.0.0
  */
-class MeetingTimeslotTimeslotPolicy
+class MeetingTimeslotPolicy
 {
     /**
      * Create a new policy instance.
