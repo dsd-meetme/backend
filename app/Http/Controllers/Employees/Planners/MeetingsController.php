@@ -102,7 +102,7 @@ class MeetingsController extends Controller
         $this->authorize($meeting);
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
-        $meeting = $meeting->delete();
+        $meeting->delete();
         return $meeting;
     }
 }
