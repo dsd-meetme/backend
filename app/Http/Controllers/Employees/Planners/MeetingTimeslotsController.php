@@ -128,7 +128,7 @@ class MeetingTimeslotsController extends Controller
         $this->authorize($timeslot);
 
         if ($meeting->group_id == $groupId && $timeslot->meeting_id == $meetingId) {
-            $timeslot = $timeslot->delete();
+            $timeslot->delete();
             return $timeslot;
         }
         return Response::json(['error' => 'meeting->group_id <> groupId || timeslot->meeting_id <> meetingId'], 403);

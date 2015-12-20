@@ -13,6 +13,7 @@ use plunner\Policies\CalendarPolicy;
 use plunner\Policies\EmployeePolicy;
 use plunner\Policies\GroupPolicy;
 use plunner\Policies\MeetingPolicy;
+use plunner\Policies\MeetingTimeslotPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
