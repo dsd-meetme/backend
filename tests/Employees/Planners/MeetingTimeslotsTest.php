@@ -88,6 +88,7 @@ class MeetingTimeslotsTest extends \TestCase
                 break;
             }
         }
+        //TODO use sql that is more elegant and efficient
 
         $response = $this->actingAs($test_employee)
             ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$this->meeting->id.'/timeslots/'.$this->meeting_timeslot->id);
@@ -130,6 +131,7 @@ class MeetingTimeslotsTest extends \TestCase
                 break;
             }
         }
+        //TODO use sql that is more elegant and efficient
 
         $response = $this->actingAs($test_employee)
             ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$this->meeting->id.'/timeslots',
@@ -174,7 +176,8 @@ class MeetingTimeslotsTest extends \TestCase
                 break;
             }
         }
-
+        //TODO use sql that is more elegant and efficient
+        
         $test_data = [
             'time_start' => '2015-12-17 14:00:00',
             'time_end' => '2015-12-17 15:00:00',
