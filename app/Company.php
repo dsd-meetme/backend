@@ -126,4 +126,54 @@ class Company extends Model implements AuthenticatableContract,
         //TODO implement and test this
         return false;
     }
+    
+    /**
+     * @param \DateTime $from
+     * @param \DateTime $to
+     * @return \Illuminate\Support\Collection
+     */
+    public function getEmployeesTimeSlots($from, $to)
+    {
+        return \DB::table('employees')
+            ->join('calendars', 'employees.id', '=', 'calendars.employee_id')
+            ->join('timeslots', 'calendars.id', '=', 'timeslots.calendar_id')
+            ->where('calendars.enabled', '=', '1')
+            ->where('timeslots.time_start', '>=', $from)
+            ->where('timeslots.time_end', '<=', $to)
+            ->where('employees.company_id','=', $this->id)
+            ->select('employees.id','timeslots.time_start','timeslots.time_end')
+            ->get();
+    }
+
+    /**
+     * @param \DateTime $from
+     * @param \DateTime $to
+     * @return \Illuminate\Support\Collection
+     */
+    public function getMeetingsTimeSlots($from, $to)
+    {
+        return \DB::table('meetings')
+            ->join('groups', 'meetings.group_id', '=', 'groups.id')
+            ->join('meeting_timeslots', 'meetings.id', '=', 'meeting_timeslots.meeting_id')
+            ->where('meeting_timeslots.time_start', '>=', $from)
+            ->where('meeting_timeslots.time_end', '<=', $to)
+            ->where('groups.company_id','=', $this->id)
+            ->where('meetings.start_time','=', NULL)
+            ->select('meetings.id', 'meetings.duration','meeting_timeslots.time_start','meeting_timeslots.time_end')
+            ->get();
+    }
+
+    public function getUsersMeetings($users, $meetings)
+    {
+        return \DB::table('meetings')
+            ->join('groups', 'meetings.group_id', '=', 'groups.id')
+            ->join('employee_group', 'employee_group.group_id', '=', 'groups.id')
+            ->join('employees', 'employee_group.employee_id', '=', 'employees.id')
+            ->whereIn('employees.id', $users)
+            ->whereIn('meetings.id', $meetings)
+            ->where('groups.company_id','=', $this->id) //this is not needed
+            ->where('employees.company_id','=', $this->id) //this is not needed
+            ->select('employees.id as employee_id', 'meetings.id as meeting_id')
+            ->get();
+    }
 }

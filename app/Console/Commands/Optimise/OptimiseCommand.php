@@ -1,43 +1,40 @@
 <?php
 
-namespace plunner\Console\Commands\SyncCaldav;
+namespace plunner\Console\Commands\Optimise;
 
 use Illuminate\Console\Command;
 use Illuminate\Console\Scheduling\Schedule;
-use plunner\Caldav;
+use plunner\Company;
 
 /**
- * Class SyncCaldav
- * @package plunner\Console\Commands\SyncCaldav
+ * Class OptimiseCommand
+ * @package plunner\Console\Commands\Optimise
  * @author Claudio Cardinale <cardi@thecsea.it>
  * @copyright 2015 Claudio Cardinale
  * @version 1.0.0
  */
-class SyncCaldav extends Command
+class OptimiseCommand extends Command
 {
     const BACKGROUND_MOD_MEX = 'background mode';
     const BACKGROUND_COMPLETED_MEX = 'All background tasks started';
-
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'sync:caldav {calendarId?} {--background}';
+    protected $signature = 'optimise:meetings {companyId?}  {--background}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Sync caldav accounts';
-
+    protected $description = 'Optimise meetings';
 
     /**
-     * @var Schedule laravel schedule object needed to perform command in background
-     */
+    * @var Schedule laravel schedule object needed to perform command in background
+    */
     private $schedule;
-
 
     /**
      * Create a new command instance.
@@ -58,9 +55,11 @@ class SyncCaldav extends Command
     public function handle()
     {
         //
-        $calendarId = $this->argument('calendarId');
-        if(is_numeric($calendarId))
-            $this->makeForeground(Caldav::findOrFail($calendarId));
+        //TODO insert a timeout
+        //TODO try...catch with destruct
+        $companyId = $this->argument('companyId');
+        if(is_numeric($companyId))
+            $this->makeForeground(Company::findOrFail($companyId));
         else
             $this->syncAll();
     }
@@ -81,24 +80,24 @@ class SyncCaldav extends Command
     }
 
     /**
-     * sync calendars via exec command
-     * @param Caldav $calendar
+     * optimise company via exec command
+     * @param Company $company
      */
-    private function makeBackground(Caldav $calendar)
+    private function makeBackground(Company $company)
     {
-        $event = $this->schedule->command('sync:caldav '.$calendar->calendar_id)->withoutOverlapping();
+        $event = $this->schedule->command('optimise:meetings '.$company->id)->withoutOverlapping();
         if($event->isDue($this->laravel))
-             $event->run($this->laravel);
+            $event->run($this->laravel);
     }
 
     /**
-     * sync calendars foreground
-     * @param Caldav $calendar
+     * optimise company foreground
+     * @param Company $company
      */
-    private function makeForeground(Caldav $calendar)
+    private function makeForeground(Company $company)
     {
-        $this->info('Sync calendar '. $calendar->calendar_id.' started');
-        (new Sync($calendar))->sync();
-        $this->info('Sync calendar '. $calendar->calendar_id.' completed');
+        $this->info('Optimisation company '. $company->id.' started');
+        (new Optimise($company, $this->schedule, $this->laravel))->optimise()->save();
+        $this->info('Optimisation '. $company->id.' completed');
     }
 }

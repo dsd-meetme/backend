@@ -1,35 +1,36 @@
 <?php
 
-namespace plunner\Events;
+namespace plunner\Events\Optimise;
 
 use plunner\Events\Event;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use plunner\Company;
 
-class CaldavSyncOkEvent extends Event
+class OkEvent extends Event
 {
     use SerializesModels;
 
     /**
-     * @var Calendar
+     * @var Company
      */
-    private $calendar;
+    private $company;
 
     /**
-     * CaldavSyncOkEvent constructor.
-     * @param Calendar $calendar
+     * OkEvent constructor.
+     * @param Company $company
      */
-    public function __construct(Calendar $calendar)
+    public function __construct(Company $company)
     {
-        $this->calendar = $calendar;
+        $this->company = clone $company;
     }
 
     /**
-     * @return Calendar
+     * @return Company
      */
-    public function getCalendar()
+    public function getCompany()
     {
-        return $this->calendar;
+        return $this->company;
     }
 
     /**

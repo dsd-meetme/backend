@@ -1,12 +1,12 @@
 <?php
 
-namespace plunner\Listeners;
+namespace plunner\Listeners\Caldav;
 
-use plunner\Events\CaldavSyncOkEvent;
+use plunner\Events\Caldav\OkEvent;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class CaldavSyncOkListener
+class OkListener
 {
     /**
      * Create the event listener.
@@ -21,12 +21,13 @@ class CaldavSyncOkListener
     /**
      * Handle the event.
      *
-     * @param  CaldavSyncOkEvent  $event
+     * @param  OkEvent  $event
      * @return void
      */
-    public function handle(CaldavSyncOkEvent $event)
+    public function handle(OkEvent $event)
     {
         //
+        $event->getCalendar()->fresh();
         $event->getCalendar()->sync_errors = '';
         $event->getCalendar()->save();
     }
