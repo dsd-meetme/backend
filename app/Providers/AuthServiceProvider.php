@@ -31,7 +31,7 @@ class AuthServiceProvider extends ServiceProvider
         Calendar::class => CalendarPolicy::class,
         Meeting::class => MeetingPolicy::class,
         MeetingTimeslot::class => MeetingTimeslotPolicy::class,
-        Timeslot::policy => TimeslotPolicy::class,
+        Timeslot::class => TimeslotPolicy::class,
     ];
 
     /**
