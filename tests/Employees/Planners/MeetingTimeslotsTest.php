@@ -26,7 +26,7 @@ class MeetingTimeslotsTest extends \TestCase
         $this->employee = $this->company->employees()->with('groups')->first();
         $this->group = $this->employee->groups->first();
         $this->planner = $this->group->planner;
-        $this->meeting = $this->group->meetings->first();
+        $this->meeting = $this->group->meetings->with('meeting')->first();
 
         $this->data= [
             'time_start' => '2015-12-17 12:00:00',
