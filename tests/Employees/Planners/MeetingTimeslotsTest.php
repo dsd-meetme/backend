@@ -4,9 +4,9 @@ namespace Companies\Employees;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use plunner\Company;
-use plunner\Employee;
 use plunner\Group;
 use plunner\Meeting;
+use plunner\Planner;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Support\testing\ActingAs;
 
@@ -19,8 +19,8 @@ class MeetingTimeslotsTest extends \TestCase
     public function setUp()
     {
         parent::setUp();
-        config(['auth.model' => Employee::class]);
-        config(['jwt.user' => Employee::class]);
+        config(['auth.model' => Planner::class]);
+        config(['jwt.user' => Planner::class]);
 
         $this->company = Company::findOrFail(1);
         $this->employee = $this->company->employees()->with('groups')->first();
