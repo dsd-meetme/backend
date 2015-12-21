@@ -37,7 +37,7 @@ class MeetingTimeslotsTest extends \TestCase
             ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$this->meeting->id.'/timeslots',
                 $this->data);
 
-        $this->meeting_timeslot = $this->meeting->timeslots->with('meeting')->first();
+        $this->meeting_timeslot = $this->meeting->timeslots()->with('meeting')->first();
     }
 
     public function testIndex()
