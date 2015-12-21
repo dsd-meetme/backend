@@ -10,6 +10,8 @@ use plunner\Policies\CalendarPolicy;
 use plunner\Policies\EmployeePolicy;
 use plunner\Group;
 use plunner\Policies\GroupPolicy;
+use plunner\Timeslot;
+use plunner\Policies\TimeslotPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -23,6 +25,7 @@ class AuthServiceProvider extends ServiceProvider
         Employee::class => EmployeePolicy::class,
         Group::class => GroupPolicy::class,
         Calendar::class => CalendarPolicy::class,
+        Timeslot::policy => TimeslotPolicy::class,
     ];
 
     /**
