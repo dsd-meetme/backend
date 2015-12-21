@@ -25,7 +25,7 @@ class AuthServiceProvider extends ServiceProvider
         Employee::class => EmployeePolicy::class,
         Group::class => GroupPolicy::class,
         Calendar::class => CalendarPolicy::class,
-        Timeslot::policy => TimeslotPolicy::class,
+        Timeslot::class => TimeslotPolicy::class,
     ];
 
     /**
