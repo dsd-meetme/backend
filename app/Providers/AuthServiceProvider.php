@@ -14,6 +14,8 @@ use plunner\Policies\EmployeePolicy;
 use plunner\Policies\GroupPolicy;
 use plunner\Policies\MeetingPolicy;
 use plunner\Policies\MeetingTimeslotPolicy;
+use plunner\Timeslot;
+use plunner\Policies\TimeslotPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -29,6 +31,7 @@ class AuthServiceProvider extends ServiceProvider
         Calendar::class => CalendarPolicy::class,
         Meeting::class => MeetingPolicy::class,
         MeetingTimeslot::class => MeetingTimeslotPolicy::class,
+        Timeslot::policy => TimeslotPolicy::class,
     ];
 
     /**
