@@ -27,12 +27,17 @@ class MeetingTimeslotsTest extends \TestCase
         $this->group = $this->employee->groups->first();
         $this->planner = $this->group->planner;
         $this->meeting = $this->group->meetings->first();
-        $this->meeting_timeslot = $this->meeting->timeslots->first();
 
         $this->data= [
             'time_start' => '2015-12-17 12:00:00',
             'time_end' => '2015-12-17 14:00:00',
         ];
+
+        $this->actingAs($this->planner)
+            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$this->meeting->id.'/timeslots',
+                $this->data);
+
+        $this->meeting_timeslot = $this->meeting->timeslots->first();
     }
 
     public function testIndex()
