@@ -29,6 +29,13 @@ class PlannersMeetingsTest extends \TestCase
         ];
     }
 
+    private function getNonExistingMeetingId()
+    {
+        $test_meeting = \plunner\Meeting::orderBy('id', 'desc')->first();
+        $non_existing_meeting_id = $test_meeting->id + 1;
+        return $non_existing_meeting_id;
+    }
+
     public function testCreateNonRepeatingMeeting()
     {
         $response = $this->actingAs($this->planner)
@@ -78,21 +85,27 @@ class PlannersMeetingsTest extends \TestCase
 
     public function testShowNonExistingMeeting()
     {
-        $test_meeting = $this->group->meetings()->orderBy('created_at', 'desc')->first();
-
-        // Find an id of a non existing meeting
-        $non_existing_meeting_id = $test_meeting->id + 1;
+        $non_existing_meeting_id = $this->getNonExistingMeetingId();
 
         $response = $this->actingAs($this->planner)
             ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$non_existing_meeting_id);
         $response->seeStatusCode(404);
     }
 
+    public function testShowOtherGroupsMeeting()
+    {
+        $other_group = \plunner\Group::where('id', '!=', $this->group->id)->first();
+        $other_groups_meeting_id = $other_group->meetings()->first()->id;
+
+        $response = $this->actingAs($this->planner)
+            ->json('GET', 'employees/planners/groups/'.$other_group->id.'/meetings/'.$other_groups_meeting_id);
+        $response->seeStatusCode(403);
+    }
+
     public function testPlannerDeleteMeeting()
     {
         $this->actingAs($this->planner)
             ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);
-        //TODO set it via code not via rest call
         $meeting_id = $this->group->meetings()->first()->id;
 
         $response = $this->actingAs($this->planner)
@@ -102,7 +115,19 @@ class PlannersMeetingsTest extends \TestCase
 
     public function testEmployeeDeleteMeeting()
     {
-        // Find an employee in the group who is not a planner and set him as $test_employee
+        $test_employee = $this->getNonPlannerInGroup();
+
+       /* $this->actingAs($this->planner)
+            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);*/
+        $meeting_id = $this->group->meetings()->first()->id;
+
+        $response = $this->actingAs($test_employee)
+            ->json('DELETE', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$meeting_id);
+        $response->seeStatusCode(403);
+    }
+
+    private function getNonPlannerInGroup()
+    {
         $test_employee = $this->employee;
         if ($this->employee->id == $this->planner->id) {
             foreach ($this->group->employees as $employee) {
@@ -111,33 +136,26 @@ class PlannersMeetingsTest extends \TestCase
                     break;
             }
         }
-        //TODO use sql that is more elegant and efficient
-
-        $this->actingAs($this->planner)
-            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);
-        $meeting_id = $this->group->meetings()->first()->id;
-
-        $response = $this->actingAs($test_employee)
-            ->json('DELETE', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$meeting_id);
-        $response->seeStatusCode(403);
+        return $test_employee;
     }
 
     public function testDeleteNonExistingMeeting()
     {
-        $test_meeting_id = 0;
-
-        // Find an id of a non existing meeting
-        for ($test_meeting_id; $test_meeting_id < $this->group->meetings->count() + 1; $test_meeting_id++)
-        {
-            $meeting = $this->group->meetings->where("id", $test_meeting_id);
-            if (is_null($meeting))
-                // If $meeting is null that means the $test_meeting_id is an id of non-existing meeting and we can break
-                break;
-        }
+        $non_existing_meeting_id = $this->getNonExistingMeetingId();
 
         $response = $this->actingAs($this->planner)
-            ->json('DELETE', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$test_meeting_id);
+            ->json('DELETE', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$non_existing_meeting_id);
         $response->seeStatusCode(404);
+    }
+
+    public function testDeleteOtherGroupsMeeting()
+    {
+        $other_group = \plunner\Group::where('id', '!=', $this->group->id)->first();
+        $other_groups_meeting_id = $other_group->meetings()->first()->id;
+
+        $response = $this->actingAs($this->planner)
+            ->json('DELETE', 'employees/planners/groups/'.$other_group->id.'/meetings/'.$other_groups_meeting_id);
+        $response->seeStatusCode(403);
     }
 
     public function testUpdateExistingMeeting()
@@ -146,102 +164,58 @@ class PlannersMeetingsTest extends \TestCase
             ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);
         $meeting = $this->group->meetings()->first();
 
-        $test_data = [
-            'title' => 'Different title',
-            'description' => 'Different description!',
-            'duration' => 60
-        ];
+        $test_data = $this->getUpdateData();
 
         $response = $this->actingAs($this->planner)
-            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings'.$meeting->id, $test_data);
+            ->json('PUT', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$meeting->id, $test_data);
         $response->assertResponseOk();
         $response->seeJson($test_data);
     }
 
     public function testEmployeeUpdateExistingMeeting()
     {
-        // Find an employee in the group who is not a planner and set him as $test_employee
-        $test_employee = $this->employee;
-        if ($this->employee->id == $this->planner->id) {
-            foreach ($this->group->employees as $employee) {
-                if ($this->employee->id != $employee->id)
-                    $test_employee = $employee;
-                break;
-            }
-        }
+        $test_employee = $this->getNonPlannerInGroup();
 
-        $this->actingAs($this->planner)
-            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);
+        /*$this->actingAs($this->planner)
+            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);*/
         $meeting = $this->group->meetings()->first();
 
-        $test_data = [
+        $test_data = $this->getUpdateData();
+
+        $response = $this->actingAs($test_employee)
+            ->json('PUT', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$meeting->id, $test_data);
+        $response->seeStatusCode(403);
+    }
+
+    public function testUpdateNonExistingMeeting()
+    {
+        $non_existing_meeting_id = $this->getNonExistingMeetingId();
+
+        $test_data = $this->getUpdateData();
+
+        $response = $this->actingAs($this->planner)
+            ->json('PUT', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$non_existing_meeting_id, $test_data);
+        $response->seeStatusCode(404);
+    }
+
+    public function testUpdateOtherGroupsMeeting()
+    {
+        $other_group = \plunner\Group::where('id', '!=', $this->group->id)->first();
+        $other_groups_meeting_id = $other_group->meetings()->first()->id;
+
+        $test_data = $this->getUpdateData();
+
+        $response = $this->actingAs($this->planner)
+            ->json('PUT', 'employees/planners/groups/'.$other_group->id.'/meetings/'.$other_groups_meeting_id, $test_data);
+        $response->seeStatusCode(403);
+    }
+
+    private function getUpdateData()
+    {
+        return [
             'title' => 'Different title',
             'description' => 'Different description!',
             'duration' => 60
         ];
-
-        $response = $this->actingAs($test_employee)
-            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings'.$meeting->id, $test_data);
-        $response->seeStatusCode(403);
     }
-
-    /*public function testCreateRepeatingMeeting()
-    {
-        $data = [
-            'title' => 'Requirements meeting',
-            'description' => 'Discussing the requirements',
-            'start_time' => '20.12.2015',
-            'end_time' => '02.01.2016',
-            'repeat' => '10',
-            'repetition_end_time' => '02.05.2016',
-            'group_id' => $this->group->id,
-        ];
-
-        $response = $this->actingAs($this->planner)->json('POST', '/employees/meetings', $data);
-
-        $response->assertResponseOk();
-        $response->seeJson($data);
-    }
-
-    public function testShowRepeatingMeeting()
-    {
-        $data = [
-            'title' => 'Requirements meeting',
-            'description' => 'Discussing the requirements',
-            'start_time' => '20.12.2015',
-            'end_time' => '02.01.2016',
-            'repeat' => '10',
-            'repetition_end_time' => '02.05.2016',
-            'group_id' => $this->group->id,
-        ];
-        $this->actingAs($this->planner)->json('POST', '/employees/meetings', $data);
-
-        $meeting_id = $this->company->employees()->first()->meetings()->first()->id;
-        $response = $this->actingAs($this->planner)->json('GET', '/employees/meetings/' . $meeting_id);
-
-        $response->assertResponseOk();
-        $response->seeJson($data);
-    }
-
-    public function testShowAllMeetingsInMonth()
-    {
-        $data = [
-            'title' => 'Requirements meeting',
-            'description' => 'Discussing the requirements',
-            'start_time' => '20.12.2015',
-            'end_time' => '02.01.2016',
-            'repeat' => '10',
-            'repetition_end_time' => '02.05.2016',
-            'group_id' => $this->group->id,
-        ];
-        $this->actingAs($this->planner)->json('POST', '/employees/meetings', $data);
-
-        $meeting_id = $this->company->employees()->first()->meetings()->first()->id;
-        $response = $this->actingAs($this->planner)->json('GET', '/employees/meetings/' . $meeting_id);
-
-        $response->assertResponseOk();
-        $response->seeJson($data);
-    }
-
-    */
 }

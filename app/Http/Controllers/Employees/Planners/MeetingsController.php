@@ -48,10 +48,21 @@ class MeetingsController extends Controller
     {
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
-        $meeting = Meeting::findOrFail($meetingId);
+        $meeting = Meeting::where('group_id', $groupId)->findOrFail($meetingId);
         $this->authorize($meeting);
-        //TODO check if the group is the same of the meeting or not?
         return $meeting;
+    }
+
+    /*
+     * Check if a meeting with this title already exists for this group.
+     */
+    private function checkTitleAlreadyExists($title, $group)
+    {
+        return in_array($title, array_map(function($meeting)
+        {
+            return $meeting['title'];
+        },
+        $group->meetings->toArray()));
     }
 
     /**
@@ -66,6 +77,10 @@ class MeetingsController extends Controller
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
         $input = $request->all();
+        if ($this->checkTitleAlreadyExists($input['title'], $group))
+        {
+            abort(422);
+        }
         $meeting = $group->meetings()->create($input);
         return $meeting;
     }
@@ -85,6 +100,10 @@ class MeetingsController extends Controller
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
         $input = $request->all();
+        if ($this->checkTitleAlreadyExists($input['title'], $group))
+        {
+            abort(422);
+        }
         $meeting->update($input);
         return $meeting;
     }
