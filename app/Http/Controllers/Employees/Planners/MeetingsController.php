@@ -48,7 +48,7 @@ class MeetingsController extends Controller
     {
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
-        $meeting = Meeting::where('group_id', $groupId)->findOrFail($meetingId);
+        $meeting = Meeting::where('group_id', $groupId)->findOrFail($meetingId); //TODO WHY??? this is very bad since we are not able to catch errors automatically via laravel (find OrFails automatically gives us the 404)., please revert and leave the laravel automatic response controller -> no response::json(..., 404)
         $this->authorize($meeting);
         return $meeting;
     }
@@ -77,9 +77,9 @@ class MeetingsController extends Controller
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
         $input = $request->all();
-        if ($this->checkTitleAlreadyExists($input['title'], $group))
+        if ($this->checkTitleAlreadyExists($input['title'], $group))//TODO create methods inside model is nto the correct way
         {
-            abort(422);
+            abort(422); //TODO thsi is note the correct way
         }
         $meeting = $group->meetings()->create($input);
         return $meeting;
