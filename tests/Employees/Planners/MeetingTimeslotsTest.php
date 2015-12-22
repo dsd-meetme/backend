@@ -4,9 +4,9 @@ namespace Companies\Employees;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use plunner\Company;
-use plunner\Employee;
 use plunner\Group;
 use plunner\Meeting;
+use plunner\Planner;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Support\testing\ActingAs;
 
@@ -19,20 +19,25 @@ class MeetingTimeslotsTest extends \TestCase
     public function setUp()
     {
         parent::setUp();
-        config(['auth.model' => Employee::class]);
-        config(['jwt.user' => Employee::class]);
+        config(['auth.model' => Planner::class]);
+        config(['jwt.user' => Planner::class]);
 
         $this->company = Company::findOrFail(1);
         $this->employee = $this->company->employees()->with('groups')->first();
         $this->group = $this->employee->groups->first();
         $this->planner = $this->group->planner;
-        $this->meeting = $this->group->meetings->first();
-        $this->meeting_timeslot = $this->meeting->timeslots->first();
+        $this->meeting = $this->group->meetings()->with('group')->first();
 
         $this->data= [
             'time_start' => '2015-12-17 12:00:00',
             'time_end' => '2015-12-17 14:00:00',
         ];
+
+        $this->actingAs($this->planner)
+            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$this->meeting->id.'/timeslots',
+                $this->data);
+
+        $this->meeting_timeslot = $this->meeting->timeslots()->with('meeting')->first();
     }
 
     public function testIndex()
@@ -88,6 +93,7 @@ class MeetingTimeslotsTest extends \TestCase
                 break;
             }
         }
+        //TODO use sql that is more elegant and efficient
 
         $response = $this->actingAs($test_employee)
             ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$this->meeting->id.'/timeslots/'.$this->meeting_timeslot->id);
@@ -130,6 +136,7 @@ class MeetingTimeslotsTest extends \TestCase
                 break;
             }
         }
+        //TODO use sql that is more elegant and efficient
 
         $response = $this->actingAs($test_employee)
             ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$this->meeting->id.'/timeslots',
@@ -174,7 +181,8 @@ class MeetingTimeslotsTest extends \TestCase
                 break;
             }
         }
-
+        //TODO use sql that is more elegant and efficient
+        
         $test_data = [
             'time_start' => '2015-12-17 14:00:00',
             'time_end' => '2015-12-17 15:00:00',
