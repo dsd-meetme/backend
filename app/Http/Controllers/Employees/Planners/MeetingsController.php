@@ -80,6 +80,7 @@ class MeetingsController extends Controller
         if ($this->checkTitleAlreadyExists($input['title'], $group))//TODO create methods inside model is nto the correct way
         {
             abort(422); //TODO thsi is note the correct way
+            //TODO This is not a contraint to do. but anyway if we want to do constraints we have to use requests
         }
         $meeting = $group->meetings()->create($input);
         return $meeting;
