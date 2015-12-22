@@ -60,6 +60,16 @@ class Employee extends Model implements AuthenticatableContract,
     protected $hidden = ['password', 'remember_token', 'pivot'];
 
     /**
+     * @var array
+     */
+    protected $appends = ['is_planner'];
+
+    public function getIsPlannerAttribute()
+    {
+        return !($this->groupsManagedRelationship()->get()->isEmpty());
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function company()
@@ -198,5 +208,13 @@ class Employee extends Model implements AuthenticatableContract,
     {
         //TODO test this
         return $timeslot->calendar->employee_id == $this->id;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    protected function groupsManagedRelationship()
+    {
+        return $this->HasMany(Group::class, 'planner_id');
     }
 }
