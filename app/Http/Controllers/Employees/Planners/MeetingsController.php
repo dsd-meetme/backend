@@ -48,7 +48,7 @@ class MeetingsController extends Controller
     {
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
-        $meeting = Meeting::where('group_id', $groupId)->findOrFail($meetingId); //TODO WHY??? this is very bad since we are not able to catch errors automatically via laravel (find OrFails automatically gives us the 404)., please revert and leave the laravel automatic response controller -> no response::json(..., 404)
+        $meeting = Meeting::where('group_id', $groupId)->findOrFail($meetingId);
         $this->authorize($meeting);
         return $meeting;
     }
