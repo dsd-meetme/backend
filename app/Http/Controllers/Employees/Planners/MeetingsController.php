@@ -34,7 +34,7 @@ class MeetingsController extends Controller
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
         return $group->meetings;
-        //TODO get only current meetings
+        //TODO get only current meetings via a get query
     }
 
     /**
