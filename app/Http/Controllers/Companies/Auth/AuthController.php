@@ -31,7 +31,7 @@ class AuthController extends Controller
 
     use AuthenticatesAndRegistersUsers{
         postLogin as postLoginOriginal;
-    };
+    }
     use ThrottlesLogins;
 
     protected $redirectPath = "/";
