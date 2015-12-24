@@ -106,9 +106,9 @@ class AuthController extends Controller
         $request->merge(['company_id' => $this->company->id]);
 
         //remember me
-        if($request->input('remember', false)) //TODO check if the true and false are correct
+        if($request->input('remember', false) == true) //TODO check if the true and false are correct
         {
-            config('jwt.ttl','43200'); //30 days
+            config(['jwt.ttl' =>'43200']); //30 days
             $this->custom = array_merge($this->custom, ['remember'=>'true']);
         }else
             $this->custom = array_merge($this->custom, ['remember'=>'false']);
