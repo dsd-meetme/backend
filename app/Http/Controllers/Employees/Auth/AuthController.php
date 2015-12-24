@@ -100,9 +100,19 @@ class AuthController extends Controller
 
     public function postLogin(Request $request)
     {
+        //get company ID and impiled it in the request
         $this->validate($request, ['company' => 'required|exists:companies,name']);
         $this->company = Company::whereName($request->input('company'))->firstOrFail();
         $request->merge(['company_id' => $this->company->id]);
+
+        //remember me
+        if($request->input('remember', false)) //TODO check if the true and false are correct
+        {
+            config('jwt.ttl','43200'); //30 days
+            $this->custom = array_merge($this->custom, ['remember'=>'true']);
+        }else
+            $this->custom = array_merge($this->custom, ['remember'=>'false']);
+
         return $this->postLoginOriginal($request);
     }
 
