@@ -85,7 +85,8 @@ class AuthController extends Controller
     public function postLogin(Request $request)
     {
         //remember me
-        if($request->input('remember', false) == true) //TODO check if the true and false are correct
+        $this->validate($request, ['remember' => 'boolean']);//TODO insert required
+        if($request->input('remember', false))
         {
             config(['jwt.ttl' =>'43200']); //30 days
             $this->custom = array_merge($this->custom, ['remember'=>'true']);
