@@ -25,7 +25,7 @@ class GetUserAndRefresh extends \Tymon\JWTAuth\Middleware\GetUserAndRefresh
     public function handle($request, \Closure $next, $custom = '')
     {
         $remember = false;
-        if($this->auth->setRequest($request)->getToken() && $remember = $this->auth->getPayload()->get('remember') &&
+        if($this->auth->setRequest($request)->getToken() && ($remember = $this->auth->getPayload()->get('remember')) &&
                 $remember == 'true'){
             config(['jwt.ttl' =>'43200']); //30 days
         }
