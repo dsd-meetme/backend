@@ -32,7 +32,7 @@ class GetUserAndRefresh extends \Tymon\JWTAuth\Middleware\GetUserAndRefresh
 
         //this to add the remember me mode field in the new token, but we have the custom check that is an useless
         //overhead
-        $custom = $custom.';remember-'.$remember?'true':'false';
+        $custom = $custom.';remember-'.$remember=='true'?'true':'false';
         return parent::handle($request, $next, $custom);
     }
 
