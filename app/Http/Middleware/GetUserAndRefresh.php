@@ -27,7 +27,8 @@ class GetUserAndRefresh extends \Tymon\JWTAuth\Middleware\GetUserAndRefresh
         $remember = false;
         if($this->auth->setRequest($request)->getToken() && ($remember = $this->auth->getPayload()->get('remember')) &&
                 $remember == 'true'){
-            config(['jwt.ttl' =>'43200']); //30 days
+            $this->app['tymon.jwt.payload.factory']->setTTL(43200);
+            //config(['jwt.ttl' =>'43200']); //30 days
         }
 
         //this to add the remember me mode field in the new token, but we have the custom check that is an useless
