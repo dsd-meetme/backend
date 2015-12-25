@@ -27,7 +27,7 @@ class GetUserAndRefresh extends \Tymon\JWTAuth\Middleware\GetUserAndRefresh
         $remember = false;
         if($this->auth->setRequest($request)->getToken() && ($remember = $this->auth->getPayload()->get('remember')) &&
                 $remember == 'true'){
-            JWTFactory::setTTL(43200);
+            \JWTFactory::setTTL(43200);
             //config(['jwt.ttl' =>'43200']); //30 days
         }
 
