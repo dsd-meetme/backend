@@ -1,6 +1,6 @@
 <?php
 
-namespace plunner\Http\Requests\Employees\Employees;
+namespace plunner\Http\Requests\Employees\Employee;
 
 use plunner\Http\Requests\Request;
 

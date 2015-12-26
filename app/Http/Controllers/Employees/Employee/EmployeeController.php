@@ -2,12 +2,9 @@
 
 namespace plunner\Http\Controllers\Employees\Employee;
 
-use Illuminate\Http\Request;
-
-use plunner\Group;
-use plunner\Employee;
-use plunner\Http\Requests;
 use plunner\Http\Controllers\Controller;
+use plunner\Http\Requests\Employees\Employee\EmployeeRequest;
+
 
 class EmployeeController extends Controller
 {
@@ -36,10 +33,10 @@ class EmployeeController extends Controller
 
     /**
      * update the employee name and password (optionally)
-     * @param Request $request
+     * @param EmployeeRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(EmployeeRequest $request)
     {
         //TODO Validation
         $employee = \Auth::user();
