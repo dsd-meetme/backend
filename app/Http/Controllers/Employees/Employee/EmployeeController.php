@@ -8,9 +8,6 @@ use plunner\Http\Requests\Employees\Employee\EmployeeRequest;
 
 class EmployeeController extends Controller
 {
-    /**
-     * ExampleController constructor.
-     */
     public function __construct()
     {
         config(['auth.model' => \plunner\Employee::class]);
