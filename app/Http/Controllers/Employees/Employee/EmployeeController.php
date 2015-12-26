@@ -32,7 +32,7 @@ class EmployeeController extends Controller
 
 
     /**
-     * update the employee name and password (optionally)
+     * update the employee name and password (both optionally)
      * @param EmployeeRequest $request
      * @return \Illuminate\Http\Response
      */
