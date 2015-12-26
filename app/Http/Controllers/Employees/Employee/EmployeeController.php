@@ -27,11 +27,27 @@ class EmployeeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getIndex()
+    public function index()
     {
         $employee = \Auth::user();
         return $employee;
     }
 
-    //TODO implement other functionalities and test this
+
+    /**
+     * update the employee name and password (optionally)
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request)
+    {
+        //TODO Validation
+        $employee = \Auth::user();
+        $input = $request->only(['name', 'password']);
+        $employee->update($input);
+        return $employee;
+    }
+
+
+    //TODO test this
 }
