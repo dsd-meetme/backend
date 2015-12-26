@@ -38,7 +38,6 @@ class EmployeeController extends Controller
      */
     public function update(EmployeeRequest $request)
     {
-        //TODO Validation
         $employee = \Auth::user();
         $input = $request->only(['name', 'password']);
         $employee->update($input);
