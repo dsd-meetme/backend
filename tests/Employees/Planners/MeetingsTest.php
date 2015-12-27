@@ -116,7 +116,10 @@ class PlannersMeetingsTest extends \TestCase
 
     private function getNonPlannerInAGroup()
     {
-        $group = \plunner\Group::has('employees', '>=', '2')->firstOrFail();
+        $group = \plunner\Group::has('employees', '>=', '2')
+            ->whereHas('employees', function ($query) {
+            $query->whereNotIn('id', \plunner\Planner::all()->pluck('id')); //TODO do in a better way less expensive
+            })->firstOrFail();
         $employee = $group->employees()->where('id', '<>', $group->planner_id)->firstOrFail();
         return [$group, $employee];
     }
