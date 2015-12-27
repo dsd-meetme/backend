@@ -1,12 +1,12 @@
 <?php
 
-namespace plunner\Listeners;
+namespace plunner\Listeners\Caldav;
 
-use plunner\Events\CaldavErrorEvent;
+use plunner\Events\Caldav\ErrorEvent;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class CaldavErrorListener
+class ErrorListener
 {
     //TODO improvement -> perform this into a queue
 
@@ -22,13 +22,14 @@ class CaldavErrorListener
     /**
      * Handle the event.
      *
-     * @param  CaldavErrorEvent  $event
+     * @param  ErrorEvent  $event
      * @return void
      */
-    public function handle(CaldavErrorEvent $event)
+    public function handle(ErrorEvent $event)
     {
         //
         \Log::info('problems during caldav (calendar id = '.$event->getCalendar()->calendar_id.') sync: '.$event->getError());
+        $event->getCalendar()->fresh();
         $event->getCalendar()->sync_errors = $event->getError();
         $event->getCalendar()->save();
     }
