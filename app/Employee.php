@@ -133,9 +133,7 @@ class Employee extends Model implements AuthenticatableContract,
     public function belongsToGroup(Group $group)
     {
         $group = $this->groups()->where('id', $group->id)->first();
-        if(is_object($group) && $group->exists)
-            return true;
-        return false;
+        return (is_object($group) && $group->exists);
     }
 
     /*
@@ -178,6 +176,16 @@ class Employee extends Model implements AuthenticatableContract,
     {
         //TODO test this
         return $calendar->employee_id == $this->id;
+    }
+
+    /**
+     * @param Meeting $meeting
+     * @return bool
+     */
+    public function verifyMeeting(Meeting $meeting)
+    {
+        //TODO implement and test this
+        return false;
     }
 
     /**

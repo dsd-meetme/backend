@@ -88,4 +88,15 @@ class Planner extends Employee
         //TODO implement and test
         return false;
     }
+
+    /**
+     * @param Meeting $meeting
+     * @return bool
+     */
+    public function verifyMeeting(Meeting $meeting)
+    {
+        //TODO test this
+        return $meeting->group->planner_id == $this->id;
+    }
+
 }

@@ -18,7 +18,7 @@ class GroupsControllerTest extends \TestCase
         config(['jwt.user' => \plunner\Planner::class]);
 
         $this->company = \plunner\Company::findOrFail(1);
-        $this->planner = $this->company->groups()->with('planner')->firstOrFail()->Planner;
+        $this->planner = $this->company->groups()->has('planner')->with('planner')->firstOrFail()->Planner;
     }
 
 
@@ -28,7 +28,7 @@ class GroupsControllerTest extends \TestCase
             ->json('GET', '/employees/planners/groups/');
 
         $response->assertResponseOk();
-        $response->seeJsonEquals($this->planner->GroupsManaged->toArray());
+        $response->seeJsonEquals($this->planner->GroupsManaged()->with('meetings')->get()->toArray());
     }
 
     public function testErrorIndex()
@@ -39,7 +39,7 @@ class GroupsControllerTest extends \TestCase
 
     public function testShow()
     {
-        $group = $this->planner->groupsManaged()->with('employees')->firstOrFail();
+        $group = $this->planner->groupsManaged()->with('meetings', 'employees')->firstOrFail();
         $response = $this->actingAs($this->planner)
             ->json('GET', '/employees/planners/groups/'.$group->id);
 

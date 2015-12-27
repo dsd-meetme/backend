@@ -29,7 +29,10 @@ class GroupsController extends Controller
     public function index()
     {
         $employee = \Auth::user();
-        return $employee->Groups;
+        return $employee->groups()->with(['meetings'=>function($query) {
+            $query->where('start_time', '=', NULL);
+        }])->get();
+        //TODO get only current meetings via a query
     }
 
     /**
@@ -40,7 +43,8 @@ class GroupsController extends Controller
      */
     public function show($id)
     {
-        $group = Group::findOrFail($id);
+        //TODO check if start_time = null in authorize
+        $group = Group::with('meetings')->findOrFail($id);
         $this->authorize($group);
         return $group;
     }
