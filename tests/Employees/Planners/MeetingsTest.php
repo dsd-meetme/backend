@@ -111,7 +111,7 @@ class PlannersMeetingsTest extends \TestCase
 
         $response = $this->actingAs($test_employee)
             ->json('DELETE', 'employees/planners/groups/'.$test_group->id.'/meetings/'.$meeting_id);
-        $response->seeStatusCode(403);
+        $response->seeStatusCode(404);
     }
 
     private function getNonPlannerInAGroup()
@@ -120,7 +120,7 @@ class PlannersMeetingsTest extends \TestCase
             ->whereHas('employees', function ($query) {
             $query->whereNotIn('id', \plunner\Planner::all()->pluck('id')); //TODO do in a better way less expensive
             })->firstOrFail();
-        $employee = $group->employees()->where('id', '<>', $group->planner_id)->firstOrFail();
+        $employee = $group->employees()->whereNotIn('id', \plunner\Planner::all()->pluck('id'))->firstOrFail();
         return [$group, $employee];
     }
 
@@ -167,7 +167,7 @@ class PlannersMeetingsTest extends \TestCase
 
         $response = $this->actingAs($test_employee)
             ->json('PUT', 'employees/planners/groups/'.$test_group->id.'/meetings/'.$meeting->id, $test_data);
-        $response->seeStatusCode(403);
+        $response->seeStatusCode(404);
     }
 
     public function testUpdateNonExistingMeeting()
