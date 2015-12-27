@@ -143,7 +143,12 @@ class Company extends Model implements AuthenticatableContract,
             ->get();
     }
 
-    public function getUsersMeetings($users, $meetings)
+    /**
+     * @param array $users
+     * @param array $meetings
+     * @return \Illuminate\Support\Collection
+     */
+    public function getUsersMeetings(array $users, array $meetings)
     {
         return \DB::table('meetings')
             ->join('groups', 'meetings.group_id', '=', 'groups.id')
