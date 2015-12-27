@@ -34,7 +34,7 @@ class MeetingsController extends Controller
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
         return $group->meetings;
-        //TODO get only current meetings
+        //TODO get only current meetings via a get query
     }
 
     /**
@@ -48,21 +48,11 @@ class MeetingsController extends Controller
     {
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
-        $meeting = Meeting::where('group_id', $groupId)->findOrFail($meetingId);
+        //Meeting::where('group_id', $groupId)->findOrFail($meetingId);
+        //it is good but expensive and useless for the user experience
+        $meeting = Meeting::findOrFail($meetingId);
         $this->authorize($meeting);
         return $meeting;
-    }
-
-    /*
-     * Check if a meeting with this title already exists for this group.
-     */
-    private function checkTitleAlreadyExists($title, $group)
-    {
-        return in_array($title, array_map(function($meeting)
-        {
-            return $meeting['title'];
-        },
-        $group->meetings->toArray()));
     }
 
     /**
@@ -77,10 +67,6 @@ class MeetingsController extends Controller
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
         $input = $request->all();
-        if ($this->checkTitleAlreadyExists($input['title'], $group))
-        {
-            abort(422);
-        }
         $meeting = $group->meetings()->create($input);
         return $meeting;
     }
@@ -95,15 +81,11 @@ class MeetingsController extends Controller
      */
     public function update(MeetingRequest $request, $groupId, $meetingId)
     {
-        $meeting = Meeting::findOrFail($meetingId);
-        $this->authorize($meeting);
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
+        $meeting = Meeting::findOrFail($meetingId);
+        $this->authorize($meeting);
         $input = $request->all();
-        if ($this->checkTitleAlreadyExists($input['title'], $group))
-        {
-            abort(422);
-        }
         $meeting->update($input);
         return $meeting;
     }
@@ -117,10 +99,10 @@ class MeetingsController extends Controller
      */
     public function destroy($groupId, $meetingId)
     {
-        $meeting = Meeting::findOrFail($meetingId);
-        $this->authorize($meeting);
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
+        $meeting = Meeting::findOrFail($meetingId);
+        $this->authorize($meeting);
         $meeting->delete();
         return $meeting;
     }

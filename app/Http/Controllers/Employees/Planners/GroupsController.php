@@ -31,6 +31,7 @@ class GroupsController extends Controller
          */
         $planner = \Auth::user();
         return $planner->groupsManaged()->with('meetings')->get();
+        //TODO get only current meetings via a query
     }
 
     /**
