@@ -1,10 +1,10 @@
 <?php
 
-namespace plunner\Http\Requests;
+namespace plunner\Http\Requests\Employees\Employee;
 
 use plunner\Http\Requests\Request;
 
-class PlannerRequest extends Request
+class EmployeeRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,8 @@ class PlannerRequest extends Request
     public function rules()
     {
         return [
-            'planner_id' => 'sometimes|required|integer'
+            'name' => 'sometimes|required|min:1|max:255',
+            'password'=>'sometimes|required|confirmed|min:6',
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace plunner\Http\Controllers\Companies\Auth;
 
+use Illuminate\Http\Request;
 use plunner\Company;
 use Validator;
 use plunner\Http\Controllers\Controller;
@@ -28,7 +29,10 @@ class AuthController extends Controller
     |
     */
 
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+    use AuthenticatesAndRegistersUsers{
+        postLogin as postLoginOriginal;
+    }
+    use ThrottlesLogins;
 
     protected $redirectPath = "/";
 
@@ -57,7 +61,7 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255|unique:companies',
+            'name' => 'required|min:1|max:255|unique:companies',
             'email' => 'required|email|max:255|unique:companies',
             'password' => 'required|confirmed|min:6',
         ]);
@@ -77,4 +81,19 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
         ]);
     }
+
+    public function postLogin(Request $request)
+    {
+        //remember me
+        $this->validate($request, ['remember' => 'boolean']);//TODO insert required
+        if($request->input('remember', false))
+        {
+            config(['jwt.ttl' =>'43200']); //30 days
+            $this->custom = array_merge($this->custom, ['remember'=>'true']);
+        }else
+            $this->custom = array_merge($this->custom, ['remember'=>'false']);
+        return $this->postLoginOriginal($request);
+    }
+
+
 }
