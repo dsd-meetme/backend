@@ -34,7 +34,7 @@ class EmployeeRequest extends Request
         return [
             'name' => 'required|min:1|max:255',
             'email' => 'required|email|max:255|unique:employees,email,'.$this->route('employees').',id,company_id,'.$this->user()->id,
-            'password' => ((\Route::current()->getName() == 'companies.employees.store')?'required|':'').'confirmed|min:6',
+            'password' => ((\Route::current()->getName() == 'companies.employees.store')?'sometimes|':'').'required|confirmed|min:6',
         ];
     }
 }

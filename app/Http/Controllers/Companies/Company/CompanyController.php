@@ -40,7 +40,4 @@ class CompanyController extends Controller
         $company->update($input);
         return $company;
     }
-
-
-    //TODO test this
 }

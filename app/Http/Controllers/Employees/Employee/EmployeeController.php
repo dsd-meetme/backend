@@ -8,9 +8,6 @@ use plunner\Http\Requests\Employees\Employee\EmployeeRequest;
 
 class EmployeeController extends Controller
 {
-    /**
-     * ExampleController constructor.
-     */
     public function __construct()
     {
         config(['auth.model' => \plunner\Employee::class]);
@@ -32,19 +29,15 @@ class EmployeeController extends Controller
 
 
     /**
-     * update the employee name and password (optionally)
+     * update the employee name and password (both optionally)
      * @param EmployeeRequest $request
      * @return \Illuminate\Http\Response
      */
     public function update(EmployeeRequest $request)
     {
-        //TODO Validation
         $employee = \Auth::user();
         $input = $request->only(['name', 'password']);
         $employee->update($input);
         return $employee;
     }
-
-
-    //TODO test this
 }
