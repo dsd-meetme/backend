@@ -23,7 +23,7 @@ class PlannersMeetingsTest extends \TestCase
         $this->planner = $this->group->planner;
 
         $this->data= [
-            'title' => 'Test non-repeating meeting',
+            'title' => 'Test meeting',
             'description' => 'Errare humanum est!',
             'duration' => 120
         ];
@@ -36,23 +36,13 @@ class PlannersMeetingsTest extends \TestCase
         return $non_existing_meeting_id;
     }
 
-    public function testCreateNonRepeatingMeeting()
+    public function testCreateMeeting()
     {
         $response = $this->actingAs($this->planner)
             ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);
 
         $response->assertResponseOk();
         $response->seeJson($this->data);
-    }
-
-    public function testCreateDuplicateNonRepeatingMeeting()
-    {
-        $this->actingAs($this->planner)
-            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);
-
-        $response = $this->actingAs($this->planner)
-            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);
-        $response->seeStatusCode(422);
     }
 
     public function testIndexAllMeetings()
@@ -71,7 +61,7 @@ class PlannersMeetingsTest extends \TestCase
         $response->seeStatusCode(401);
     }
 
-    public function testShowNonRepeatingMeeting()
+    public function testShowMeeting()
     {
         $this->actingAs($this->planner)
             ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);
