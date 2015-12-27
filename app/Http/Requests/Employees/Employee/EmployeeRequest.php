@@ -24,8 +24,8 @@ class EmployeeRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'min:1|max:255',
-            'password'=>'confirmed|min:6',
+            'name' => 'sometimes|required|min:1|max:255',
+            'password'=>'sometimes|required|confirmed|min:6',
         ];
     }
 }

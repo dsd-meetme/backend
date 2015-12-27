@@ -40,7 +40,4 @@ class EmployeeController extends Controller
         $employee->update($input);
         return $employee;
     }
-
-
-    //TODO test this
 }

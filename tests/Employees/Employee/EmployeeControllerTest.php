@@ -1,42 +1,42 @@
 <?php
 
-namespace Companies\Company;
+namespace Employees\Employee;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tymon\JWTAuth\Support\testing\ActingAs;
 
-class CompanysControllerTest extends \TestCase
+class EmployeeControllerTest extends \TestCase
 {
     use DatabaseTransactions, ActingAs;
 
     public function setUp()
     {
         parent::setUp();
-        config(['auth.model' => \plunner\Company::class]);
-        config(['jwt.user' => \plunner\Company::class]);
+        config(['auth.model' => \plunner\Employee::class]);
+        config(['jwt.user' => \plunner\Employee::class]);
     }
 
 
     public function testIndex()
     {
         /**
-         * @var $company \plunner\Company
+         * @var $company \plunner\Employee
          */
-        $company = \plunner\Company::findOrFail(1);
-        $response = $this->actingAs($company)->json('GET', '/companies/company');
+        $employee = \plunner\Employee::findOrFail(1);
+        $response = $this->actingAs($employee)->json('GET', '/employees/employee');
         $response->assertResponseOk();
-        $response->seeJsonEquals($company->toArray());
+        $response->seeJsonEquals($employee->toArray());
     }
 
     public function testErrorIndex()
     {
-        $response = $this->json('GET', '/companies/company');
+        $response = $this->json('GET', '/employees/employee');
         $response->seeStatusCode(401);
     }
 
     public function testUpdate()
     {
-        $company = \plunner\Company::findOrFail(1);
+        $employee = \plunner\Employee::findOrFail(1);
         $data = [
             'name' => 'test',
             'password' => 'testest',
@@ -44,7 +44,7 @@ class CompanysControllerTest extends \TestCase
         ];
 
         //correct request
-        $response = $this->actingAs($company)->json('PUT', '/companies/company/',$data);
+        $response = $this->actingAs($employee)->json('PUT', '/employees/employee/',$data);
         $response->assertResponseOk();
         $data2 = $data;
         unset($data2['password']);
@@ -53,7 +53,7 @@ class CompanysControllerTest extends \TestCase
 
         //no correct request
         unset($data['password_confirmation']);
-        $response = $this->actingAs($company)->json('PUT', '/companies/company/',$data);
+        $response = $this->actingAs($employee)->json('PUT', '/employees/employee/',$data);
         $response->seeStatusCode(422);
     }
 }

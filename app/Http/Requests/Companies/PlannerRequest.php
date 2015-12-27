@@ -24,7 +24,7 @@ class PlannerRequest extends Request
     public function rules()
     {
         return [
-            'planner_id' => 'required|integer'
+            'planner_id' => 'sometimes|required|integer'
         ];
     }
 }
