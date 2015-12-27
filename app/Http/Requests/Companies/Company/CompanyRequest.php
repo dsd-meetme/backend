@@ -24,8 +24,8 @@ class CompanyRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'required|min:1|max:255|unique:companies',
-            'password'=>'confirmed|min:6',
+            'name' => 'sometimes|required|min:1|max:255|unique:companies,name,'.$this->user()->id,
+            'password'=>'sometimes|required|confirmed|min:6',
         ];
     }
 }

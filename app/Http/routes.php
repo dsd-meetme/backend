@@ -95,4 +95,9 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
     Route::group(['namespace' => 'Groups'], function() {
         Route::resource('groups', 'GroupsController', ['only' => ['index', 'show']]);
     });
+
+    Route::group(['namespace' => 'Employee', 'prefix' => 'employee'], function() {
+        Route::get('/', ['as' => 'employees.employee.index', 'uses' => 'EmployeeController@index']);
+        Route::put('/', ['as' => 'employees.employee.update', 'uses' => 'EmployeeController@update']);
+    });
 });

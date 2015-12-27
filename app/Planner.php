@@ -35,9 +35,12 @@ namespace plunner;
 class Planner extends Employee
 {
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function groupsManaged()
     {
-        return $this->HasMany(Group::class);
+        return $this->groupsManagedRelationship();
     }
 
     /*
