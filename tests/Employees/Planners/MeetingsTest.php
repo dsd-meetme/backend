@@ -9,16 +9,16 @@ class PlannersMeetingsTest extends \TestCase
 {
     use DatabaseTransactions, ActingAs;
 
-    private $company, $group, $employee, $planner, $data, $data_repeat;
+    private $company, $group, $employee, $planner, $data;
 
     public function setUp()
     {
         parent::setUp();
-        config(['auth.model' => \plunner\Employee::class]);
-        config(['jwt.user' => \plunner\Employee::class]);
+        config(['auth.model' => \plunner\Planner::class]);
+        config(['jwt.user' => \plunner\Planner::class]);
 
         $this->company = \plunner\Company::findOrFail(1);
-        $this->employee = $this->company->employees()->with('groups')->first();
+        $this->employee = $this->company->employees()->has('groups')->with('groups')->firstOrFail();
         $this->group = $this->employee->groups->first();
         $this->planner = $this->group->planner;
 
@@ -84,7 +84,7 @@ class PlannersMeetingsTest extends \TestCase
 
     public function testShowOtherGroupsMeeting()
     {
-        $other_group = \plunner\Group::where('id', '!=', $this->group->id)->first();
+        $other_group = \plunner\Group::where('planner_id', '<>', $this->planner->id)->first();
         $other_groups_meeting_id = $other_group->meetings()->first()->id;
 
         $response = $this->actingAs($this->planner)
@@ -105,28 +105,20 @@ class PlannersMeetingsTest extends \TestCase
 
     public function testEmployeeDeleteMeeting()
     {
-        $test_employee = $this->getNonPlannerInGroup();
+        list($test_group, $test_employee) = $this->getNonPlannerInAGroup();
 
-       /* $this->actingAs($this->planner)
-            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);*/
-        $meeting_id = $this->group->meetings()->first()->id;
+        $meeting_id = $test_group->meetings()->first()->id;
 
         $response = $this->actingAs($test_employee)
-            ->json('DELETE', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$meeting_id);
+            ->json('DELETE', 'employees/planners/groups/'.$test_group->id.'/meetings/'.$meeting_id);
         $response->seeStatusCode(403);
     }
 
-    private function getNonPlannerInGroup()
+    private function getNonPlannerInAGroup()
     {
-        $test_employee = $this->employee;
-        if ($this->employee->id == $this->planner->id) {
-            foreach ($this->group->employees as $employee) {
-                if ($this->employee->id != $employee->id)
-                    $test_employee = $employee;
-                    break;
-            }
-        }
-        return $test_employee;
+        $group = \plunner\Group::has('employees', '>=', '2')->firstOrFail();
+        $employee = $group->employees()->where('id', '<>', $group->planner_id)->firstOrFail();
+        return [$group, $employee];
     }
 
     public function testDeleteNonExistingMeeting()
@@ -140,7 +132,7 @@ class PlannersMeetingsTest extends \TestCase
 
     public function testDeleteOtherGroupsMeeting()
     {
-        $other_group = \plunner\Group::where('id', '!=', $this->group->id)->first();
+        $other_group = \plunner\Group::where('planner_id', '<>', $this->planner->id)->first();
         $other_groups_meeting_id = $other_group->meetings()->first()->id;
 
         $response = $this->actingAs($this->planner)
@@ -164,16 +156,14 @@ class PlannersMeetingsTest extends \TestCase
 
     public function testEmployeeUpdateExistingMeeting()
     {
-        $test_employee = $this->getNonPlannerInGroup();
+        list($test_group, $test_employee) = $this->getNonPlannerInAGroup();
 
-        /*$this->actingAs($this->planner)
-            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);*/
-        $meeting = $this->group->meetings()->first();
+        $meeting = $test_group->meetings()->first();
 
         $test_data = $this->getUpdateData();
 
         $response = $this->actingAs($test_employee)
-            ->json('PUT', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$meeting->id, $test_data);
+            ->json('PUT', 'employees/planners/groups/'.$test_group->id.'/meetings/'.$meeting->id, $test_data);
         $response->seeStatusCode(403);
     }
 
@@ -190,7 +180,7 @@ class PlannersMeetingsTest extends \TestCase
 
     public function testUpdateOtherGroupsMeeting()
     {
-        $other_group = \plunner\Group::where('id', '!=', $this->group->id)->first();
+        $other_group = \plunner\Group::where('planner_id', '<>', $this->planner->id)->first();
         $other_groups_meeting_id = $other_group->meetings()->first()->id;
 
         $test_data = $this->getUpdateData();

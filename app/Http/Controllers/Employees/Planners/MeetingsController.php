@@ -48,7 +48,9 @@ class MeetingsController extends Controller
     {
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
-        $meeting = Meeting::where('group_id', $groupId)->findOrFail($meetingId);
+        //Meeting::where('group_id', $groupId)->findOrFail($meetingId);
+        //it is good but expensive and useless for the user experience
+        $meeting = Meeting::findOrFail($meetingId);
         $this->authorize($meeting);
         return $meeting;
     }
@@ -79,10 +81,10 @@ class MeetingsController extends Controller
      */
     public function update(MeetingRequest $request, $groupId, $meetingId)
     {
-        $meeting = Meeting::findOrFail($meetingId);
-        $this->authorize($meeting);
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
+        $meeting = Meeting::findOrFail($meetingId);
+        $this->authorize($meeting);
         $input = $request->all();
         $meeting->update($input);
         return $meeting;
@@ -97,10 +99,10 @@ class MeetingsController extends Controller
      */
     public function destroy($groupId, $meetingId)
     {
-        $meeting = Meeting::findOrFail($meetingId);
-        $this->authorize($meeting);
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
+        $meeting = Meeting::findOrFail($meetingId);
+        $this->authorize($meeting);
         $meeting->delete();
         return $meeting;
     }
