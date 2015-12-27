@@ -1,10 +1,10 @@
 <?php
 
-namespace plunner\Http\Requests\Employees;
+namespace plunner\Http\Requests\Employees\Employee;
 
 use plunner\Http\Requests\Request;
 
-class MeetingRequest extends Request
+class EmployeeRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,11 +23,9 @@ class MeetingRequest extends Request
      */
     public function rules()
     {
-        //TODO test this with the new data
         return [
-            'title' => 'required|max:255',
-            'description' => 'sometimes|required|max:255',
-            'duration' => 'required|integer',
+            'name' => 'sometimes|required|min:1|max:255',
+            'password'=>'sometimes|required|confirmed|min:6',
         ];
     }
 }

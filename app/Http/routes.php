@@ -50,6 +50,11 @@ Route::group(['namespace' => 'Companies', 'prefix' => 'companies'], function() {
         Route::resource('groups', 'GroupsController', ['except' => ['create', 'edit']]);
         Route::resource('groups.employees', 'EmployeesController', ['only' => ['store', 'index', 'destroy']]);
     });
+
+    Route::group(['namespace' => 'Company', 'prefix' => 'company'], function() {
+        Route::get('/', ['as' => 'companies.company.index', 'uses' => 'CompanyController@index']);
+        Route::put('/', ['as' => 'companies.company.update', 'uses' => 'CompanyController@update']);
+    });
 });
 
 
@@ -92,5 +97,10 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
 
     Route::group(['namespace' => 'Groups'], function() {
         Route::resource('groups', 'GroupsController', ['only' => ['index', 'show']]);
+    });
+
+    Route::group(['namespace' => 'Employee', 'prefix' => 'employee'], function() {
+        Route::get('/', ['as' => 'employees.employee.index', 'uses' => 'EmployeeController@index']);
+        Route::put('/', ['as' => 'employees.employee.update', 'uses' => 'EmployeeController@update']);
     });
 });

@@ -10,15 +10,15 @@ class EmployeesAuthTest extends \TestCase
 
     public function testLogin()
     {
-        $response = $this->json('POST', '/employees/auth/login', ['company' => 'testInit' , 'email' => 'testEmp@test.com', 'password' => 'test']);
+        $response = $this->json('POST', '/employees/auth/login', ['company' => 'testInit' , 'email' => 'testEmp@test.com', 'password' => 'test', 'remember'=>0]);
         $response->seeStatusCode(200);
     }
 
     public function testErrorLogin()
     {
-        $response = $this->json('POST', '/employees/auth/login', ['company' => 'testInit', 'email' => 'testEmp@test.com', 'password' => 'atest']);
+        $response = $this->json('POST', '/employees/auth/login', ['company' => 'testInit', 'email' => 'testEmp@test.com', 'password' => 'atest', 'remember'=>0]);
         $response->seeStatusCode(422);
-        $response = $this->json('POST', '/employees/auth/login', ['company' => 'testInita' , 'email' => 'testEmp@test.com', 'password' => 'test']);
+        $response = $this->json('POST', '/employees/auth/login', ['company' => 'testInita' , 'email' => 'testEmp@test.com', 'password' => 'test', 'remember'=>0]);
         $response->seeStatusCode(422);
     }
 
@@ -40,9 +40,9 @@ class EmployeesAuthTest extends \TestCase
         //perform correct reset
         $response = $this->json('POST', '/employees/password/reset', ['company' => 'testInit', 'email' => 'testEmp@test.com', 'password_confirmation' => 'testtest', 'password' => 'testtest', 'token' => $token]);
         $response->seeStatusCode(200);
-        $response = $this->json('POST', '/employees/auth/login', ['company' => 'testInit', 'email' => 'testEmp@test.com', 'password' => 'test']);
+        $response = $this->json('POST', '/employees/auth/login', ['company' => 'testInit', 'email' => 'testEmp@test.com', 'password' => 'test', 'remember'=>0]);
         $response->seeStatusCode(422);
-        $response = $this->json('POST', '/employees/auth/login', ['company' => 'testInit', 'email' => 'testEmp@test.com', 'password' => 'testtest']);
+        $response = $this->json('POST', '/employees/auth/login', ['company' => 'testInit', 'email' => 'testEmp@test.com', 'password' => 'testtest', 'remember'=>0]);
         $response->seeStatusCode(200);
     }
 
@@ -58,10 +58,10 @@ class EmployeesAuthTest extends \TestCase
     public function testThrottlesLogins()
     {
         for ($i = 0; $i < 5; $i++) {
-            $response = $this->json('POST', '/employees/auth/login', ['company' => 'testInit', 'email' => 'testEmp@test.com', 'password' => 'atest']);
+            $response = $this->json('POST', '/employees/auth/login', ['company' => 'testInit', 'email' => 'testEmp@test.com', 'password' => 'atest', 'remember'=>0]);
             $response->seeStatusCode(422);
         }
-        $response = $this->json('POST', '/employees/auth/login', ['company' => 'testInit', 'email' => 'testEmp@test.com', 'password' => 'test']);
+        $response = $this->json('POST', '/employees/auth/login', ['company' => 'testInit', 'email' => 'testEmp@test.com', 'password' => 'test', 'remember'=>0]);
         $response->seeStatusCode(422);
 
     }
@@ -69,10 +69,10 @@ class EmployeesAuthTest extends \TestCase
     public function testNoThrottlesLogins()
     {
         for ($i = 0; $i < 4; $i++) {
-            $response = $this->json('POST', '/employees/auth/login', ['company' => 'testInit', 'email' => 'testEmp@test.com', 'password' => 'atest']);
+            $response = $this->json('POST', '/employees/auth/login', ['company' => 'testInit', 'email' => 'testEmp@test.com', 'password' => 'atest', 'remember'=>0]);
             $response->seeStatusCode(422);
         }
-        $response = $this->json('POST', '/employees/auth/login', ['company' => 'testInit', 'email' => 'testEmp@test.com', 'password' => 'test']);
+        $response = $this->json('POST', '/employees/auth/login', ['company' => 'testInit', 'email' => 'testEmp@test.com', 'password' => 'test', 'remember'=>0]);
         $response->seeStatusCode(200);
 
     }
