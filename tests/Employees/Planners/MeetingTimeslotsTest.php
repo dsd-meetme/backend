@@ -48,19 +48,13 @@ class MeetingTimeslotsTest extends \TestCase
 
     public function testEmployeeViewIndex()
     {
-        // Find an employee in the group who is not a planner and set him as $test_employee
-        $test_employee = $this->employee;
-        if ($this->employee->id == $this->planner->id) {
-            foreach ($this->group->employees as $employee) {
-                if ($this->employee->id != $employee->id)
-                    $test_employee = $employee;
-                break;
-            }
-        }
+        list($test_group, $test_employee) = $this->getNonPlannerInAGroup();
+
+        $meeting = $test_group->meetings()->firstOrFail();
 
         $response = $this->actingAs($test_employee)
-            ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$this->meeting->id.'/timeslots');
-        $response->seeStatusCode(403);
+            ->json('GET', 'employees/planners/groups/'.$test_group->id.'/meetings/'.$meeting->id.'/timeslots');
+        $response->seeStatusCode(404);
     }
 
     public function testShow()
