@@ -1,10 +1,10 @@
 <?php
 
-namespace plunner\Http\Requests\Employees;
+namespace plunner\Http\Requests\Employees\Calendar;
 
 use plunner\Http\Requests\Request;
 
-class CalendarRequest extends Request
+class TimeslotRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,8 @@ class CalendarRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'required|max:255',
-            'enabled'=>'required|boolean',
+            'time_start' => 'required|date_format:"Y-m-d H:i:s"',
+            'time_end'=>'required|date_format:"Y-m-d H:i:s"',
         ];
     }
 }

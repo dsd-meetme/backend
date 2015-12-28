@@ -91,6 +91,16 @@ class Planner extends Employee
     }
 
     /**
+     * @param Timeslot $timeslot
+     * @return bool
+     */
+    public function verifyTimeslot(Timeslot $timeslot)
+    {
+        //TODO implement and test this
+        return false;
+    }
+
+    /**
      * @param Meeting $meeting
      * @return bool
      */

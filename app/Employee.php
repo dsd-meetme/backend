@@ -180,6 +180,16 @@ class Employee extends Model implements AuthenticatableContract,
     }
 
     /**
+     * @param Timeslot $timeslot
+     * @return bool
+     */
+    public function verifyTimeslot(Timeslot $timeslot)
+    {
+        //TODO test this
+        return $timeslot->calendar->employee_id == $this->id;
+    }
+
+    /**
      * @param Meeting $meeting
      * @return bool
      */
