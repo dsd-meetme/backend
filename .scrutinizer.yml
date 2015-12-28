@@ -1,3 +1,5 @@
 build:
     environment:
         php: '5.5.0'
+filter:
+    paths: [app/*]
