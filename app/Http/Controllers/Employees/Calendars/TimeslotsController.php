@@ -60,7 +60,7 @@ class TimeslotsController extends Controller
         $this->authorize($calendar);
         $input = $request->all();
         $timeslot = $calendar->timeslots()->create($input);
-        if( $timeslot->time_start > $timeslot->time_end)
+        //  if( $timeslot->time_start > $timeslot->time_end) //IMPROVE THIS,t hsi must be inserted before creation
         return $timeslot;
         //TODO else
     }
