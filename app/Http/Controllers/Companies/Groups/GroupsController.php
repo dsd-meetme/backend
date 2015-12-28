@@ -16,9 +16,6 @@ use plunner\Http\Requests\Companies\Groups\GroupRequest;
  */
 class GroupsController extends Controller
 {
-    /**
-     * ExampleController constructor.
-     */
     public function __construct()
     {
         config(['auth.model' => \plunner\Company::class]);

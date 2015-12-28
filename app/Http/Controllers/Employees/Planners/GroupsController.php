@@ -9,9 +9,6 @@ use plunner\Planner;
 
 class GroupsController extends Controller
 {
-    /**
-     * ExampleController constructor.
-     */
     public function __construct()
     {
         config(['auth.model' => Planner::class]);

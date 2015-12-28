@@ -11,14 +11,6 @@ use plunner\Timeslot;
 
 class TimeslotsController extends Controller
 {
-    /**
-     * @var \plunner\Company
-     */
-    private $user;
-
-    /**
-     * ExampleController constructor.
-     */
     public function __construct()
     {
         config(['auth.model' => \plunner\Employee::class]);

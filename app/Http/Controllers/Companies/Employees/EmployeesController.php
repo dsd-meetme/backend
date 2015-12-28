@@ -16,9 +16,6 @@ use plunner\Http\Requests\Companies\Employees\EmployeeRequest;
  */
 class EmployeesController extends Controller
 {
-    /**
-     * ExampleController constructor.
-     */
     public function __construct()
     {
         config(['auth.model' => \plunner\Company::class]);

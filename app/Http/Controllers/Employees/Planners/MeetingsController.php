@@ -13,9 +13,6 @@ use plunner\Group;
 
 class MeetingsController extends Controller
 {
-    /**
-     * ExampleController constructor.
-     */
     public function __construct()
     {
         config(['auth.model' => \plunner\Planner::class]);

@@ -11,9 +11,6 @@ use plunner\Http\Controllers\Controller;
 
 class GroupsController extends Controller
 {
-    /**
-     * ExampleController constructor.
-     */
     public function __construct()
     {
         config(['auth.model' => \plunner\Employee::class]);

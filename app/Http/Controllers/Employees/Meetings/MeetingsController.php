@@ -12,9 +12,6 @@ use plunner\Meeting;
 
 class MeetingsController extends Controller
 {
-    /**
-     * ExampleController constructor.
-     */
     public function __construct()
     {
         config(['auth.model' => \plunner\Employee::class]);

@@ -12,9 +12,6 @@ use plunner\Http\Requests\Employees\Calendar\CalendarRequest;
 
 class CalendarsController extends Controller
 {
-    /**
-     * ExampleController constructor.
-     */
     public function __construct()
     {
         config(['auth.model' => \plunner\Employee::class]);
