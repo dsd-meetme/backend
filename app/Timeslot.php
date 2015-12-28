@@ -36,6 +36,13 @@ class Timeslot extends Model
     protected $fillable = ['time_start', 'time_end'];
 
     /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
+     */
+    protected $hidden = ['pivot', 'calendar'];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function Calendar()
