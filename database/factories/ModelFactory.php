@@ -33,6 +33,7 @@ $factory->define(plunner\Employee::class, function (Faker\Generator $faker) {
 $factory->define(plunner\Calendar::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
+        'enabled' => $faker->boolean(),
     ];
 });
 
@@ -63,5 +64,14 @@ $factory->define(plunner\MeetingTimeslot::class, function (Faker\Generator $fake
     return [
         'time_start' => $faker->dateTime,
         'time_end' => $faker->dateTime,
+    ];
+});
+
+$factory->define(plunner\Caldav::class, function (Faker\Generator $faker) {
+    return [
+        'url' => 'http://test.com',
+        'username' => 'test',
+        'password' => 'test',
+        'calendar_name' => 'test',
     ];
 });

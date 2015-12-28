@@ -55,6 +55,7 @@ class CalendarsController extends Controller
 
     /**
      * Store a newly created resource in storage with caldav.
+     * <strong>CAUTION:</strong> this method returns only calendar data, not caldav
      *
      * @param  CalendarRequest  $request
      * @return \Illuminate\Http\Response
@@ -162,7 +163,7 @@ class CalendarsController extends Controller
         $this->validate($request, [
             'url' => 'required|max:255',
             'username' => 'required|max:255',
-            'password' => ((\Route::current()->getName() == 'companies.calendars.caldav')?'required':''),
+            'password' => ((\Route::current()->getName() == 'employees.calendars.caldav')?'':'sometimes|'). 'required',
             'calendar_name' => 'required|max:255',
         ]);
     }

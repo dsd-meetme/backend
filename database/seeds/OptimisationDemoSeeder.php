@@ -22,7 +22,7 @@ class OptimisationDemoSeeder extends Seeder
         $company = factory(\plunner\Company::class)->create(['password' => bcrypt('test')]);
         $employees = factory(\plunner\Employee::class, 3)->make(['password' => bcrypt('test')])->each(function ($employee) use($company){
             $company->employees()->save($employee);
-            $employee->calendars()->save(factory(\plunner\Calendar::class)->make());
+            $employee->calendars()->save(factory(\plunner\Calendar::class)->make(['enabled'=>true]));
         });
 
         $group1 = factory(\plunner\Group::class)->make();
