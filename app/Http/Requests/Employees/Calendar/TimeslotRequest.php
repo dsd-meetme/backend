@@ -24,8 +24,8 @@ class TimeslotRequest extends Request
     public function rules()
     {
         return [
-            'time_start' => 'required', //TODO define datetime
-            'time_end'=>'required', //TODO define datetime
+            'time_start' => 'required|date_format:"Y-m-d H:i:s"',
+            'time_end'=>'required|date_format:"Y-m-d H:i:s"',
         ];
     }
 }
