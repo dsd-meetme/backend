@@ -185,8 +185,9 @@ class Employee extends Model implements AuthenticatableContract,
      */
     public function verifyMeeting(Meeting $meeting)
     {
-        //TODO implement and test this
-        return false;
+        //TODO test this
+        $meeting = $this->meetings()->whereId($meeting->id)->first();
+        return (is_object($meeting) && $meeting->exists);
     }
 
     /**

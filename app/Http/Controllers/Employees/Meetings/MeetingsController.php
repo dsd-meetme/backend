@@ -42,7 +42,7 @@ class MeetingsController extends Controller
     public function show($id)
     {
         $meeting = Meeting::findOrFail($id);
-        $this->authorize($meeting); //TODO implement authorize
+        $this->authorize($meeting);
         return $meeting;
     }
 }
