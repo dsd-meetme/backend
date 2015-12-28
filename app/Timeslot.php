@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer $calendar_id
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @property-read \plunner\Calendar $Calendar
+ * @property-read \plunner\Calendar $calendar
  */
 class Timeslot extends Model
 {
@@ -38,7 +38,7 @@ class Timeslot extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function Calendar()
+    public function calendar()
     {
         return $this->belongsTo('plunner\Calendar');
     }
