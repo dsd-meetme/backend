@@ -15,9 +15,6 @@ use Illuminate\Support\Facades\Response;
 
 class MeetingTimeslotsController extends Controller
 {
-    /**
-     * ExampleController constructor.
-     */
     public function __construct()
     {
         config(['auth.model' => \plunner\Planner::class]);

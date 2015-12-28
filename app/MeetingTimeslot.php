@@ -34,6 +34,12 @@ class MeetingTimeslot extends Model
      */
     protected $fillable = ['time_start', 'time_end'];
 
+    /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
+     */
+    protected $hidden = ['pivot', 'meeting'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
