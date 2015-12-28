@@ -43,7 +43,7 @@ class MeetingTimeslotsController extends Controller
      *
      * @param int $groupId
      * @param int $meetingId
-     *  @param int $timeslotId
+     * @param int $timeslotId
      * @return mixed
      */
     public function show($groupId, $meetingId, $timeslotId)

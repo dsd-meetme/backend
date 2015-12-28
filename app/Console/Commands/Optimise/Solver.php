@@ -19,8 +19,8 @@
 
 namespace plunner\Console\Commands\Optimise;
 
-use \Illuminate\Console\Scheduling\Schedule;
-use \Illuminate\Foundation\Application;
+use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Foundation\Application;
 
 /**
  * Class Solver
@@ -69,8 +69,8 @@ class Solver
     private $usersMeetings;
 
     /**
-    * @var Schedule laravel schedule object needed to perform command in background
-    */
+     * @var Schedule laravel schedule object needed to perform command in background
+     */
     private $schedule;
 
     /**
@@ -102,18 +102,18 @@ class Solver
     /**
      * @throws OptimiseException
      */
-    public function __destruct()
+    static private function checkGlpsol()
     {
-        $this->path = null; //call the path destruct
+        if (!(`which glpsol`))
+            throw new OptimiseException('glpsol is not installed');
     }
 
     /**
      * @throws OptimiseException
      */
-    static private function checkGlpsol()
+    public function __destruct()
     {
-        if(!(`which glpsol`))
-            throw new OptimiseException('glpsol is not installed');
+        $this->path = null; //call the path destruct
     }
 
     /**
@@ -193,7 +193,7 @@ class Solver
      */
     public function setTimeSlots($timeSlots)
     {
-        if(!is_int($timeSlots) || $timeSlots <=0)
+        if (!is_int($timeSlots) || $timeSlots <= 0)
             throw new OptimiseException('$timeSlots is not integer or it is not >0');
 
         $this->timeSlots = $timeSlots;
@@ -215,7 +215,7 @@ class Solver
      */
     public function setMaxTimeSlots($maxTimeSlots)
     {
-        if(!is_int($maxTimeSlots) || $maxTimeSlots <=0)
+        if (!is_int($maxTimeSlots) || $maxTimeSlots <= 0)
             throw new OptimiseException('$maxTimeSlots is not integer or it is not >0');
 
         $this->maxTimeSlots = $maxTimeSlots;
@@ -238,17 +238,31 @@ class Solver
     public function setMeetingsAvailability($meetingsAvailability)
     {
         $meetings = array_keys($meetingsAvailability);
-        if(array_diff($meetings, $this->meetings))
+        if (array_diff($meetings, $this->meetings))
             throw new OptimiseException('meetings different from meetings set');
-        foreach($meetingsAvailability as $key=>$meetingsAvailabilityS) {
+        foreach ($meetingsAvailability as $key => $meetingsAvailabilityS) {
             $timeSlots = array_keys($meetingsAvailabilityS);
-            if(count($timeSlots) != $this->timeSlots)
+            if (count($timeSlots) != $this->timeSlots)
                 throw new OptimiseException('timeSlots different from timeSlots set');
             $meetingsAvailability[$key] = self::arrayPad($meetingsAvailabilityS, $this->timeSlots + $this->maxTimeSlots, 0);
         }
 
         $this->meetingsAvailability = $meetingsAvailability;
         return $this;
+    }
+
+    /**
+     * implementation of arraypad that doesn't change original keys<br/>
+     * <strong>CAUTION: Only positive $len</strong>
+     * @param array $array
+     * @return array
+     */
+    static private function arrayPad(array $array, $len, $pad)
+    {
+        $len = $len - count($array);
+        for ($i = 0; $i < $len; $i++)
+            $array[] = $pad;
+        return $array;
     }
 
     /**
@@ -267,13 +281,13 @@ class Solver
     public function setMeetingsDuration($meetingsDuration)
     {
         $meetings = array_keys($meetingsDuration);
-        if(array_diff($meetings, $this->meetings)) {
+        if (array_diff($meetings, $this->meetings)) {
             print "";
             throw new OptimiseException('meetings different from meetings set');
         }
-        foreach($meetingsDuration as $duration) {
-            $duration = (int) $duration; //TODO fix this (fix for optimise)
-            if(!is_int($duration) || $duration <=0)
+        foreach ($meetingsDuration as $duration) {
+            $duration = (int)$duration; //TODO fix this (fix for optimise)
+            if (!is_int($duration) || $duration <= 0)
                 throw new OptimiseException('duration is not integer or it is not >0');
         }
 
@@ -297,11 +311,11 @@ class Solver
     public function setUsersAvailability($usersAvailability)
     {
         $users = array_keys($usersAvailability);
-        if(array_diff($users, $this->users))
+        if (array_diff($users, $this->users))
             throw new OptimiseException('users different from users set');
-        foreach($usersAvailability as $key=>$usersAvailabilityS) {
+        foreach ($usersAvailability as $key => $usersAvailabilityS) {
             $timeSlots = array_keys($usersAvailabilityS);
-            if(count($timeSlots) != $this->timeSlots)
+            if (count($timeSlots) != $this->timeSlots)
                 throw new OptimiseException('timeSlots different from timeSlots set');
 
             $usersAvailability[$key] = self::arrayPad($usersAvailabilityS, $this->timeSlots + $this->maxTimeSlots, 0);
@@ -327,137 +341,16 @@ class Solver
     public function setUsersMeetings($usersMeetings)
     {
         $users = array_keys($usersMeetings);
-        if(array_diff($users, $this->users))
+        if (array_diff($users, $this->users))
             throw new OptimiseException('users different from users set');
-        foreach($usersMeetings as $usersMeetingsS) {
+        foreach ($usersMeetings as $usersMeetingsS) {
             $meetings = array_keys($usersMeetingsS);
-            if(array_diff($meetings, $this->meetings))
+            if (array_diff($meetings, $this->meetings))
                 throw new OptimiseException('meetings different from meetings set');
         }
 
         $this->usersMeetings = $usersMeetings;
         return $this;
-    }
-
-    /**
-     * @throws OptimiseException
-     */
-    private function writeUsers()
-    {
-        self::writeCSVArrayNoKey($this->path->getUsersPath(), $this->users);
-    }
-
-    /**
-     * @throws OptimiseException
-     */
-    private function writeMeetings()
-    {
-        self::writeCSVArrayNoKey($this->path->getMeetingsPath(), $this->meetings);
-    }
-
-    /**
-     * @throws OptimiseException
-     */
-    private function writeMeetingsDuration()
-    {
-        self::writeCSVArray($this->path->getMeetingsDurationPath(), $this->meetingsDuration, 'MeetingsDuration');
-    }
-
-    /**
-     * @throws OptimiseException
-     */
-    private function writeMeetingsAvailability()
-    {
-        self::writeCSVMatrix($this->path->getMeetingsAvailabilityPath(), $this->meetingsAvailability, 'MeetingsAvailability');
-    }
-
-    /**
-     * @throws OptimiseException
-     */
-    private function writeUsersAvailability()
-    {
-        self::writeCSVMatrix($this->path->getUsersAvailabilityPath(), $this->usersAvailability, 'UsersAvailability');
-    }
-
-    /**
-     * @throws OptimiseException
-     */
-    private function writeUsersMeetings()
-    {
-        self::writeCSVMatrix($this->path->getUsersMeetingsPath(), $this->usersMeetings, 'UsersMeetings');
-    }
-
-    /**
-     * @param string $file
-     * @param array $data
-     * @throws OptimiseException
-     */
-    static private function writeCSVArrayNoKey($file, $data)
-    {
-        $f = function ($fp, $data){
-            foreach ($data as $field) {
-                fputcsv($fp, [$field]);
-            }
-        };
-
-        self::writeCSV($file, $data, ['i'], $f);
-    }
-
-    /**
-     * @param string $file
-     * @param array $data
-     * @param string $name
-     * @throws OptimiseException
-     */
-    static private function writeCSVArray($file, $data, $name)
-    {
-        $f = function ($fp, $data){
-            foreach ($data as $key=>$field) {
-                fputcsv($fp, [$key, $field]);
-            }
-        };
-
-        self::writeCSV($file, $data, ['i', $name], $f);
-    }
-
-    /**
-     * @param string $file
-     * @param array $data
-     * @param string $name
-     * @throws OptimiseException
-     */
-    static private function writeCSVMatrix($file, $data, $name)
-    {
-        $f = function ($fp, $data){
-            foreach ($data as $key=>$field) {
-                foreach ($field as $key2=>$field2)
-                    fputcsv($fp, [$key, $key2, $field2]);
-            }
-        };
-
-        self::writeCSV($file, $data, ['i', 'j', $name], $f);
-    }
-
-    /**
-     * @param string $file
-     * @param array $data
-     * @param array $heading
-     * @param \Closure $writer
-     * @throws OptimiseException
-     */
-    static private function writeCSV($file, $data, $heading, \Closure $writer)
-    {
-        $fp = @fopen($file, 'w');
-        if(!$fp)
-            throw new OptimiseException('problem during creation of a file');
-
-        fputcsv($fp, $heading);
-
-        $writer($fp, $data);
-
-        //fputcsv($fp, []); //empty line
-
-        fclose($fp);
     }
 
     /**
@@ -468,84 +361,12 @@ class Solver
     {
         $this->writeData();
         $this->writeModelFile();
-        $event = $this->schedule->exec('glpsol --math '.$this->path->getModelPath())->sendOutputTo($this->path->getOutputPath())->after(function () { }); //this just to execute in foreground
-        if($event->isDue($this->laravel))
+        $event = $this->schedule->exec('glpsol --math ' . $this->path->getModelPath())->sendOutputTo($this->path->getOutputPath())->after(function () {
+        }); //this just to execute in foreground
+        if ($event->isDue($this->laravel))
             $event->run($this->laravel);
         //TODO catch glpsol errors
         return $this;
-    }
-
-    /**
-     * @throws OptimiseException
-     */
-    private function writeModelFile()
-    {
-        $strReplaceS = array('{USERS_PATH}', '{MEETINGS_PATH}', '{USER_AVAILABILITY_PATH}', '{MEETINGS_AVAILABILITY_PATH}', '{USER_MEETINGS_PATH}', '{MEETINGS_DURATION_PATH}', '{TIME_SLOTS}', '{MAX_TIME_SLOTS}', '{X_OUT_PATH}', '{Y_OUT_PATH}');
-        $strReplaceR = array($this->path->getUsersPath(), $this->path->getMeetingsPath(), $this->path->getUsersAvailabilityPath(), $this->path->getMeetingsAvailabilityPath(), $this->path->getUsersMeetingsPath(), $this->path->getMeetingsDurationPath(), $this->timeSlots, $this->maxTimeSlots, $this->path->getXPath(), $this->path->getYPath());
-        $f = @fopen($this->path->getModelPath(), "w");
-        if(!$f)
-            throw new OptimiseException('problem during creation of a file');
-        fwrite($f, str_replace($strReplaceS, $strReplaceR, file_get_contents(__DIR__ . "/model.stub")));
-        fclose($f);
-    }
-
-    /**
-     * @return array
-     * @throws OptimiseException
-     */
-    public function getXResults()
-    {
-        return self::readCSVFile($this->path->getXPath());
-    }
-
-    /**
-     * @return array
-     * @throws OptimiseException
-     */
-    public function getYResults()
-    {
-        return self::readCSVFile($this->path->getYPath());
-    }
-
-    /**
-     * @return string
-     * @throws OptimiseException
-     */
-    public function getOutput()
-    {
-        if(!($data = file_get_contents($this->path->getOutputPath())))
-            throw new OptimiseException('problems during reading the file');
-        return $data;
-    }
-
-    /**
-     * @param string $file
-     * @return array
-     * @throws OptimiseException
-     */
-    static private function readCSVFile($file)
-    {
-        if(!file_exists($file) || !filesize($file))
-            throw new OptimiseException('no results file');
-
-        $handle = @fopen($file,"r");
-        if(!$handle)
-            throw new OptimiseException('problems during reading the file');
-
-        $ret = [];
-        fgetcsv($handle); //skip head
-        while (($data = fgetcsv($handle)) !== FALSE) {
-            if(count($data) != 3) {
-                fclose($handle);
-                throw new OptimiseException('problems during parsing the file');
-            }
-
-            $ret[$data[0]][$data[1]] = $data[2];
-        }
-
-        fclose($handle);
-
-        return $ret;
     }
 
     /**
@@ -577,9 +398,9 @@ class Solver
      */
     private function checkArrayProprieties($proprieties)
     {
-        foreach($proprieties as $propriety)
-            if(count($this->$propriety)==0)
-                throw new OptimiseException($propriety.' is not set correctly');
+        foreach ($proprieties as $propriety)
+            if (count($this->$propriety) == 0)
+                throw new OptimiseException($propriety . ' is not set correctly');
     }
 
     /**
@@ -588,22 +409,202 @@ class Solver
      */
     private function checkIntProprieties($proprieties)
     {
-        foreach($proprieties as $propriety)
-            if(!is_int($this->$propriety) || $this->$propriety <= 0)
-                throw new OptimiseException($propriety.' is not set correctly');
+        foreach ($proprieties as $propriety)
+            if (!is_int($this->$propriety) || $this->$propriety <= 0)
+                throw new OptimiseException($propriety . ' is not set correctly');
     }
 
     /**
-     * implementation of arraypad that doesn't change original keys<br/>
-     * <strong>CAUTION: Only positive $len</strong>
-     * @param array $array
-     * @return array
+     * @throws OptimiseException
      */
-    static private function arrayPad(array $array, $len, $pad)
+    private function writeUsers()
     {
-        $len = $len - count($array);
-        for($i = 0; $i<$len; $i++)
-            $array[] = $pad;
-        return $array;
+        self::writeCSVArrayNoKey($this->path->getUsersPath(), $this->users);
+    }
+
+    /**
+     * @param string $file
+     * @param array $data
+     * @throws OptimiseException
+     */
+    static private function writeCSVArrayNoKey($file, $data)
+    {
+        $f = function ($fp, $data) {
+            foreach ($data as $field) {
+                fputcsv($fp, [$field]);
+            }
+        };
+
+        self::writeCSV($file, $data, ['i'], $f);
+    }
+
+    /**
+     * @param string $file
+     * @param array $data
+     * @param array $heading
+     * @param \Closure $writer
+     * @throws OptimiseException
+     */
+    static private function writeCSV($file, $data, $heading, \Closure $writer)
+    {
+        $fp = @fopen($file, 'w');
+        if (!$fp)
+            throw new OptimiseException('problem during creation of a file');
+
+        fputcsv($fp, $heading);
+
+        $writer($fp, $data);
+
+        //fputcsv($fp, []); //empty line
+
+        fclose($fp);
+    }
+
+    /**
+     * @throws OptimiseException
+     */
+    private function writeMeetings()
+    {
+        self::writeCSVArrayNoKey($this->path->getMeetingsPath(), $this->meetings);
+    }
+
+    /**
+     * @throws OptimiseException
+     */
+    private function writeMeetingsDuration()
+    {
+        self::writeCSVArray($this->path->getMeetingsDurationPath(), $this->meetingsDuration, 'MeetingsDuration');
+    }
+
+    /**
+     * @param string $file
+     * @param array $data
+     * @param string $name
+     * @throws OptimiseException
+     */
+    static private function writeCSVArray($file, $data, $name)
+    {
+        $f = function ($fp, $data) {
+            foreach ($data as $key => $field) {
+                fputcsv($fp, [$key, $field]);
+            }
+        };
+
+        self::writeCSV($file, $data, ['i', $name], $f);
+    }
+
+    /**
+     * @throws OptimiseException
+     */
+    private function writeMeetingsAvailability()
+    {
+        self::writeCSVMatrix($this->path->getMeetingsAvailabilityPath(), $this->meetingsAvailability, 'MeetingsAvailability');
+    }
+
+    /**
+     * @param string $file
+     * @param array $data
+     * @param string $name
+     * @throws OptimiseException
+     */
+    static private function writeCSVMatrix($file, $data, $name)
+    {
+        $f = function ($fp, $data) {
+            foreach ($data as $key => $field) {
+                foreach ($field as $key2 => $field2)
+                    fputcsv($fp, [$key, $key2, $field2]);
+            }
+        };
+
+        self::writeCSV($file, $data, ['i', 'j', $name], $f);
+    }
+
+    /**
+     * @throws OptimiseException
+     */
+    private function writeUsersAvailability()
+    {
+        self::writeCSVMatrix($this->path->getUsersAvailabilityPath(), $this->usersAvailability, 'UsersAvailability');
+    }
+
+    /**
+     * @throws OptimiseException
+     */
+    private function writeUsersMeetings()
+    {
+        self::writeCSVMatrix($this->path->getUsersMeetingsPath(), $this->usersMeetings, 'UsersMeetings');
+    }
+
+    /**
+     * @throws OptimiseException
+     */
+    private function writeModelFile()
+    {
+        $strReplaceS = array('{USERS_PATH}', '{MEETINGS_PATH}', '{USER_AVAILABILITY_PATH}', '{MEETINGS_AVAILABILITY_PATH}', '{USER_MEETINGS_PATH}', '{MEETINGS_DURATION_PATH}', '{TIME_SLOTS}', '{MAX_TIME_SLOTS}', '{X_OUT_PATH}', '{Y_OUT_PATH}');
+        $strReplaceR = array($this->path->getUsersPath(), $this->path->getMeetingsPath(), $this->path->getUsersAvailabilityPath(), $this->path->getMeetingsAvailabilityPath(), $this->path->getUsersMeetingsPath(), $this->path->getMeetingsDurationPath(), $this->timeSlots, $this->maxTimeSlots, $this->path->getXPath(), $this->path->getYPath());
+        $f = @fopen($this->path->getModelPath(), "w");
+        if (!$f)
+            throw new OptimiseException('problem during creation of a file');
+        fwrite($f, str_replace($strReplaceS, $strReplaceR, file_get_contents(__DIR__ . "/model.stub")));
+        fclose($f);
+    }
+
+    /**
+     * @return array
+     * @throws OptimiseException
+     */
+    public function getXResults()
+    {
+        return self::readCSVFile($this->path->getXPath());
+    }
+
+    /**
+     * @param string $file
+     * @return array
+     * @throws OptimiseException
+     */
+    static private function readCSVFile($file)
+    {
+        if (!file_exists($file) || !filesize($file))
+            throw new OptimiseException('no results file');
+
+        $handle = @fopen($file, "r");
+        if (!$handle)
+            throw new OptimiseException('problems during reading the file');
+
+        $ret = [];
+        fgetcsv($handle); //skip head
+        while (($data = fgetcsv($handle)) !== FALSE) {
+            if (count($data) != 3) {
+                fclose($handle);
+                throw new OptimiseException('problems during parsing the file');
+            }
+
+            $ret[$data[0]][$data[1]] = $data[2];
+        }
+
+        fclose($handle);
+
+        return $ret;
+    }
+
+    /**
+     * @return array
+     * @throws OptimiseException
+     */
+    public function getYResults()
+    {
+        return self::readCSVFile($this->path->getYPath());
+    }
+
+    /**
+     * @return string
+     * @throws OptimiseException
+     */
+    public function getOutput()
+    {
+        if (!($data = file_get_contents($this->path->getOutputPath())))
+            throw new OptimiseException('problems during reading the file');
+        return $data;
     }
 }

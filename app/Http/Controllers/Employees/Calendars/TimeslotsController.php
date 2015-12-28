@@ -23,7 +23,7 @@ class TimeslotsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  int  $calendarId
+     * @param  int $calendarId
      * @return \Illuminate\Http\Response
      */
     public function index($calendarId)
@@ -40,8 +40,8 @@ class TimeslotsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  TimeslotRequest  $request
-     * @param  int  $calendarId
+     * @param  TimeslotRequest $request
+     * @param  int $calendarId
      * @return \Illuminate\Http\Response
      */
     public function store(TimeslotRequest $request, $calendarId)
@@ -60,8 +60,8 @@ class TimeslotsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $calendarId
-     * @param  int  $timeslotId
+     * @param  int $calendarId
+     * @param  int $timeslotId
      * @return \Illuminate\Http\Response
      */
     public function show($calendarId, $timeslotId)
@@ -77,9 +77,9 @@ class TimeslotsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  TimeslotRequest  $request
-     * @param  int  $calendarId
-     * @param  int  $timeslotId
+     * @param  TimeslotRequest $request
+     * @param  int $calendarId
+     * @param  int $timeslotId
      * @return \Illuminate\Http\Response
      */
     public function update(TimeslotRequest $request, $calendarId, $timeslotId)
@@ -97,8 +97,8 @@ class TimeslotsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $calendarId
-     * @param  int  $timeslotId
+     * @param  int $calendarId
+     * @param  int $timeslotId
      * @return \Illuminate\Http\Response
      */
     public function destroy($calendarId, $timeslotId)

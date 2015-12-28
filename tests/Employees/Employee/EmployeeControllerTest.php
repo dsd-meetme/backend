@@ -44,7 +44,7 @@ class EmployeeControllerTest extends \TestCase
         ];
 
         //correct request
-        $response = $this->actingAs($employee)->json('PUT', '/employees/employee/',$data);
+        $response = $this->actingAs($employee)->json('PUT', '/employees/employee/', $data);
         $response->assertResponseOk();
         $data2 = $data;
         unset($data2['password']);
@@ -53,7 +53,7 @@ class EmployeeControllerTest extends \TestCase
 
         //no correct request
         unset($data['password_confirmation']);
-        $response = $this->actingAs($employee)->json('PUT', '/employees/employee/',$data);
+        $response = $this->actingAs($employee)->json('PUT', '/employees/employee/', $data);
         $response->seeStatusCode(422);
     }
 }

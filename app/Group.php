@@ -45,7 +45,7 @@ class Group extends Model
 
     public function getPlannerNameAttribute()
     {
-        if(is_object($this->planner) && $this->planner->exists)
+        if (is_object($this->planner) && $this->planner->exists)
             return $this->planner->name;
         return null;
     }

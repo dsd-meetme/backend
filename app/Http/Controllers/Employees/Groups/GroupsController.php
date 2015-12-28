@@ -3,11 +3,9 @@
 namespace plunner\Http\Controllers\Employees\Groups;
 
 use Illuminate\Http\Request;
-
 use plunner\Group;
-use plunner\Employee;
-use plunner\Http\Requests;
 use plunner\Http\Controllers\Controller;
+use plunner\Http\Requests;
 
 class GroupsController extends Controller
 {
@@ -26,7 +24,7 @@ class GroupsController extends Controller
     public function index()
     {
         $employee = \Auth::user();
-        return $employee->groups()->with(['meetings'=>function($query) {
+        return $employee->groups()->with(['meetings' => function ($query) {
             $query->where('start_time', '=', NULL);
         }])->get();
         //TODO get only current meetings via a query
@@ -35,7 +33,7 @@ class GroupsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)

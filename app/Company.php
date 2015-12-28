@@ -29,9 +29,9 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
  * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Group[] $groups
  */
 class Company extends Model implements AuthenticatableContract,
-                                    AuthorizableContract,
-                                    CanResetPasswordContract,
-                                    PolicyCheckable
+    AuthorizableContract,
+    CanResetPasswordContract,
+    PolicyCheckable
 {
     use Authenticatable, Authorizable, CanResetPassword;
 
@@ -128,7 +128,7 @@ class Company extends Model implements AuthenticatableContract,
         //TODO implement and test this
         return false;
     }
-    
+
     /**
      * @param \DateTime $from
      * @param \DateTime $to
@@ -142,8 +142,8 @@ class Company extends Model implements AuthenticatableContract,
             ->where('calendars.enabled', '=', '1')
             ->where('timeslots.time_start', '>=', $from)
             ->where('timeslots.time_end', '<=', $to)
-            ->where('employees.company_id','=', $this->id)
-            ->select('employees.id','timeslots.time_start','timeslots.time_end')
+            ->where('employees.company_id', '=', $this->id)
+            ->select('employees.id', 'timeslots.time_start', 'timeslots.time_end')
             ->get();
     }
 
@@ -159,9 +159,9 @@ class Company extends Model implements AuthenticatableContract,
             ->join('meeting_timeslots', 'meetings.id', '=', 'meeting_timeslots.meeting_id')
             ->where('meeting_timeslots.time_start', '>=', $from)
             ->where('meeting_timeslots.time_end', '<=', $to)
-            ->where('groups.company_id','=', $this->id)
-            ->where('meetings.start_time','=', NULL)
-            ->select('meetings.id', 'meetings.duration','meeting_timeslots.time_start','meeting_timeslots.time_end')
+            ->where('groups.company_id', '=', $this->id)
+            ->where('meetings.start_time', '=', NULL)
+            ->select('meetings.id', 'meetings.duration', 'meeting_timeslots.time_start', 'meeting_timeslots.time_end')
             ->get();
     }
 
@@ -178,8 +178,8 @@ class Company extends Model implements AuthenticatableContract,
             ->join('employees', 'employee_group.employee_id', '=', 'employees.id')
             ->whereIn('employees.id', $users)
             ->whereIn('meetings.id', $meetings)
-            ->where('groups.company_id','=', $this->id) //this is not needed
-            ->where('employees.company_id','=', $this->id) //this is not needed
+            ->where('groups.company_id', '=', $this->id)//this is not needed
+            ->where('employees.company_id', '=', $this->id)//this is not needed
             ->select('employees.id as employee_id', 'meetings.id as meeting_id')
             ->get();
     }

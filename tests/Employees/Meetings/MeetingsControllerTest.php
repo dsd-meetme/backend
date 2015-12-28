@@ -50,7 +50,7 @@ class MeetingsControllerTest extends \TestCase
     {
         $meeting_id = $this->employee->meetings->first()->id;
         $response = $this->actingAs($this->employee)
-            ->json('GET', '/employees/meetings/'.$meeting_id);
+            ->json('GET', '/employees/meetings/' . $meeting_id);
 
         $response->assertResponseOk();
         $response->seeJsonEquals($this->employee->meetings()->first()->toArray());
@@ -62,7 +62,7 @@ class MeetingsControllerTest extends \TestCase
         $test_group = $test_company->groups()->has('meetings')->firstOrFail();
         $test_meeting = $test_group->meetings()->firstOrFail();
         $response = $this->actingAs($this->employee)
-            ->json('GET', '/employees/meetings/'.$test_meeting->id);
+            ->json('GET', '/employees/meetings/' . $test_meeting->id);
         $response->seeStatusCode(403);
     }
 }

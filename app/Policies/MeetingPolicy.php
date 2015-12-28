@@ -39,6 +39,16 @@ class MeetingPolicy
      * @param Meeting $Meeting
      * @return bool
      */
+    private function userCheck(PolicyCheckable $policyCheckable, Meeting $Meeting)
+    {
+        return $policyCheckable->verifyMeeting($Meeting);
+    }
+
+    /**
+     * @param PolicyCheckable $policyCheckable
+     * @param Meeting $Meeting
+     * @return bool
+     */
     public function store(PolicyCheckable $policyCheckable, Meeting $Meeting)
     {
         return $this->userCheck($policyCheckable, $Meeting);
@@ -73,15 +83,5 @@ class MeetingPolicy
     public function destroy(PolicyCheckable $policyCheckable, Meeting $Meeting)
     {
         return $this->userCheck($policyCheckable, $Meeting);
-    }
-
-    /**
-     * @param PolicyCheckable $policyCheckable
-     * @param Meeting $Meeting
-     * @return bool
-     */
-    private function userCheck(PolicyCheckable $policyCheckable, Meeting $Meeting)
-    {
-        return $policyCheckable->verifyMeeting($Meeting);
     }
 }

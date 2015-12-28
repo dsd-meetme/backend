@@ -2,7 +2,6 @@
 
 namespace plunner\Http\Requests\Companies\Groups;
 
-use plunner\Company;
 use plunner\Http\Requests\Request;
 
 /**
@@ -32,7 +31,7 @@ class EmployeeRequest extends Request
     public function rules()
     {
         return [
-            'id' => 'required|array|exists:employees,id,company_id,'.$this->user()->id,
+            'id' => 'required|array|exists:employees,id,company_id,' . $this->user()->id,
         ];
     }
 }

@@ -23,7 +23,7 @@ class TimeslotsControllerTest extends TestCase
          */
         $employee = \plunner\Employee::findOrFail(1);
         $calendar = $employee->calendars()->firstOrFail();
-        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/'.$calendar->id.'/timeslots');
+        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/' . $calendar->id . '/timeslots');
         $response->assertResponseOk();
         $response->seeJsonEquals($calendar->timeslots->toArray());
     }
@@ -35,7 +35,7 @@ class TimeslotsControllerTest extends TestCase
          */
         $employee = \plunner\Employee::findOrFail(1);
         $calendar = $employee->calendars()->firstOrFail();
-        $response = $this->json('GET', '/employees/calendars/'.$calendar->id.'/timeslots');
+        $response = $this->json('GET', '/employees/calendars/' . $calendar->id . '/timeslots');
         $response->seeStatusCode(401);
     }
 
@@ -52,7 +52,7 @@ class TimeslotsControllerTest extends TestCase
         $calendar = $employee->calendars()->firstOrFail();
 
         //correct request
-        $response = $this->actingAs($employee)->json('POST', '/employees/calendars/'.$calendar->id.'/timeslots',$data);
+        $response = $this->actingAs($employee)->json('POST', '/employees/calendars/' . $calendar->id . '/timeslots', $data);
         $response->assertResponseOk();
         $response->seeJson($data);
     }
@@ -64,20 +64,20 @@ class TimeslotsControllerTest extends TestCase
         $timeslot = $calendar->timeslots()->firstOrFail();
 
         //timeslot exists
-        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/'.$calendar->id.'/timeslots/'.$timeslot->id);
+        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/' . $calendar->id . '/timeslots/' . $timeslot->id);
         $response->assertResponseOk();
         $response->seeJsonEquals($timeslot->toArray());
 
         //remove
-        $response = $this->actingAs($employee)->json('DELETE', '/employees/calendars/'.$calendar->id.'/timeslots/'.$timeslot->id);
+        $response = $this->actingAs($employee)->json('DELETE', '/employees/calendars/' . $calendar->id . '/timeslots/' . $timeslot->id);
         $response->assertResponseOk();
 
         //timeslot doesn't exist
-        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/'.$calendar->id.'/timeslots/'.$timeslot->id);
+        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/' . $calendar->id . '/timeslots/' . $timeslot->id);
         $response->seeStatusCode(404);
 
         //I cannot remove a removed timeslot
-        $response = $this->actingAs($employee)->json('DELETE', '/employees/calendars/'.$calendar->id.'/timeslots/'.$timeslot->id);
+        $response = $this->actingAs($employee)->json('DELETE', '/employees/calendars/' . $calendar->id . '/timeslots/' . $timeslot->id);
         $response->seeStatusCode(404);
     }
 
@@ -92,14 +92,14 @@ class TimeslotsControllerTest extends TestCase
         ];
 
         //correct request
-        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/'.$calendar->id.'/timeslots/'.$timeslot->id,$data);
+        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/' . $calendar->id . '/timeslots/' . $timeslot->id, $data);
         $response->assertResponseOk();
         $response->seeJson($data);
 
 
         //same timeslot update
         //correct request
-        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/'.$calendar->id.'/timeslots/'.$timeslot->id,$data);
+        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/' . $calendar->id . '/timeslots/' . $timeslot->id, $data);
         $response->assertResponseOk();
         $response->seeJson($data);
     }
@@ -111,7 +111,7 @@ class TimeslotsControllerTest extends TestCase
         $calendar = $employee->Calendars()->firstOrFail();
         $timeslot = $calendar->timeslots()->firstOrFail();
 
-        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/'.$calendar->id.'/timeslots/'.$timeslot->id);
+        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/' . $calendar->id . '/timeslots/' . $timeslot->id);
         $response->assertResponseOk();
         $response->seeJsonEquals($timeslot->toArray());
     }
@@ -120,9 +120,9 @@ class TimeslotsControllerTest extends TestCase
     {
         $employee = \plunner\Employee::findOrFail(1);
         $calendar = $employee->Calendars()->firstOrFail();
-        $timeslot = \plunner\Timeslot::whereNotIn('calendar_id',$employee->calendars()->get()->pluck('id'))->firstOrFail();
+        $timeslot = \plunner\Timeslot::whereNotIn('calendar_id', $employee->calendars()->get()->pluck('id'))->firstOrFail();
 
-        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/'.$calendar->id.'/timeslots/'.$timeslot->id);
+        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/' . $calendar->id . '/timeslots/' . $timeslot->id);
         $response->seeStatusCode(403);
     }
 }

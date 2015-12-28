@@ -39,6 +39,16 @@ class EmployeePolicy
      * @param Employee $employee
      * @return bool
      */
+    private function userCheck(PolicyCheckable $policyCheckable, Employee $employee)
+    {
+        return $policyCheckable->verifyEmployee($employee);
+    }
+
+    /**
+     * @param PolicyCheckable $policyCheckable
+     * @param Employee $employee
+     * @return bool
+     */
     public function store(PolicyCheckable $policyCheckable, Employee $employee)
     {
         return $this->userCheck($policyCheckable, $employee);
@@ -72,15 +82,5 @@ class EmployeePolicy
     public function destroy(PolicyCheckable $policyCheckable, Employee $employee)
     {
         return $this->userCheck($policyCheckable, $employee);
-    }
-
-    /**
-     * @param PolicyCheckable $policyCheckable
-     * @param Employee $employee
-     * @return bool
-     */
-    private function userCheck(PolicyCheckable $policyCheckable, Employee $employee)
-    {
-        return $policyCheckable->verifyEmployee($employee);
     }
 }

@@ -4,10 +4,10 @@ namespace plunner\Http\Controllers\Companies\Auth;
 
 use Illuminate\Http\Request;
 use plunner\Company;
-use Validator;
 use plunner\Http\Controllers\Controller;
 use Tymon\JWTAuth\Support\auth\AuthenticatesAndRegistersUsers;
 use Tymon\JWTAuth\Support\auth\ThrottlesLogins;
+use Validator;
 
 /**
  * Class AuthController
@@ -29,7 +29,7 @@ class AuthController extends Controller
     |
     */
 
-    use AuthenticatesAndRegistersUsers{
+    use AuthenticatesAndRegistersUsers {
         postLogin as postLoginOriginal;
     }
     use ThrottlesLogins;
@@ -40,7 +40,7 @@ class AuthController extends Controller
      * cn = company normal
      * @var array
      */
-    protected $custom = ['mode'=>'cn'];
+    protected $custom = ['mode' => 'cn'];
 
     /**
      * Create a new authentication controller instance.
@@ -52,10 +52,22 @@ class AuthController extends Controller
         config(['jwt.user' => \plunner\Company::class]);
     }
 
+    public function postLogin(Request $request)
+    {
+        //remember me
+        $this->validate($request, ['remember' => 'boolean']);//TODO insert required
+        if ($request->input('remember', false)) {
+            config(['jwt.ttl' => '43200']); //30 days
+            $this->custom = array_merge($this->custom, ['remember' => 'true']);
+        } else
+            $this->custom = array_merge($this->custom, ['remember' => 'false']);
+        return $this->postLoginOriginal($request);
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param  array $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
@@ -70,7 +82,7 @@ class AuthController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
+     * @param  array $data
      * @return Company
      */
     protected function create(array $data)
@@ -80,19 +92,6 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
-    }
-
-    public function postLogin(Request $request)
-    {
-        //remember me
-        $this->validate($request, ['remember' => 'boolean']);//TODO insert required
-        if($request->input('remember', false))
-        {
-            config(['jwt.ttl' =>'43200']); //30 days
-            $this->custom = array_merge($this->custom, ['remember'=>'true']);
-        }else
-            $this->custom = array_merge($this->custom, ['remember'=>'false']);
-        return $this->postLoginOriginal($request);
     }
 
 

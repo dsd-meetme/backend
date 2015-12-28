@@ -2,10 +2,9 @@
 
 namespace ConsoleTests\Optimise;
 
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use plunner\Console\Commands\Optimise\Optimise;
-use plunner\Console\Commands\Optimise\Solver;
-use Illuminate\Console\Scheduling\Schedule;
 
 class OptimiseTest extends \TestCase
 {
@@ -15,15 +14,15 @@ class OptimiseTest extends \TestCase
     //This is teh same model of SolverTest
     public function testSimpleModel()
     {
-        if(!$this->doConsole())
+        if (!$this->doConsole())
             return;
         $company = factory(\plunner\Company::class)->create();
         $optimise = new Optimise($company, new Schedule(), \App::getInstance());
         $optimise->setTimeSlots(4);
         $optimise->setMaxTimeSlots(4);
-        $employees = factory(\plunner\Employee::class, 3)->make()->each(function ($employee) use($company){
+        $employees = factory(\plunner\Employee::class, 3)->make()->each(function ($employee) use ($company) {
             $company->employees()->save($employee);
-            $employee->calendars()->save(factory(\plunner\Calendar::class)->make(['enabled'=>true]));
+            $employee->calendars()->save(factory(\plunner\Calendar::class)->make(['enabled' => true]));
         });
 
         $group1 = factory(\plunner\Group::class)->make();
@@ -34,19 +33,19 @@ class OptimiseTest extends \TestCase
         $employeeNo = $employees->pop();
         $group2->employees()->attach($employees->pluck('id')->toArray());
 
-        $meeting1 = factory(\plunner\Meeting::class)->make(['duration'=>1*Optimise::TIME_SLOT_DURATION]);
+        $meeting1 = factory(\plunner\Meeting::class)->make(['duration' => 1 * Optimise::TIME_SLOT_DURATION]);
         $group1->meetings()->save($meeting1);
-        $meeting2 = factory(\plunner\Meeting::class)->make(['duration'=>3*Optimise::TIME_SLOT_DURATION]);
+        $meeting2 = factory(\plunner\Meeting::class)->make(['duration' => 3 * Optimise::TIME_SLOT_DURATION]);
         $group2->meetings()->save($meeting2);
 
         $now = new \DateTime();
-        $timeslots1 = ['time_start' => clone $now, 'time_end'=>self::addTimeInterval(clone $now)];
-        $timeslots2 = ['time_start' => clone $now, 'time_end'=>self::addTimeInterval(clone $now, 3)];
+        $timeslots1 = ['time_start' => clone $now, 'time_end' => self::addTimeInterval(clone $now)];
+        $timeslots2 = ['time_start' => clone $now, 'time_end' => self::addTimeInterval(clone $now, 3)];
         $meeting1->timeslots()->create($timeslots1);
         $meeting2->timeslots()->create($timeslots2);
-        $timeslotsE = ['time_start' => self::addTimeInterval(clone $now, 3), 'time_end'=>self::addTimeInterval(clone $now, $optimise->getTimeSlots())];
-        $timeslotsENo = ['time_start' => self::addTimeInterval(clone $now, 1), 'time_end'=>self::addTimeInterval(clone $now, $optimise->getTimeSlots())];
-        $employees->each(function($employee) use ($timeslotsE){
+        $timeslotsE = ['time_start' => self::addTimeInterval(clone $now, 3), 'time_end' => self::addTimeInterval(clone $now, $optimise->getTimeSlots())];
+        $timeslotsENo = ['time_start' => self::addTimeInterval(clone $now, 1), 'time_end' => self::addTimeInterval(clone $now, $optimise->getTimeSlots())];
+        $employees->each(function ($employee) use ($timeslotsE) {
             $employee->calendars()->first()->timeslots()->create($timeslotsE);
         });
         $employeeNo->calendars()->first()->timeslots()->create($timeslotsENo);
@@ -55,15 +54,15 @@ class OptimiseTest extends \TestCase
         $optimise->optimise();
 
         $x = [];
-        foreach($employees as $employee)
-            $x[$employee->id] = [$meeting1->id=>0,$meeting2->id=>1];
-        $x[$employeeNo->id] = [$meeting1->id=>1,$meeting2->id=>0];
+        foreach ($employees as $employee)
+            $x[$employee->id] = [$meeting1->id => 0, $meeting2->id => 1];
+        $x[$employeeNo->id] = [$meeting1->id => 1, $meeting2->id => 0];
 
         $this->assertEquals($x, $optimise->getSolver()->getXResults());
 
         $y = [];
-        $y[$meeting1->id] = [1=>1,0,0,0];
-        $y[$meeting2->id] = [1=>1,0,0,0];
+        $y[$meeting1->id] = [1 => 1, 0, 0, 0];
+        $y[$meeting2->id] = [1 => 1, 0, 0, 0];
 
         $this->assertEquals($y, $optimise->getSolver()->getYResults());
 
@@ -72,7 +71,7 @@ class OptimiseTest extends \TestCase
         $optimise->save();
         $this->assertEquals($now, new \DateTime($meeting1->fresh()->start_time));
         $this->assertEquals($now, new \DateTime($meeting2->fresh()->start_time));
-        foreach($employees as $employee)
+        foreach ($employees as $employee)
             $this->assertEquals([$meeting2->id], $employee->meetings->pluck('id')->toArray());
         $this->assertEquals([$meeting1->id], $employeeNo->meetings->pluck('id')->toArray());
     }
@@ -83,8 +82,8 @@ class OptimiseTest extends \TestCase
      * @param Int $multiplier
      * @return \DateTime
      */
-    static private function addTimeInterval(\DateTime $date, $multiplier=1)
+    static private function addTimeInterval(\DateTime $date, $multiplier = 1)
     {
-        return $date->add(new \DateInterval('PT'.Optimise::TIME_SLOT_DURATION*$multiplier.'S'));
+        return $date->add(new \DateInterval('PT' . Optimise::TIME_SLOT_DURATION * $multiplier . 'S'));
     }
 }

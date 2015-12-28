@@ -3,13 +3,13 @@
 namespace plunner\Http\Controllers\Employees\Auth;
 
 use Illuminate\Http\Request;
+use Log;
 use plunner\Company;
 use plunner\employee;
-use Validator;
 use plunner\Http\Controllers\Controller;
 use Tymon\JWTAuth\Support\auth\AuthenticatesAndRegistersUsers;
 use Tymon\JWTAuth\Support\auth\ThrottlesLogins;
-use Log;
+use Validator;
 
 /**
  * Class AuthController
@@ -31,7 +31,7 @@ class AuthController extends Controller
     |
     */
 
-    use AuthenticatesAndRegistersUsers{
+    use AuthenticatesAndRegistersUsers {
         postRegister as postRegisterOriginal;
         postLogin as postLoginOriginal;
     }
@@ -43,7 +43,7 @@ class AuthController extends Controller
      * en = employee normal
      * @var array
      */
-    protected $custom = ['mode'=>'en'];
+    protected $custom = ['mode' => 'en'];
 
     /**
      * @var company
@@ -60,43 +60,12 @@ class AuthController extends Controller
         config(['jwt.user' => \plunner\Employee::class]);
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => 'required|min:1|max:255',
-            'email' => 'required|email|max:255|unique:employees,email,NULL,id,company_id,'.$this->company->id,
-            'password' => 'required|confirmed|min:6',
-        ]);
-    }
-
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return Company
-     */
-    protected function create(array $data)
-    {
-        return $this->company->save(new employee([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]));
-    }
-
     public function postRegister(Request $request)
     {
         $this->validate($request, ['company' => 'required|exists:companies,name']);
         $this->company = Company::whereName($request->input('company'))->firstOrFail();
         return $this->postRegisterOriginal($request);
     }
-
 
     public function postLogin(Request $request)
     {
@@ -107,13 +76,42 @@ class AuthController extends Controller
 
         //remember me
         $this->validate($request, ['remember' => 'boolean']);//TODO insert required
-        if($request->input('remember', false))
-        {
-            config(['jwt.ttl' =>'43200']); //30 days
-            $this->custom = array_merge($this->custom, ['remember'=>'true']);
-        }else
-            $this->custom = array_merge($this->custom, ['remember'=>'false']);
+        if ($request->input('remember', false)) {
+            config(['jwt.ttl' => '43200']); //30 days
+            $this->custom = array_merge($this->custom, ['remember' => 'true']);
+        } else
+            $this->custom = array_merge($this->custom, ['remember' => 'false']);
 
         return $this->postLoginOriginal($request);
+    }
+
+    /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param  array $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => 'required|min:1|max:255',
+            'email' => 'required|email|max:255|unique:employees,email,NULL,id,company_id,' . $this->company->id,
+            'password' => 'required|confirmed|min:6',
+        ]);
+    }
+
+    /**
+     * Create a new user instance after a valid registration.
+     *
+     * @param  array $data
+     * @return Company
+     */
+    protected function create(array $data)
+    {
+        return $this->company->save(new employee([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+        ]));
     }
 }

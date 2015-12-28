@@ -3,13 +3,11 @@
 namespace plunner\Http\Controllers\Employees\Planners;
 
 use Illuminate\Http\Request;
-
+use plunner\Group;
+use plunner\Http\Controllers\Controller;
 use plunner\Http\Requests;
 use plunner\Http\Requests\Employees\Meeting\MeetingRequest;
-use plunner\Http\Controllers\Controller;
-
 use plunner\Meeting;
-use plunner\Group;
 
 class MeetingsController extends Controller
 {
@@ -23,7 +21,7 @@ class MeetingsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     *  @param int $groupId
+     * @param int $groupId
      * @return mixed
      */
     public function index($groupId)

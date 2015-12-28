@@ -38,6 +38,16 @@ class CalendarPolicy
      * @param Calendar $calendar
      * @return bool
      */
+    private function userCheck(PolicyCheckable $policyCheckable, Calendar $calendar)
+    {
+        return $policyCheckable->verifyCalendar($calendar);
+    }
+
+    /**
+     * @param PolicyCheckable $policyCheckable
+     * @param Calendar $calendar
+     * @return bool
+     */
     public function store(PolicyCheckable $policyCheckable, Calendar $calendar)
     {
         return $this->userCheck($policyCheckable, $calendar);
@@ -72,15 +82,5 @@ class CalendarPolicy
     public function destroy(PolicyCheckable $policyCheckable, Calendar $calendar)
     {
         return $this->userCheck($policyCheckable, $calendar);
-    }
-
-    /**
-     * @param PolicyCheckable $policyCheckable
-     * @param Calendar $calendar
-     * @return bool
-     */
-    private function userCheck(PolicyCheckable $policyCheckable, Calendar $calendar)
-    {
-        return $policyCheckable->verifyCalendar($calendar);
     }
 }

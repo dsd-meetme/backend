@@ -21,7 +21,7 @@ class VerifyCsrfToken extends BaseVerifier
     {
 
         // Don't validate CSRF when testing.
-        if(env('APP_ENV') === 'testing') {
+        if (env('APP_ENV') === 'testing') {
             return true;
         }
 

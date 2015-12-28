@@ -45,17 +45,17 @@ class CalendarsControllerTest extends TestCase
         ];
 
         //correct request
-        $response = $this->actingAs($employee)->json('POST', '/employees/calendars/',$data);
+        $response = $this->actingAs($employee)->json('POST', '/employees/calendars/', $data);
         $response->assertResponseOk();
         $response->seeJson($data);
 
         //error request
-        $response = $this->actingAs($employee)->json('POST', '/employees/calendars/',[]);
+        $response = $this->actingAs($employee)->json('POST', '/employees/calendars/', []);
         $response->seeStatusCode(422);
 
         //force field
         $data['employee_id'] = 2;
-        $response = $this->actingAs($employee)->json('POST', '/employees/calendars/',$data);
+        $response = $this->actingAs($employee)->json('POST', '/employees/calendars/', $data);
         $response->assertResponseOk();
         $json = $response->response->content();
         $json = json_decode($json, true);
@@ -72,41 +72,41 @@ class CalendarsControllerTest extends TestCase
         $id = $calendar->id;
 
         //calendar exists
-        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/'.$id);
+        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/' . $id);
         $response->assertResponseOk();
         $response->seeJsonEquals($calendar->toArray());
 
         //remove
-        $response = $this->actingAs($employee)->json('DELETE', '/employees/calendars/'.$id);
+        $response = $this->actingAs($employee)->json('DELETE', '/employees/calendars/' . $id);
         $response->assertResponseOk();
 
         //calendar doesn't exist
-        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/'.$id);
+        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/' . $id);
         $response->seeStatusCode(404);
 
         //I cannot remove a removed calendar
-        $response = $this->actingAs($employee)->json('DELETE', '/employees/calendars/'.$id);
+        $response = $this->actingAs($employee)->json('DELETE', '/employees/calendars/' . $id);
         $response->seeStatusCode(404);
     }
 
     public function testUpdateNoCaldav()
     {
         $employee = \plunner\Employee::findOrFail(1);
-        $calendar = $employee->Calendars()->has('caldav','=','0')->firstOrFail();//TODO fix thsi with the new seeds
+        $calendar = $employee->Calendars()->has('caldav', '=', '0')->firstOrFail();//TODO fix thsi with the new seeds
         $data = [
             'name' => 'test',
             'enabled' => '1',
         ];
 
         //correct request
-        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/'.$calendar->id,$data);
+        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/' . $calendar->id, $data);
         $response->assertResponseOk();
         $response->seeJson($data);
 
 
         //same calendar update
         //correct request
-        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/'.$calendar->id,$data);
+        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/' . $calendar->id, $data);
         $response->assertResponseOk();
         $response->seeJson($data);
     }
@@ -116,7 +116,7 @@ class CalendarsControllerTest extends TestCase
         $employee = \plunner\Employee::findOrFail(1);
         $calendar = $employee->Calendars()->with('caldav')->firstOrFail();
 
-        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/'.$calendar->id);
+        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/' . $calendar->id);
         $response->assertResponseOk();
         $response->seeJsonEquals($calendar->toArray());
     }
@@ -124,9 +124,9 @@ class CalendarsControllerTest extends TestCase
     public function testShowNotMine()
     {
         $employee = \plunner\Employee::findOrFail(1);
-        $calendar = \plunner\Calendar::where('employee_id','<>', $employee->id)->firstOrFail();
+        $calendar = \plunner\Calendar::where('employee_id', '<>', $employee->id)->firstOrFail();
 
-        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/'.$calendar->id);
+        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/' . $calendar->id);
         $response->seeStatusCode(403);
     }
 
@@ -146,7 +146,7 @@ class CalendarsControllerTest extends TestCase
         ];
 
         //correct request
-        $response = $this->actingAs($employee)->json('POST', '/employees/calendars/caldav',$data);
+        $response = $this->actingAs($employee)->json('POST', '/employees/calendars/caldav', $data);
         $response->assertResponseOk();
         $response->seeJson([
             'name' => 'test',
@@ -155,14 +155,14 @@ class CalendarsControllerTest extends TestCase
 
         //error request NO PASSWORD
         unset($data['password']);
-        $response = $this->actingAs($employee)->json('POST', '/employees/calendars/caldav',$data);
+        $response = $this->actingAs($employee)->json('POST', '/employees/calendars/caldav', $data);
         $response->seeStatusCode(422);
     }
 
     public function testUpdateCaldav()
     {
         $employee = \plunner\Employee::findOrFail(1);
-        $calendar = factory(\plunner\Calendar::class)->make(['enabled'=>true]);
+        $calendar = factory(\plunner\Calendar::class)->make(['enabled' => true]);
         $employee->calendars()->save($calendar);
         $caldav = factory(\plunner\Caldav::class)->make();
         $calendar->caldav()->save($caldav);
@@ -177,7 +177,7 @@ class CalendarsControllerTest extends TestCase
         ];
 
         //correct request
-        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/'.$calendar->id,$data);
+        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/' . $calendar->id, $data);
         $response->assertResponseOk();
         $response->seeJson([
             'name' => 'test',
@@ -187,7 +187,7 @@ class CalendarsControllerTest extends TestCase
 
         //same calendar update
         //correct request
-        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/'.$calendar->id,$data);
+        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/' . $calendar->id, $data);
         $response->assertResponseOk();
         $response->seeJson([
             'name' => 'test',
@@ -204,7 +204,7 @@ class CalendarsControllerTest extends TestCase
             'url' => 'http://test.com',
             'username' => 'test',
             'calendar_name' => 'test',
-        ],$caldav);
+        ], $caldav);
     }
 
     public function testGetExternalCalendars()
@@ -217,8 +217,8 @@ class CalendarsControllerTest extends TestCase
         ];
 
         //error request
-        $response = $this->actingAs($employee)->json('POST', '/employees/calendars/calendars',$data);
+        $response = $this->actingAs($employee)->json('POST', '/employees/calendars/calendars', $data);
         $response->seeStatusCode(422);
-        $response->seeJson(['error'=>"Invalid URL: 'http://test.com'"]);
+        $response->seeJson(['error' => "Invalid URL: 'http://test.com'"]);
     }
 }

@@ -22,24 +22,17 @@ class PlannersMeetingsTest extends \TestCase
         $this->group = $this->employee->groups->first();
         $this->planner = $this->group->planner;
 
-        $this->data= [
+        $this->data = [
             'title' => 'Test meeting',
             'description' => 'Errare humanum est!',
             'duration' => 120
         ];
     }
 
-    private function getNonExistingMeetingId()
-    {
-        $test_meeting = \plunner\Meeting::orderBy('id', 'desc')->first();
-        $non_existing_meeting_id = $test_meeting->id + 1;
-        return $non_existing_meeting_id;
-    }
-
     public function testCreateMeeting()
     {
         $response = $this->actingAs($this->planner)
-            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);
+            ->json('POST', 'employees/planners/groups/' . $this->group->id . '/meetings', $this->data);
 
         $response->assertResponseOk();
         $response->seeJson($this->data);
@@ -48,7 +41,7 @@ class PlannersMeetingsTest extends \TestCase
     public function testIndexAllMeetings()
     {
         $response = $this->actingAs($this->planner)
-            ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings');
+            ->json('GET', 'employees/planners/groups/' . $this->group->id . '/meetings');
 
         $response->assertResponseOk();
         $response->seeJsonEquals($this->group->meetings->toArray());
@@ -56,7 +49,7 @@ class PlannersMeetingsTest extends \TestCase
 
     public function testErrorIndexNoMeetings()
     {
-        $response = $this->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings');
+        $response = $this->json('GET', 'employees/planners/groups/' . $this->group->id . '/meetings');
 
         $response->seeStatusCode(401);
     }
@@ -64,11 +57,11 @@ class PlannersMeetingsTest extends \TestCase
     public function testShowMeeting()
     {
         $this->actingAs($this->planner)
-            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);
+            ->json('POST', 'employees/planners/groups/' . $this->group->id . '/meetings', $this->data);
         $meeting_id = $this->group->meetings->first()->id;
 
         $response = $this->actingAs($this->planner)
-            ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$meeting_id);
+            ->json('GET', 'employees/planners/groups/' . $this->group->id . '/meetings/' . $meeting_id);
         $response->assertResponseOk();
         $response->seeJsonEquals($this->group->meetings()->with('group')->first()->toArray());
     }
@@ -78,8 +71,15 @@ class PlannersMeetingsTest extends \TestCase
         $non_existing_meeting_id = $this->getNonExistingMeetingId();
 
         $response = $this->actingAs($this->planner)
-            ->json('GET', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$non_existing_meeting_id);
+            ->json('GET', 'employees/planners/groups/' . $this->group->id . '/meetings/' . $non_existing_meeting_id);
         $response->seeStatusCode(404);
+    }
+
+    private function getNonExistingMeetingId()
+    {
+        $test_meeting = \plunner\Meeting::orderBy('id', 'desc')->first();
+        $non_existing_meeting_id = $test_meeting->id + 1;
+        return $non_existing_meeting_id;
     }
 
     public function testShowOtherGroupsMeeting()
@@ -88,18 +88,18 @@ class PlannersMeetingsTest extends \TestCase
         $other_groups_meeting_id = $other_group->meetings()->first()->id;
 
         $response = $this->actingAs($this->planner)
-            ->json('GET', 'employees/planners/groups/'.$other_group->id.'/meetings/'.$other_groups_meeting_id);
+            ->json('GET', 'employees/planners/groups/' . $other_group->id . '/meetings/' . $other_groups_meeting_id);
         $response->seeStatusCode(403);
     }
 
     public function testPlannerDeleteMeeting()
     {
         $this->actingAs($this->planner)
-            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);
+            ->json('POST', 'employees/planners/groups/' . $this->group->id . '/meetings', $this->data);
         $meeting_id = $this->group->meetings()->first()->id;
 
         $response = $this->actingAs($this->planner)
-            ->json('DELETE', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$meeting_id);
+            ->json('DELETE', 'employees/planners/groups/' . $this->group->id . '/meetings/' . $meeting_id);
         $response->assertResponseOk();
     }
 
@@ -110,7 +110,7 @@ class PlannersMeetingsTest extends \TestCase
         $meeting_id = $test_group->meetings()->first()->id;
 
         $response = $this->actingAs($test_employee)
-            ->json('DELETE', 'employees/planners/groups/'.$test_group->id.'/meetings/'.$meeting_id);
+            ->json('DELETE', 'employees/planners/groups/' . $test_group->id . '/meetings/' . $meeting_id);
         $response->seeStatusCode(404);
     }
 
@@ -118,7 +118,7 @@ class PlannersMeetingsTest extends \TestCase
     {
         $group = \plunner\Group::has('employees', '>=', '2')
             ->whereHas('employees', function ($query) {
-            $query->whereNotIn('id', \plunner\Planner::all()->pluck('id')); //TODO do in a better way less expensive
+                $query->whereNotIn('id', \plunner\Planner::all()->pluck('id')); //TODO do in a better way less expensive
             })->firstOrFail();
         $employee = $group->employees()->whereNotIn('id', \plunner\Planner::all()->pluck('id'))->firstOrFail();
         return [$group, $employee];
@@ -129,7 +129,7 @@ class PlannersMeetingsTest extends \TestCase
         $non_existing_meeting_id = $this->getNonExistingMeetingId();
 
         $response = $this->actingAs($this->planner)
-            ->json('DELETE', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$non_existing_meeting_id);
+            ->json('DELETE', 'employees/planners/groups/' . $this->group->id . '/meetings/' . $non_existing_meeting_id);
         $response->seeStatusCode(404);
     }
 
@@ -139,22 +139,31 @@ class PlannersMeetingsTest extends \TestCase
         $other_groups_meeting_id = $other_group->meetings()->first()->id;
 
         $response = $this->actingAs($this->planner)
-            ->json('DELETE', 'employees/planners/groups/'.$other_group->id.'/meetings/'.$other_groups_meeting_id);
+            ->json('DELETE', 'employees/planners/groups/' . $other_group->id . '/meetings/' . $other_groups_meeting_id);
         $response->seeStatusCode(403);
     }
 
     public function testUpdateExistingMeeting()
     {
         $this->actingAs($this->planner)
-            ->json('POST', 'employees/planners/groups/'.$this->group->id.'/meetings', $this->data);
+            ->json('POST', 'employees/planners/groups/' . $this->group->id . '/meetings', $this->data);
         $meeting = $this->group->meetings()->first();
 
         $test_data = $this->getUpdateData();
 
         $response = $this->actingAs($this->planner)
-            ->json('PUT', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$meeting->id, $test_data);
+            ->json('PUT', 'employees/planners/groups/' . $this->group->id . '/meetings/' . $meeting->id, $test_data);
         $response->assertResponseOk();
         $response->seeJson($test_data);
+    }
+
+    private function getUpdateData()
+    {
+        return [
+            'title' => 'Different title',
+            'description' => 'Different description!',
+            'duration' => 60
+        ];
     }
 
     public function testEmployeeUpdateExistingMeeting()
@@ -166,7 +175,7 @@ class PlannersMeetingsTest extends \TestCase
         $test_data = $this->getUpdateData();
 
         $response = $this->actingAs($test_employee)
-            ->json('PUT', 'employees/planners/groups/'.$test_group->id.'/meetings/'.$meeting->id, $test_data);
+            ->json('PUT', 'employees/planners/groups/' . $test_group->id . '/meetings/' . $meeting->id, $test_data);
         $response->seeStatusCode(404);
     }
 
@@ -177,7 +186,7 @@ class PlannersMeetingsTest extends \TestCase
         $test_data = $this->getUpdateData();
 
         $response = $this->actingAs($this->planner)
-            ->json('PUT', 'employees/planners/groups/'.$this->group->id.'/meetings/'.$non_existing_meeting_id, $test_data);
+            ->json('PUT', 'employees/planners/groups/' . $this->group->id . '/meetings/' . $non_existing_meeting_id, $test_data);
         $response->seeStatusCode(404);
     }
 
@@ -189,16 +198,7 @@ class PlannersMeetingsTest extends \TestCase
         $test_data = $this->getUpdateData();
 
         $response = $this->actingAs($this->planner)
-            ->json('PUT', 'employees/planners/groups/'.$other_group->id.'/meetings/'.$other_groups_meeting_id, $test_data);
+            ->json('PUT', 'employees/planners/groups/' . $other_group->id . '/meetings/' . $other_groups_meeting_id, $test_data);
         $response->seeStatusCode(403);
-    }
-
-    private function getUpdateData()
-    {
-        return [
-            'title' => 'Different title',
-            'description' => 'Different description!',
-            'duration' => 60
-        ];
     }
 }

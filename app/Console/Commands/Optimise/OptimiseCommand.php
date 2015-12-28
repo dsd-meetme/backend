@@ -32,8 +32,8 @@ class OptimiseCommand extends Command
     protected $description = 'Optimise meetings';
 
     /**
-    * @var Schedule laravel schedule object needed to perform command in background
-    */
+     * @var Schedule laravel schedule object needed to perform command in background
+     */
     private $schedule;
 
     /**
@@ -58,24 +58,35 @@ class OptimiseCommand extends Command
         //TODO insert a timeout
         //TODO try...catch with destruct
         $companyId = $this->argument('companyId');
-        if(is_numeric($companyId))
+        if (is_numeric($companyId))
             $this->makeForeground(Company::findOrFail($companyId));
         else
             $this->syncAll();
     }
 
+    /**
+     * optimise company foreground
+     * @param Company $company
+     */
+    private function makeForeground(Company $company)
+    {
+        $this->info('Optimisation company ' . $company->id . ' started');
+        (new Optimise($company, $this->schedule, $this->laravel))->optimise()->save();
+        $this->info('Optimisation ' . $company->id . ' completed');
+    }
+
     private function syncAll()
     {
         $calendars = Caldav::all();
-        if($this->option('background')) {
+        if ($this->option('background')) {
             \Log::debug(self::BACKGROUND_MOD_MEX);
             $this->info(self::BACKGROUND_MOD_MEX);
             foreach ($calendars as $calendar)
                 $this->makeBackground($calendar);
             \Log::debug(self::BACKGROUND_COMPLETED_MEX);
             $this->info(self::BACKGROUND_COMPLETED_MEX);
-        }else
-            foreach($calendars as $calendar)
+        } else
+            foreach ($calendars as $calendar)
                 $this->makeForeground($calendar);
     }
 
@@ -85,19 +96,8 @@ class OptimiseCommand extends Command
      */
     private function makeBackground(Company $company)
     {
-        $event = $this->schedule->command('optimise:meetings '.$company->id)->withoutOverlapping();
-        if($event->isDue($this->laravel))
+        $event = $this->schedule->command('optimise:meetings ' . $company->id)->withoutOverlapping();
+        if ($event->isDue($this->laravel))
             $event->run($this->laravel);
-    }
-
-    /**
-     * optimise company foreground
-     * @param Company $company
-     */
-    private function makeForeground(Company $company)
-    {
-        $this->info('Optimisation company '. $company->id.' started');
-        (new Optimise($company, $this->schedule, $this->laravel))->optimise()->save();
-        $this->info('Optimisation '. $company->id.' completed');
     }
 }

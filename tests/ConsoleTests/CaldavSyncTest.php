@@ -10,7 +10,7 @@ class EmployeesAuthTest extends \TestCase
 
     public function testPerformSyncForeground()
     {
-        if(!$this->doConsole())
+        if (!$this->doConsole())
             return;
         $status = \Artisan::call('sync:caldav');
         $this->assertEquals(0, $status);
@@ -18,7 +18,7 @@ class EmployeesAuthTest extends \TestCase
 
     public function testPerformSyncBackground()
     {
-        if(!$this->doConsole())
+        if (!$this->doConsole())
             return;
         $status = \Artisan::call('sync:caldav', ['--background' => true]);
         $this->assertEquals(0, $status);
@@ -26,7 +26,7 @@ class EmployeesAuthTest extends \TestCase
 
     public function testError()
     {
-        if(!$this->doConsole())
+        if (!$this->doConsole())
             return;
         $company = \plunner\Company::whereEmail('testInit@test.com')->firstOrFail();
         $employee = $company->employees()->whereEmail('testEmp@test.com')->firstOrFail();

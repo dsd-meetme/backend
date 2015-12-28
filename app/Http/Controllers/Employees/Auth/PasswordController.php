@@ -3,10 +3,9 @@
 namespace plunner\Http\Controllers\Employees\Auth;
 
 use Illuminate\Http\Request;
+use plunner\Company;
 use plunner\Http\Controllers\Controller;
 use Tymon\JWTAuth\Support\auth\ResetsPasswords;
-use \plunner\Company;
-use \plunner\Employee;
 
 /**
  * Class PasswordController
@@ -28,8 +27,7 @@ class PasswordController extends Controller
     |
     */
 
-    use ResetsPasswords
-    {
+    use ResetsPasswords {
         postEmail as postEmailOriginal;
         postReset as postResetOriginal;
     }
@@ -38,7 +36,7 @@ class PasswordController extends Controller
      * en = employee normal
      * @var array
      */
-    protected $custom = ['mode'=>'en'];
+    protected $custom = ['mode' => 'en'];
 
     /**
      * @var array

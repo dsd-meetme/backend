@@ -12,10 +12,10 @@ use plunner\MeetingTimeslot;
 use plunner\Policies\CalendarPolicy;
 use plunner\Policies\EmployeePolicy;
 use plunner\Policies\GroupPolicy;
-use plunner\Timeslot;
-use plunner\Policies\TimeslotPolicy;
 use plunner\Policies\MeetingPolicy;
 use plunner\Policies\MeetingTimeslotPolicy;
+use plunner\Policies\TimeslotPolicy;
+use plunner\Timeslot;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -37,7 +37,7 @@ class AuthServiceProvider extends ServiceProvider
     /**
      * Register any application authentication / authorization services.
      *
-     * @param  \Illuminate\Contracts\Auth\Access\Gate  $gate
+     * @param  \Illuminate\Contracts\Auth\Access\Gate $gate
      * @return void
      */
     public function boot(GateContract $gate)

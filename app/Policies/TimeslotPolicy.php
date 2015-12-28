@@ -2,8 +2,8 @@
 
 namespace plunner\Policies;
 
-use plunner\Timeslot;
 use plunner\PolicyCheckable;
+use plunner\Timeslot;
 
 /**
  * Class TimeslotPolicy
@@ -32,6 +32,16 @@ class TimeslotPolicy
     public function index(PolicyCheckable $policyCheckable, Timeslot $timeslot)
     {
         return $this->userCheck($policyCheckable, $timeslot);
+    }
+
+    /**
+     * @param PolicyCheckable $policyCheckable
+     * @param Timeslot $timeslot
+     * @return bool
+     */
+    private function userCheck(PolicyCheckable $policyCheckable, Timeslot $timeslot)
+    {
+        return $policyCheckable->verifyTimeslot($timeslot);
     }
 
     /**
@@ -73,15 +83,5 @@ class TimeslotPolicy
     public function destroy(PolicyCheckable $policyCheckable, Timeslot $timeslot)
     {
         return $this->userCheck($policyCheckable, $timeslot);
-    }
-
-    /**
-     * @param PolicyCheckable $policyCheckable
-     * @param Timeslot $timeslot
-     * @return bool
-     */
-    private function userCheck(PolicyCheckable $policyCheckable, Timeslot $timeslot)
-    {
-        return $policyCheckable->verifyTimeslot($timeslot);
     }
 }

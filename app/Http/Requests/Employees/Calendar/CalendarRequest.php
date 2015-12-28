@@ -25,7 +25,7 @@ class CalendarRequest extends Request
     {
         return [
             'name' => 'required|max:255',
-            'enabled'=>'required|boolean',
+            'enabled' => 'required|boolean',
         ];
     }
 }

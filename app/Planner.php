@@ -28,18 +28,6 @@ class Planner extends Employee
 {
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function groupsManaged()
-    {
-        return $this->groupsManagedRelationship();
-    }
-
-    /*
-    * for a planer employee the policyCheckable methods say if the planer can modify or not that part
-    */
-
-    /**
      * @param Group $group
      * @return bool
      */
@@ -50,13 +38,27 @@ class Planner extends Employee
         return (is_object($group) && $group->exists);
     }
 
+    /*
+    * for a planer employee the policyCheckable methods say if the planer can modify or not that part
+    */
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function groupsManaged()
+    {
+        return $this->groupsManagedRelationship();
+    }
+
     /**
      * @param Employee $employee
      * @return bool
      */
     public function verifyEmployee(Employee $employee)
     {
-        $group = $this->groupsManaged()->whereHas('employees',function ($query) use ($employee) {$query->where('employees.id', $employee->id);})->first();
+        $group = $this->groupsManaged()->whereHas('employees', function ($query) use ($employee) {
+            $query->where('employees.id', $employee->id);
+        })->first();
 
         return (is_object($group) && $group->exists);
     }
@@ -92,17 +94,6 @@ class Planner extends Employee
     }
 
     /**
-     * @param Meeting $meeting
-     * @return bool
-     */
-    public function verifyMeeting(Meeting $meeting)
-    {
-        //TODO test this
-        return $meeting->group->planner_id == $this->id;
-    }
-
-
-    /**
      * @param MeetingTimeslot $meetingTimeslot
      * @return bool
      */
@@ -110,5 +101,15 @@ class Planner extends Employee
     {
         //TODO test this
         return $this->verifyMeeting($meetingTimeslot->meeting);
+    }
+
+    /**
+     * @param Meeting $meeting
+     * @return bool
+     */
+    public function verifyMeeting(Meeting $meeting)
+    {
+        //TODO test this
+        return $meeting->group->planner_id == $this->id;
     }
 }

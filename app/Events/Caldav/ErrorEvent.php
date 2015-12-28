@@ -2,9 +2,9 @@
 
 namespace plunner\Events\Caldav;
 
-use plunner\Events\Event;
-use plunner\Caldav;
 use Illuminate\Queue\SerializesModels;
+use plunner\Caldav;
+use plunner\Events\Event;
 
 class ErrorEvent extends Event
 {

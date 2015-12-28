@@ -41,7 +41,7 @@ class GroupsControllerTest extends \TestCase
     {
         $group_id = $this->employee->groups->first()->id;
         $response = $this->actingAs($this->employee)
-            ->json('GET', '/employees/groups/'.$group_id);
+            ->json('GET', '/employees/groups/' . $group_id);
 
         $response->assertResponseOk();
         $response->seeJsonEquals($this->employee->groups()->with('meetings')->first()->toArray());
@@ -52,7 +52,7 @@ class GroupsControllerTest extends \TestCase
         $test_company = \plunner\Company::where('id', '<>', $this->company->id)->firstOrFail();
         $test_group = $test_company->groups->first();
         $response = $this->actingAs($this->employee)
-            ->json('GET', '/employees/groups/'.$test_group->id);
+            ->json('GET', '/employees/groups/' . $test_group->id);
         $response->seeStatusCode(403);
     }
 }

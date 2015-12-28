@@ -2,10 +2,9 @@
 
 namespace plunner\Events\Optimise;
 
-use plunner\Events\Event;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use plunner\Company;
+use plunner\Events\Event;
 
 class OkEvent extends Event
 {

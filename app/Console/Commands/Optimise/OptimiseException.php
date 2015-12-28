@@ -21,4 +21,5 @@ namespace plunner\Console\Commands\Optimise;
 
 
 class OptimiseException extends \Exception
-{}
+{
+}

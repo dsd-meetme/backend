@@ -3,11 +3,8 @@
 namespace plunner\Http\Controllers\Employees\Meetings;
 
 use Illuminate\Http\Request;
-
-use plunner\Group;
-use plunner\Employee;
-use plunner\Http\Requests;
 use plunner\Http\Controllers\Controller;
+use plunner\Http\Requests;
 use plunner\Meeting;
 
 class MeetingsController extends Controller
@@ -33,7 +30,7 @@ class MeetingsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)

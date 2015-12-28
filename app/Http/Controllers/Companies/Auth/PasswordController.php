@@ -31,7 +31,7 @@ class PasswordController extends Controller
      * cn = company normal
      * @var array
      */
-    protected $custom = ['mode'=>'cn'];
+    protected $custom = ['mode' => 'cn'];
 
 
     /**

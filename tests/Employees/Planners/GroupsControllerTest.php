@@ -41,7 +41,7 @@ class GroupsControllerTest extends \TestCase
     {
         $group = $this->planner->groupsManaged()->with('meetings', 'employees')->firstOrFail();
         $response = $this->actingAs($this->planner)
-            ->json('GET', '/employees/planners/groups/'.$group->id);
+            ->json('GET', '/employees/planners/groups/' . $group->id);
 
         $response->assertResponseOk();
         $response->seeJsonEquals($group->toArray());
@@ -50,8 +50,7 @@ class GroupsControllerTest extends \TestCase
     public function testShowGroupNotManagedByMe()
     {
         $group = \plunner\Group::where('planner_id', '<>', $this->planner->id)->first();
-        if(!$group)
-        {
+        if (!$group) {
             $employee = $this->company->employees()->create([
                 'name' => 'test',
                 'email' => 'test@test.com',
@@ -65,7 +64,7 @@ class GroupsControllerTest extends \TestCase
             ]);
         }
         $response = $this->actingAs($this->planner)
-            ->json('GET', '/employees/planners/groups/'.$group->id);
+            ->json('GET', '/employees/planners/groups/' . $group->id);
         $response->seeStatusCode(403);
     }
 }

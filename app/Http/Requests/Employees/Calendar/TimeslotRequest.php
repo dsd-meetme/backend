@@ -25,7 +25,7 @@ class TimeslotRequest extends Request
     {
         return [
             'time_start' => 'required|date_format:"Y-m-d H:i:s"',
-            'time_end'=>'required|date_format:"Y-m-d H:i:s"',
+            'time_end' => 'required|date_format:"Y-m-d H:i:s"',
         ];
     }
 }

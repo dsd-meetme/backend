@@ -25,7 +25,7 @@ class EmployeeRequest extends Request
     {
         return [
             'name' => 'sometimes|required|min:1|max:255',
-            'password'=>'sometimes|required|confirmed|min:6',
+            'password' => 'sometimes|required|confirmed|min:6',
         ];
     }
 }

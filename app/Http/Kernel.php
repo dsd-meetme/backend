@@ -30,6 +30,6 @@ class Kernel extends HttpKernel
         'auth' => \plunner\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \plunner\Http\Middleware\RedirectIfAuthenticated::class,
-        'jwt.authandrefresh' =>  \plunner\Http\Middleware\GetUserAndRefresh::class,//'Tymon\JWTAuth\Middleware\GetUserAndRefresh',
+        'jwt.authandrefresh' => \plunner\Http\Middleware\GetUserAndRefresh::class,//'Tymon\JWTAuth\Middleware\GetUserAndRefresh',
     ];
 }

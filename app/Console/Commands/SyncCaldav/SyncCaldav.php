@@ -59,24 +59,35 @@ class SyncCaldav extends Command
     {
         //
         $calendarId = $this->argument('calendarId');
-        if(is_numeric($calendarId))
+        if (is_numeric($calendarId))
             $this->makeForeground(Caldav::findOrFail($calendarId));
         else
             $this->syncAll();
     }
 
+    /**
+     * sync calendars foreground
+     * @param Caldav $calendar
+     */
+    private function makeForeground(Caldav $calendar)
+    {
+        $this->info('Sync calendar ' . $calendar->calendar_id . ' started');
+        (new Sync($calendar))->sync();
+        $this->info('Sync calendar ' . $calendar->calendar_id . ' completed');
+    }
+
     private function syncAll()
     {
         $calendars = Caldav::all();
-        if($this->option('background')) {
+        if ($this->option('background')) {
             \Log::debug(self::BACKGROUND_MOD_MEX);
             $this->info(self::BACKGROUND_MOD_MEX);
             foreach ($calendars as $calendar)
                 $this->makeBackground($calendar);
             \Log::debug(self::BACKGROUND_COMPLETED_MEX);
             $this->info(self::BACKGROUND_COMPLETED_MEX);
-        }else
-            foreach($calendars as $calendar)
+        } else
+            foreach ($calendars as $calendar)
                 $this->makeForeground($calendar);
     }
 
@@ -86,19 +97,8 @@ class SyncCaldav extends Command
      */
     private function makeBackground(Caldav $calendar)
     {
-        $event = $this->schedule->command('sync:caldav '.$calendar->calendar_id)->withoutOverlapping();
-        if($event->isDue($this->laravel))
-             $event->run($this->laravel);
-    }
-
-    /**
-     * sync calendars foreground
-     * @param Caldav $calendar
-     */
-    private function makeForeground(Caldav $calendar)
-    {
-        $this->info('Sync calendar '. $calendar->calendar_id.' started');
-        (new Sync($calendar))->sync();
-        $this->info('Sync calendar '. $calendar->calendar_id.' completed');
+        $event = $this->schedule->command('sync:caldav ' . $calendar->calendar_id)->withoutOverlapping();
+        if ($event->isDue($this->laravel))
+            $event->run($this->laravel);
     }
 }

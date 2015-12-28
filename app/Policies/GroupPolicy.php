@@ -39,6 +39,16 @@ class GroupPolicy
      * @param Group $group
      * @return bool
      */
+    private function userCheck(PolicyCheckable $policyCheckable, Group $group)
+    {
+        return $policyCheckable->verifyGroup($group);
+    }
+
+    /**
+     * @param PolicyCheckable $policyCheckable
+     * @param Group $group
+     * @return bool
+     */
     public function store(PolicyCheckable $policyCheckable, Group $group)
     {
         return $this->userCheck($policyCheckable, $group);
@@ -73,15 +83,5 @@ class GroupPolicy
     public function destroy(PolicyCheckable $policyCheckable, Group $group)
     {
         return $this->userCheck($policyCheckable, $group);
-    }
-
-    /**
-     * @param PolicyCheckable $policyCheckable
-     * @param Group $group
-     * @return bool
-     */
-    private function userCheck(PolicyCheckable $policyCheckable, Group $group)
-    {
-        return $policyCheckable->verifyGroup($group);
     }
 }

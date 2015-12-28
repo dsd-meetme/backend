@@ -38,6 +38,16 @@ class MeetingTimeslotPolicy
      * @param MeetingTimeslot $MeetingTimeslot
      * @return bool
      */
+    private function userCheck(PolicyCheckable $policyCheckable, MeetingTimeslot $MeetingTimeslot)
+    {
+        return $policyCheckable->verifyMeetingTimeslot($MeetingTimeslot);
+    }
+
+    /**
+     * @param PolicyCheckable $policyCheckable
+     * @param MeetingTimeslot $MeetingTimeslot
+     * @return bool
+     */
     public function store(PolicyCheckable $policyCheckable, MeetingTimeslot $MeetingTimeslot)
     {
         return $this->userCheck($policyCheckable, $MeetingTimeslot);
@@ -72,15 +82,5 @@ class MeetingTimeslotPolicy
     public function destroy(PolicyCheckable $policyCheckable, MeetingTimeslot $MeetingTimeslot)
     {
         return $this->userCheck($policyCheckable, $MeetingTimeslot);
-    }
-
-    /**
-     * @param PolicyCheckable $policyCheckable
-     * @param MeetingTimeslot $MeetingTimeslot
-     * @return bool
-     */
-    private function userCheck(PolicyCheckable $policyCheckable, MeetingTimeslot $MeetingTimeslot)
-    {
-        return $policyCheckable->verifyMeetingTimeslot($MeetingTimeslot);
     }
 }

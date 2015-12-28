@@ -2,12 +2,14 @@
 
 namespace plunner\Http\Controllers\Employees\Calendars;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Http\Request; //TODO fix this
 use it\thecsea\caldav_client_adapter\simple_caldav_client\SimpleCaldavAdapter;
 use plunner\Calendar;
 use plunner\Http\Controllers\Controller;
 use plunner\Http\Requests\Employees\Calendar\CalendarRequest;
+
+//TODO fix this
 
 
 class CalendarsController extends Controller
@@ -38,7 +40,7 @@ class CalendarsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  CalendarRequest  $request
+     * @param  CalendarRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(CalendarRequest $request)
@@ -54,7 +56,7 @@ class CalendarsController extends Controller
      * Store a newly created resource in storage with caldav.
      * <strong>CAUTION:</strong> this method returns only calendar data, not caldav
      *
-     * @param  CalendarRequest  $request
+     * @param  CalendarRequest $request
      * @return \Illuminate\Http\Response
      */
     public function storeCaldav(CalendarRequest $request)
@@ -64,7 +66,7 @@ class CalendarsController extends Controller
         $employee = \Auth::user();
         $input = $request->all();
         $calendar = $employee->calendars()->create($input);
-        if(isset($input['password']))
+        if (isset($input['password']))
             $input['password'] = \Crypt::encrypt($input['password']);
         $calendar->caldav()->create($input);
         //TODO test
@@ -75,9 +77,22 @@ class CalendarsController extends Controller
     }
 
     /**
+     * @param Request $request
+     */
+    private function validateCaldav(Request $request)
+    {
+        $this->validate($request, [
+            'url' => 'required|max:255',
+            'username' => 'required|max:255',
+            'password' => ((\Route::current()->getName() == 'employees.calendars.caldav') ? '' : 'sometimes|') . 'required',
+            'calendar_name' => 'required|max:255',
+        ]);
+    }
+
+    /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -91,8 +106,8 @@ class CalendarsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  CalendarRequest  $request
-     * @param  int  $id
+     * @param  CalendarRequest $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(CalendarRequest $request, $id)
@@ -102,17 +117,17 @@ class CalendarsController extends Controller
         $this->authorize($calendar);
         $input = $request->all();
         $caldav = $calendar->caldav;
-        if($caldav){
+        if ($caldav) {
             $this->validateCaldav($request);
         }
-        if(isset($input['password']))
+        if (isset($input['password']))
             $input['password'] = \Crypt::encrypt($input['password']);
         $calendar->update($input);
         //TODO test
         //TODO validator
         //TODO check if caldav exists?
 
-        if($caldav)
+        if ($caldav)
             $caldav->update($input);
         return $calendar;
     }
@@ -120,7 +135,7 @@ class CalendarsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -146,22 +161,8 @@ class CalendarsController extends Controller
             $caldavClient->connect($request->input('url'), $request->input('username'), $request->input('password'));
             $calendars = $caldavClient->findCalendars();
             return array_keys($calendars);
-        }catch (\it\thecsea\caldav_client_adapter\CaldavException $e)
-        {
-            return Response::json(['error' => $e->getMessage()],422);
+        } catch (\it\thecsea\caldav_client_adapter\CaldavException $e) {
+            return Response::json(['error' => $e->getMessage()], 422);
         }
-    }
-
-    /**
-     * @param Request $request
-     */
-    private function validateCaldav(Request $request)
-    {
-        $this->validate($request, [
-            'url' => 'required|max:255',
-            'username' => 'required|max:255',
-            'password' => ((\Route::current()->getName() == 'employees.calendars.caldav')?'':'sometimes|'). 'required',
-            'calendar_name' => 'required|max:255',
-        ]);
     }
 }

@@ -44,12 +44,19 @@ class Path
     }
 
     /**
-     * @throws OptimiseException
+     * @throws OptimiseException on problems during creation of tmp dir
      */
-    public function __destruct()
+    static public function createPath()
     {
-        if ($this->path && is_dir($this->path) && !self::delTree($this->path))
-            throw new OptimiseException('problems during removing of path directory');
+        $path = new Path(tempnam(sys_get_temp_dir(), 'OPT')); //TODO check the return in case of errors this return false on failure
+        unlink($path->getPath()); //remove file to create a dir
+        if (file_exists($path->getPath()))
+            throw new OptimiseException('problem during creation of tmp dir (the directory already exists)');
+        if (!@mkdir($path->getPath()))
+            throw new OptimiseException('problem during creation of tmp dir (mkdir problem)');;
+        if (!is_dir($path->getPath()))
+            throw new OptimiseException('problem during creation of tmp dir (it is not possible to create directory)');
+        return $path;
     }
 
     /**
@@ -68,21 +75,13 @@ class Path
         $this->path = $path;
     }
 
-
     /**
-     * @throws OptimiseException on problems during creation of tmp dir
+     * @throws OptimiseException
      */
-    static public function createPath()
+    public function __destruct()
     {
-        $path = new Path(tempnam(sys_get_temp_dir(), 'OPT')); //TODO check the return in case of errors this return false on failure
-        unlink($path->getPath()); //remove file to create a dir
-        if(file_exists($path->getPath()))
-            throw new OptimiseException('problem during creation of tmp dir (the directory already exists)');
-        if(!@mkdir($path->getPath()))
-            throw new OptimiseException('problem during creation of tmp dir (mkdir problem)');;
-        if(! is_dir($path->getPath()))
-            throw new OptimiseException('problem during creation of tmp dir (it is not possible to create directory)');
-        return $path;
+        if ($this->path && is_dir($this->path) && !self::delTree($this->path))
+            throw new OptimiseException('problems during removing of path directory');
     }
 
     /**
@@ -90,8 +89,9 @@ class Path
      * @param $dir
      * @return bool
      */
-    private static function delTree($dir) {
-        $files = array_diff(scandir($dir), array('.','..'));
+    private static function delTree($dir)
+    {
+        $files = array_diff(scandir($dir), array('.', '..'));
         foreach ($files as $file) {
             (is_dir("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file");
         }
@@ -104,7 +104,7 @@ class Path
      */
     public function getModelPath()
     {
-        return $this->path.'/model.mod';
+        return $this->path . '/model.mod';
     }
 
     /**
@@ -112,7 +112,7 @@ class Path
      */
     public function getUsersPath()
     {
-        return $this->path.'/Users.csv';
+        return $this->path . '/Users.csv';
     }
 
     /**
@@ -120,7 +120,7 @@ class Path
      */
     public function getMeetingsPath()
     {
-        return $this->path.'/Meeting.csv';
+        return $this->path . '/Meeting.csv';
     }
 
     /**
@@ -128,7 +128,7 @@ class Path
      */
     public function getMeetingsDurationPath()
     {
-        return $this->path.'/MeetingsDuration.csv';
+        return $this->path . '/MeetingsDuration.csv';
     }
 
     /**
@@ -136,7 +136,7 @@ class Path
      */
     public function getMeetingsAvailabilityPath()
     {
-        return $this->path.'/MeetingsAvailability.csv';
+        return $this->path . '/MeetingsAvailability.csv';
     }
 
     /**
@@ -144,7 +144,7 @@ class Path
      */
     public function getUsersAvailabilityPath()
     {
-        return $this->path.'/UsersAvailability.csv';
+        return $this->path . '/UsersAvailability.csv';
     }
 
     /**
@@ -152,7 +152,7 @@ class Path
      */
     public function getUsersMeetingsPath()
     {
-        return $this->path.'/UsersMeetings.csv';
+        return $this->path . '/UsersMeetings.csv';
     }
 
     /**
@@ -160,7 +160,7 @@ class Path
      */
     public function getXPath()
     {
-        return $this->path.'/x.csv';
+        return $this->path . '/x.csv';
     }
 
     /**
@@ -168,7 +168,7 @@ class Path
      */
     public function getYPath()
     {
-        return $this->path.'/y.csv';
+        return $this->path . '/y.csv';
     }
 
     /**
@@ -176,6 +176,6 @@ class Path
      */
     public function getOutputPath()
     {
-        return $this->path.'/out.txt';
+        return $this->path . '/out.txt';
     }
 }

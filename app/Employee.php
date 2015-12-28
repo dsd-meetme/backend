@@ -2,12 +2,12 @@
 
 namespace plunner;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 
 /**
@@ -32,9 +32,9 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
  * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Meeting[] $meetings
  */
 class Employee extends Model implements AuthenticatableContract,
-                                        AuthorizableContract,
-                                        CanResetPasswordContract,
-                                        PolicyCheckable
+    AuthorizableContract,
+    CanResetPasswordContract,
+    PolicyCheckable
 {
     use Authenticatable, Authorizable, CanResetPassword;
 
@@ -63,6 +63,14 @@ class Employee extends Model implements AuthenticatableContract,
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    protected function groupsManagedRelationship()
+    {
+        return $this->HasMany(Group::class, 'planner_id');
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function company()
@@ -71,29 +79,11 @@ class Employee extends Model implements AuthenticatableContract,
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function groups()
-    {
-        return $this->belongsToMany('plunner\Group', 'employee_group', 'employee_id'); //needed for planner model
-    }
-
-    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function calendars()
     {
         return $this->hasMany('plunner\Calendar');
-    }
-
-    /**
-     * meetings where the user participates
-     * to get all meetings where the user can go user groups with meetings
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function meetings(){
-        //TODO durign the inserting chek if the meeting is of a group of the user
-        return $this->belongsToMany(Meeting::class);
     }
 
     /**
@@ -107,7 +97,7 @@ class Employee extends Model implements AuthenticatableContract,
     public function getEmailForPasswordReset()
     {
         list(, $caller) = debug_backtrace(false);
-        if(isset($caller['class']))
+        if (isset($caller['class']))
             $caller = explode('\\', $caller['class']);
         else
             $caller = '';
@@ -117,6 +107,15 @@ class Employee extends Model implements AuthenticatableContract,
             return $this->email;
         //return unique identify for token repository
         return $this->email . $this->company->id;
+    }
+
+    /**
+     * @param Group $group
+     * @return bool
+     */
+    public function verifyGroup(Group $group)
+    {
+        return $this->belongsToGroup($group);
     }
 
     /**
@@ -134,12 +133,11 @@ class Employee extends Model implements AuthenticatableContract,
      */
 
     /**
-     * @param Group $group
-     * @return bool
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function verifyGroup(Group $group)
+    public function groups()
     {
-        return $this->belongsToGroup($group);
+        return $this->belongsToMany('plunner\Group', 'employee_group', 'employee_id'); //needed for planner model
     }
 
     /**
@@ -193,6 +191,17 @@ class Employee extends Model implements AuthenticatableContract,
     }
 
     /**
+     * meetings where the user participates
+     * to get all meetings where the user can go user groups with meetings
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function meetings()
+    {
+        //TODO durign the inserting chek if the meeting is of a group of the user
+        return $this->belongsToMany(Meeting::class);
+    }
+
+    /**
      * @param MeetingTimeslot $meetingTimeslot
      * @return bool
      */
@@ -200,13 +209,5 @@ class Employee extends Model implements AuthenticatableContract,
     {
         //TODO implement and test this
         return false;
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    protected function groupsManagedRelationship()
-    {
-        return $this->HasMany(Group::class, 'planner_id');
     }
 }

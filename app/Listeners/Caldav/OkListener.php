@@ -3,8 +3,6 @@
 namespace plunner\Listeners\Caldav;
 
 use plunner\Events\Caldav\OkEvent;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class OkListener
 {
@@ -21,7 +19,7 @@ class OkListener
     /**
      * Handle the event.
      *
-     * @param  OkEvent  $event
+     * @param  OkEvent $event
      * @return void
      */
     public function handle(OkEvent $event)

@@ -31,9 +31,9 @@ class GroupRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'required|max:255|unique:groups,name,'.$this->route('groups').',id,company_id,'.$this->user()->id,
+            'name' => 'required|max:255|unique:groups,name,' . $this->route('groups') . ',id,company_id,' . $this->user()->id,
             'description' => 'sometimes|required|max:255',
-            'planner_id' => 'required|exists:employees,id,company_id,'.$this->user()->id,
+            'planner_id' => 'required|exists:employees,id,company_id,' . $this->user()->id,
         ];
     }
 }

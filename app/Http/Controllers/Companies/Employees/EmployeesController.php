@@ -42,7 +42,7 @@ class EmployeesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  EmployeeRequest  $request
+     * @param  EmployeeRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(EmployeeRequest $request)
@@ -50,7 +50,7 @@ class EmployeesController extends Controller
         //
         $company = \Auth::user();
         $input = $request->all();
-        if(isset($input['password']))
+        if (isset($input['password']))
             $input['password'] = bcrypt($input['password']);
         $employee = $company->employees()->create($input);
         return $employee;
@@ -59,7 +59,7 @@ class EmployeesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -73,8 +73,8 @@ class EmployeesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  EmployeeRequest  $request
-     * @param  int  $id
+     * @param  EmployeeRequest $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(EmployeeRequest $request, $id)
@@ -83,7 +83,7 @@ class EmployeesController extends Controller
         $employee = Employee::findOrFail($id);
         $this->authorize($employee);
         $input = $request->all();
-        if(isset($input['password']))
+        if (isset($input['password']))
             $input['password'] = bcrypt($input['password']);
         $employee->update($input);
         return $employee;
@@ -92,7 +92,7 @@ class EmployeesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

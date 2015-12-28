@@ -44,7 +44,7 @@ class CompanysControllerTest extends \TestCase
         ];
 
         //correct request
-        $response = $this->actingAs($company)->json('PUT', '/companies/company/',$data);
+        $response = $this->actingAs($company)->json('PUT', '/companies/company/', $data);
         $response->assertResponseOk();
         $data2 = $data;
         unset($data2['password']);
@@ -53,7 +53,7 @@ class CompanysControllerTest extends \TestCase
 
         //no correct request
         unset($data['password_confirmation']);
-        $response = $this->actingAs($company)->json('PUT', '/companies/company/',$data);
+        $response = $this->actingAs($company)->json('PUT', '/companies/company/', $data);
         $response->seeStatusCode(422);
     }
 }
