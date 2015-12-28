@@ -27,9 +27,3 @@ tools:
             standard: PSR2
         filter:
             paths: ['app']
-    php_loc:
-        enabled: true
-        excluded_dirs: [vendor, tests]
-    php_cpd:
-        enabled: false
-        excluded_dirs: [vendor, tests]
