@@ -28,11 +28,11 @@ class OkListener
     {
         //
         \Log::info('Meeting correctly optimised (company id = '.$event->getCompany()->id.')');
-        $event->getCompany()->fresh();
+        $company = $event->getCompany()->fresh();
         //send email to company
-        self::sendCompanyEmail($event->getCompany()->email);
+        self::sendCompanyEmail($company->email);
         //send emails to employees
-        $employees = $event->getCompany()->employees()->with('meetings')->get();
+        $employees = $company->employees()->with('meetings')->get();
         foreach($employees as $employee)
             self::sendEmployeeEmail($employee->email, $employee->meetings);
     }
