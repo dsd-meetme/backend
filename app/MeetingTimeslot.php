@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Query\Builder|\plunner\MeetingTimeslot whereMeetingId($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\MeetingTimeslot whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\MeetingTimeslot whereUpdatedAt($value)
+ * @property-read \plunner\Meeting $meeting
  */
 class MeetingTimeslot extends Model
 {

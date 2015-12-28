@@ -31,6 +31,7 @@ namespace plunner;
  * @method static \Illuminate\Database\Query\Builder|\plunner\Planner whereRememberToken($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Planner whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Planner whereUpdatedAt($value)
+ * @property-read mixed $is_planner
  */
 class Planner extends Employee
 {
