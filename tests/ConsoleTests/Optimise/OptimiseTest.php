@@ -23,7 +23,7 @@ class OptimiseTest extends \TestCase
         $optimise->setMaxTimeSlots(4);
         $employees = factory(\plunner\Employee::class, 3)->make()->each(function ($employee) use($company){
             $company->employees()->save($employee);
-            $employee->calendars()->save(factory(\plunner\Calendar::class)->make());
+            $employee->calendars()->save(factory(\plunner\Calendar::class)->make(['enabled'=>true]));
         });
 
         $group1 = factory(\plunner\Group::class)->make();

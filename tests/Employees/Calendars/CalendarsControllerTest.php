@@ -49,7 +49,7 @@ class CalendarsControllerTest extends TestCase
         $response->assertResponseOk();
         $response->seeJson($data);
 
-        //duplicate employee
+        //error request
         $response = $this->actingAs($employee)->json('POST', '/employees/calendars/',[]);
         $response->seeStatusCode(422);
 
@@ -128,5 +128,97 @@ class CalendarsControllerTest extends TestCase
 
         $response = $this->actingAs($employee)->json('GET', '/employees/calendars/'.$calendar->id);
         $response->seeStatusCode(403);
+    }
+
+    public function testCreateCaldav()
+    {
+        /**
+         * @var $employee \plunner\Employee
+         */
+        $employee = \plunner\Employee::findOrFail(1);
+        $data = [
+            'name' => 'test',
+            'enabled' => '1',
+            'url' => 'http://test.com',
+            'username' => 'test',
+            'password' => 'test',
+            'calendar_name' => 'test',
+        ];
+
+        //correct request
+        $response = $this->actingAs($employee)->json('POST', '/employees/calendars/caldav',$data);
+        $response->assertResponseOk();
+        $response->seeJson([
+            'name' => 'test',
+            'enabled' => '1',
+        ]);
+
+        //error request NO PASSWORD
+        unset($data['password']);
+        $response = $this->actingAs($employee)->json('POST', '/employees/calendars/caldav',$data);
+        $response->seeStatusCode(422);
+    }
+
+    public function testUpdateCaldav()
+    {
+        $employee = \plunner\Employee::findOrFail(1);
+        $calendar = factory(\plunner\Calendar::class)->make(['enabled'=>true]);
+        $employee->calendars()->save($calendar);
+        $caldav = factory(\plunner\Caldav::class)->make();
+        $calendar->caldav()->save($caldav);
+
+        $data = [
+            'name' => 'test',
+            'enabled' => '1',
+            'url' => 'http://test.com',
+            'username' => 'test',
+            'password' => 'test',
+            'calendar_name' => 'test',
+        ];
+
+        //correct request
+        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/'.$calendar->id,$data);
+        $response->assertResponseOk();
+        $response->seeJson([
+            'name' => 'test',
+            'enabled' => '1',
+        ]);
+
+
+        //same calendar update
+        //correct request
+        $response = $this->actingAs($employee)->json('PUT', '/employees/calendars/'.$calendar->id,$data);
+        $response->assertResponseOk();
+        $response->seeJson([
+            'name' => 'test',
+            'enabled' => '1',
+        ]);
+
+        //check caldav equals
+        $caldav = $calendar->caldav->toArray();
+        unset($caldav['updated_at']);
+        unset($caldav['created_at']);
+        unset($caldav['sync_errors']);
+        unset($caldav['calendar_id']);
+        $this->assertEquals([
+            'url' => 'http://test.com',
+            'username' => 'test',
+            'calendar_name' => 'test',
+        ],$caldav);
+    }
+
+    public function testGetExternalCalendars()
+    {
+        $employee = \plunner\Employee::findOrFail(1);
+        $data = [
+            'url' => 'http://test.com',
+            'username' => 'test',
+            'password' => 'test',
+        ];
+
+        //error request
+        $response = $this->actingAs($employee)->json('POST', '/employees/calendars/calendars',$data);
+        $response->seeStatusCode(422);
+        $response->seeJson(['error'=>"Invalid URL: 'http://test.com'"]);
     }
 }
