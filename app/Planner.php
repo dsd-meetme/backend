@@ -31,6 +31,7 @@ namespace plunner;
  * @method static \Illuminate\Database\Query\Builder|\plunner\Planner whereRememberToken($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Planner whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Planner whereUpdatedAt($value)
+ * @property-read mixed $is_planner
  */
 class Planner extends Employee
 {
@@ -87,5 +88,26 @@ class Planner extends Employee
     {
         //TODO implement and test
         return false;
+    }
+
+    /**
+     * @param Meeting $meeting
+     * @return bool
+     */
+    public function verifyMeeting(Meeting $meeting)
+    {
+        //TODO test this
+        return $meeting->group->planner_id == $this->id;
+    }
+
+
+    /**
+     * @param MeetingTimeslot $meetingTimeslot
+     * @return bool
+     */
+    public function verifyMeetingTimeslot(MeetingTimeslot $meetingTimeslot)
+    {
+        //TODO test this
+        return $this->verifyMeeting($meetingTimeslot->meeting);
     }
 }

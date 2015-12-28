@@ -4,7 +4,7 @@ namespace plunner\Http\Requests\Employees;
 
 use plunner\Http\Requests\Request;
 
-class MeetingRequest extends Request
+class MeetingTimeslotRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,11 +23,9 @@ class MeetingRequest extends Request
      */
     public function rules()
     {
-        //TODO test this with the new data
         return [
-            'title' => 'required|max:255',
-            'description' => 'sometimes|required|max:255',
-            'duration' => 'required|integer',
+            'time_start' => 'required|date_format:"Y-m-d H:i:s"',
+            'time_end' => 'required|date_format:"Y-m-d H:i:s"',
         ];
     }
 }

@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Query\Builder|\plunner\MeetingTimeslot whereMeetingId($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\MeetingTimeslot whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\MeetingTimeslot whereUpdatedAt($value)
+ * @property-read \plunner\Meeting $meeting
  */
 class MeetingTimeslot extends Model
 {
@@ -34,11 +35,17 @@ class MeetingTimeslot extends Model
      */
     protected $fillable = ['time_start', 'time_end'];
 
+    /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
+     */
+    protected $hidden = ['pivot', 'meeting'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function Meeting()
+    public function meeting()
     {
         return $this->belongsTo('plunner\Meeting');
     }

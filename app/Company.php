@@ -108,6 +108,26 @@ class Company extends Model implements AuthenticatableContract,
     }
 
     /**
+     * @param Meeting $meeting
+     * @return bool
+     */
+    public function verifyMeeting(Meeting $meeting)
+    {
+        //TODO implement and test this
+        return false;
+    }
+
+    /**
+     * @param MeetingTimeslot $meetingTimeslot
+     * @return bool
+     */
+    public function verifyMeetingTimeslot(MeetingTimeslot $meetingTimeslot)
+    {
+        //TODO implement and test this
+        return false;
+    }
+    
+    /**
      * @param \DateTime $from
      * @param \DateTime $to
      * @return \Illuminate\Support\Collection

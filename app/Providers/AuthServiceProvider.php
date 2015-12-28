@@ -6,10 +6,14 @@ use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use plunner\Calendar;
 use plunner\Employee;
+use plunner\Group;
+use plunner\Meeting;
+use plunner\MeetingTimeslot;
 use plunner\Policies\CalendarPolicy;
 use plunner\Policies\EmployeePolicy;
-use plunner\Group;
 use plunner\Policies\GroupPolicy;
+use plunner\Policies\MeetingPolicy;
+use plunner\Policies\MeetingTimeslotPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -23,6 +27,8 @@ class AuthServiceProvider extends ServiceProvider
         Employee::class => EmployeePolicy::class,
         Group::class => GroupPolicy::class,
         Calendar::class => CalendarPolicy::class,
+        Meeting::class => MeetingPolicy::class,
+        MeetingTimeslot::class => MeetingTimeslotPolicy::class,
     ];
 
     /**
