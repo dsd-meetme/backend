@@ -189,6 +189,16 @@ class Employee extends Model implements AuthenticatableContract,
     }
 
     /**
+     * @param MeetingTimeslot $meetingTimeslot
+     * @return bool
+     */
+    public function verifyMeetingTimeslot(MeetingTimeslot $meetingTimeslot)
+    {
+        //TODO implement and test this
+        return false;
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     protected function groupsManagedRelationship()
