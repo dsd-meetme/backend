@@ -37,6 +37,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
  * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereRememberToken($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereUpdatedAt($value)
+ * @property-read mixed $is_planner
  */
 class Employee extends Model implements AuthenticatableContract,
                                         AuthorizableContract,
