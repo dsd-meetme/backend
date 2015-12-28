@@ -6,6 +6,13 @@ use Illuminate\Console\Command;
 use Illuminate\Console\Scheduling\Schedule;
 use plunner\Caldav;
 
+/**
+ * Class SyncCaldav
+ * @package plunner\Console\Commands\SyncCaldav
+ * @author Claudio Cardinale <cardi@thecsea.it>
+ * @copyright 2015 Claudio Cardinale
+ * @version 1.0.0
+ */
 class SyncCaldav extends Command
 {
     const BACKGROUND_MOD_MEX = 'background mode';

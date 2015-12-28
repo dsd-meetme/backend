@@ -28,10 +28,13 @@ class EmployeesAuthTest extends \TestCase
     {
         if(!$this->doConsole())
             return;
-        \Artisan::call('sync:caldav');
         $company = \plunner\Company::whereEmail('testInit@test.com')->firstOrFail();
         $employee = $company->employees()->whereEmail('testEmp@test.com')->firstOrFail();
         $calendar = $employee->calendars()->whereName('errors')->firstOrFail()->caldav;
+        $calendar->sync_errors = '';
+        $calendar->save();
+        \Artisan::call('sync:caldav');
+        $calendar = $calendar->fresh();
         $this->assertNotEquals('', $calendar->sync_errors);
     }
 

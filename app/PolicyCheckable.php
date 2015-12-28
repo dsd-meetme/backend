@@ -33,4 +33,6 @@ interface PolicyCheckable
     public function verifyCompany(Company $company);
     public function verifyCalendar(Calendar $calendar);
     public function verifyTimeslot(Timeslot $timeslot);
+    public function verifyMeeting(Meeting $meeting);
+    public function verifyMeetingTimeslot(MeetingTimeslot $meetingTimeslot);
 }

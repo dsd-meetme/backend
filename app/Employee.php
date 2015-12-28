@@ -37,6 +37,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
  * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereRememberToken($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\plunner\Employee whereUpdatedAt($value)
+ * @property-read mixed $is_planner
  */
 class Employee extends Model implements AuthenticatableContract,
                                         AuthorizableContract,
@@ -58,6 +59,16 @@ class Employee extends Model implements AuthenticatableContract,
      * @var array
      */
     protected $hidden = ['password', 'remember_token', 'pivot'];
+
+    /**
+     * @var array
+     */
+    protected $appends = ['is_planner'];
+
+    public function getIsPlannerAttribute()
+    {
+        return !($this->groupsManagedRelationship()->get()->isEmpty());
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -123,9 +134,7 @@ class Employee extends Model implements AuthenticatableContract,
     public function belongsToGroup(Group $group)
     {
         $group = $this->groups()->where('id', $group->id)->first();
-        if(is_object($group) && $group->exists)
-            return true;
-        return false;
+        return (is_object($group) && $group->exists);
     }
 
     /*
@@ -178,5 +187,34 @@ class Employee extends Model implements AuthenticatableContract,
     {
         //TODO test this
         return $timeslot->calendar->employee_id == $this->id;
+    }
+
+    /**
+     * @param Meeting $meeting
+     * @return bool
+     */
+    public function verifyMeeting(Meeting $meeting)
+    {
+        //TODO test this
+        $meeting = $this->meetings()->whereId($meeting->id)->first();
+        return (is_object($meeting) && $meeting->exists);
+    }
+
+    /**
+     * @param MeetingTimeslot $meetingTimeslot
+     * @return bool
+     */
+    public function verifyMeetingTimeslot(MeetingTimeslot $meetingTimeslot)
+    {
+        //TODO implement and test this
+        return false;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    protected function groupsManagedRelationship()
+    {
+        return $this->HasMany(Group::class, 'planner_id');
     }
 }

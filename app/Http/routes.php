@@ -18,6 +18,7 @@
 /**
  * Companies
  */
+
 Route::group(['namespace' => 'Companies', 'prefix' => 'companies'], function() {
 
     //\Auth
@@ -48,6 +49,11 @@ Route::group(['namespace' => 'Companies', 'prefix' => 'companies'], function() {
     Route::group(['namespace' => 'Groups'], function() {
         Route::resource('groups', 'GroupsController', ['except' => ['create', 'edit']]);
         Route::resource('groups.employees', 'EmployeesController', ['only' => ['store', 'index', 'destroy']]);
+    });
+
+    Route::group(['namespace' => 'Company', 'prefix' => 'company'], function() {
+        Route::get('/', ['as' => 'companies.company.index', 'uses' => 'CompanyController@index']);
+        Route::put('/', ['as' => 'companies.company.update', 'uses' => 'CompanyController@update']);
     });
 });
 
@@ -86,9 +92,21 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
 
     Route::group(['namespace' => 'Planners', 'prefix' => 'planners'], function() {
         Route::resource('groups', 'GroupsController', ['only' => ['index', 'show']]);
+        Route::resource('groups.meetings', 'MeetingsController', ['except' => ['create', 'edit']]);
+        Route::resource('groups.meetings.timeslots', 'MeetingTimeslotsController', ['except' => ['create', 'edit']]);
     });
 
     Route::group(['namespace' => 'Groups'], function() {
         Route::resource('groups', 'GroupsController', ['only' => ['index', 'show']]);
+    });
+
+
+    Route::group(['namespace' => 'Meetings'], function() {
+        Route::resource('meetings', 'MeetingsController', ['only' => ['index', 'show']]);
+    });
+
+    Route::group(['namespace' => 'Employee', 'prefix' => 'employee'], function() {
+        Route::get('/', ['as' => 'employees.employee.index', 'uses' => 'EmployeeController@index']);
+        Route::put('/', ['as' => 'employees.employee.update', 'uses' => 'EmployeeController@update']);
     });
 });
