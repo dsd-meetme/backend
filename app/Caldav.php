@@ -5,25 +5,21 @@ namespace plunner;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * plunner\Caldav
+ * Class Caldav
  *
+ * @author Claudio Cardinale <cardi@thecsea.it>
+ * @copyright 2015 Claudio Cardinale
+ * @version 1.0.0
+ * @package plunner
  * @property integer $calendar_id
  * @property string $url
  * @property string $username
  * @property string $password
  * @property string $calendar_name
+ * @property string $sync_errors
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @property-read Calendar $Calendar
- * @method static \Illuminate\Database\Query\Builder|\plunner\Caldav whereCalendarId($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Caldav whereUrl($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Caldav whereUsername($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Caldav wherePassword($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Caldav whereCalendarName($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Caldav whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Caldav whereUpdatedAt($value)
- * @property string $sync_errors
- * @method static \Illuminate\Database\Query\Builder|\plunner\Caldav whereSyncErrors($value)
+ * @property-read \plunner\Calendar $Calendar
  */
 class Caldav extends Model
 {

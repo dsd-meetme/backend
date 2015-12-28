@@ -7,28 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Calendar
  *
- * @package plunner
  * @author Claudio Cardinale <cardi@thecsea.it>
  * @copyright 2015 Claudio Cardinale
  * @version 1.0.0
+ * @package plunner
  * @property integer $id
  * @property string $name
  * @property integer $employee_id
+ * @property boolean $enabled
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @property-read \plunner\Employee $employees
- * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Timeslot[] $timeslots
- * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereEmployeeId($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereUpdatedAt($value)
- * @property boolean $enabled
  * @property-read \plunner\Employee $employee
- * @property-read Caldav $Caldav
- * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereType($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereSyncErrors($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Calendar whereEnabled($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Timeslot[] $timeslots
+ * @property-read \plunner\Caldav $Caldav
  */
 class Calendar extends Model
 {

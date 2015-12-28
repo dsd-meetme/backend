@@ -13,10 +13,10 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 /**
  * Class Company
  *
- * @package plunner
  * @author Claudio Cardinale <cardi@thecsea.it>
  * @copyright 2015 Claudio Cardinale
  * @version 1.0.0
+ * @package plunner
  * @property integer $id
  * @property string $name
  * @property string $email
@@ -25,16 +25,8 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
  * @property string $remember_token
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|Employee[] $employees
- * @property-read \Illuminate\Database\Eloquent\Collection|Group[] $groups
- * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereEmail($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Company wherePassword($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereVerified($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereRememberToken($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\plunner\Company whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Employee[] $employees
+ * @property-read \Illuminate\Database\Eloquent\Collection|\plunner\Group[] $groups
  */
 class Company extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
