@@ -3,14 +3,13 @@
 namespace plunner\Http\Controllers\Employees\Planners;
 
 use Illuminate\Http\Request;
-use plunner\Employee;
-use plunner\Http\Requests;
-use plunner\Meeting;
-use plunner\Group;
-use plunner\MeetingTimeslot;
-use plunner\Http\Controllers\Controller;
-use plunner\Http\Requests\Employees\MeetingTimeslotRequest;
 use Illuminate\Support\Facades\Response;
+use plunner\Group;
+use plunner\Http\Controllers\Controller;
+use plunner\Http\Requests;
+use plunner\Http\Requests\Employees\Meeting\MeetingTimeslotRequest;
+use plunner\Meeting;
+use plunner\MeetingTimeslot;
 
 
 class MeetingTimeslotsController extends Controller

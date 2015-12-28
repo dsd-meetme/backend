@@ -1,6 +1,6 @@
 <?php
 
-namespace plunner\Http\Requests\Employees;
+namespace plunner\Http\Requests\Employees\Meeting;
 
 use plunner\Http\Requests\Request;
 
