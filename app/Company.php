@@ -108,16 +108,6 @@ class Company extends Model implements AuthenticatableContract,
     }
 
     /**
-     * @param Meeting $meeting
-     * @return bool
-     */
-    public function verifyMeeting(Meeting $meeting)
-    {
-        //TODO implement and test this
-        return false;
-    }
-
-    /**
      * @param Timeslot $timeslot
      * @return bool
      */
@@ -127,6 +117,15 @@ class Company extends Model implements AuthenticatableContract,
         return false;
     }
 
+    /**
+     * @param Meeting $meeting
+     * @return bool
+     */
+    public function verifyMeeting(Meeting $meeting)
+    {
+        //TODO implement and test this
+        return false;
+    }
 
     /**
      * @param MeetingTimeslot $meetingTimeslot
