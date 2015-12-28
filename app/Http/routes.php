@@ -99,6 +99,11 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function() {
         Route::resource('groups', 'GroupsController', ['only' => ['index', 'show']]);
     });
 
+
+    Route::group(['namespace' => 'Meetings'], function() {
+        Route::resource('meetings', 'MeetingsController', ['only' => ['index', 'show']]);
+    });
+
     Route::group(['namespace' => 'Employee', 'prefix' => 'employee'], function() {
         Route::get('/', ['as' => 'employees.employee.index', 'uses' => 'EmployeeController@index']);
         Route::put('/', ['as' => 'employees.employee.update', 'uses' => 'EmployeeController@update']);
