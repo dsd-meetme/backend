@@ -20,16 +20,25 @@ class MeetingsController extends Controller
 
     /**
      * Display a listing of the resource.
+     * ?current=1 -> to exclude old planed meetings
      *
      * @param int $groupId
+     * @param Request $request needed for get query to get only current planed meetings (to be planned are all retrieved)
      * @return mixed
      */
-    public function index($groupId)
+    public function index($groupId, Request $request)
     {
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
-        return $group->meetings;
-        //TODO get only current meetings via a get query
+        $meetings = $group->meetings();
+        if ($request->query('current'))
+            $meetings->where(function ($query) { //parenthesis for conditions ...(C1 OR C2)...
+                $query->where('start_time', '=', NULL);//to be planned
+                //datetime to consider timezone, don't use mysql NOW()
+                $query->orWhere('start_time', '>=', new \DateTime());//planned
+            });
+
+        return $meetings->get();
     }
 
     /**
