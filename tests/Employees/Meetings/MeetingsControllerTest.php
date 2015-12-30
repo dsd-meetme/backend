@@ -50,27 +50,29 @@ class MeetingsControllerTest extends \TestCase
     public function testIndexCurrent()
     {
         //one meeting planed new, one meeting planed old, one to be planed
+        $employee = factory(\plunner\Employee::class)->make();
+        $this->company->employees()->save($employee);
         $group = factory(\plunner\Group::class)->make();
         $this->company->groups()->save($group);
-        $this->employee->groups()->attach($group);
+        $employee->groups()->attach($group);
         $group->meetings()->save(factory(\plunner\Meeting::class)->make()); //to be planed
         $new = factory(\plunner\Meeting::class)->make(['start_time' => (new \DateTime())->add(new \DateInterval('PT100S'))]);
         $group->meetings()->save($new); // new planed
-        $this->employee->meetings()->attach($new->id);
+        $employee->meetings()->attach($new->id);
         $old = factory(\plunner\Meeting::class)->make(['start_time' => (new \DateTime())->sub(new \DateInterval('PT100S'))]);
         $group->meetings()->save($old); // old planed
-        $this->employee->meetings()->attach($old->id);
+        $employee->meetings()->attach($old->id);
 
         //other planner meeting planned to test or condition
-        $groupOther = \plunner\Group::whereNotIn('id', $this->employee->groups->pluck('id'))->firstOrFail();
+        $groupOther = \plunner\Group::whereNotIn('id', $employee->groups->pluck('id'))->firstOrFail();
         $other = factory(\plunner\Meeting::class)->make(['start_time' => (new \DateTime())->add(new \DateInterval('PT100S'))]);
         $groupOther->meetings()->save($other);
-        $response = $this->actingAs($this->employee)
+        $response = $this->actingAs($employee)
             ->json('GET', '/employees/meetings/?current=1');
 
         $response->assertResponseOk();
-        $this->employee = $this->employee->fresh();
-        $response->seeJsonEquals($this->employee->meetings()->where(function ($query) {
+        $employee = $employee->fresh();
+        $response->seeJsonEquals($employee->meetings()->where(function ($query) {
             $query->where('start_time', '=', NULL);//to be planned
             $query->orWhere('start_time', '>=', new \DateTime());//planned
         })->get()->toArray());
