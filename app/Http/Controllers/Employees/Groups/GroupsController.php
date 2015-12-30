@@ -27,7 +27,6 @@ class GroupsController extends Controller
         return $employee->groups()->with(['meetings' => function ($query) {
             $query->where('start_time', '=', NULL);
         }])->get();
-        //TODO get only current meetings via a query
     }
 
     /**

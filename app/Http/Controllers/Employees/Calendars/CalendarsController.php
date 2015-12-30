@@ -9,8 +9,6 @@ use plunner\Calendar;
 use plunner\Http\Controllers\Controller;
 use plunner\Http\Requests\Employees\Calendar\CalendarRequest;
 
-//TODO fix this
-
 
 class CalendarsController extends Controller
 {
@@ -69,10 +67,6 @@ class CalendarsController extends Controller
         if (isset($input['password']))
             $input['password'] = \Crypt::encrypt($input['password']);
         $calendar->caldav()->create($input);
-        //TODO test
-        //TODO validator
-        //TODO return caldav info
-        //TODO supprot function to create simple calendar
         return $calendar;
     }
 
@@ -123,9 +117,6 @@ class CalendarsController extends Controller
         if (isset($input['password']))
             $input['password'] = \Crypt::encrypt($input['password']);
         $calendar->update($input);
-        //TODO test
-        //TODO validator
-        //TODO check if caldav exists?
 
         if ($caldav)
             $caldav->update($input);
@@ -154,8 +145,12 @@ class CalendarsController extends Controller
      */
     public function getCalendars(Request $request)
     {
-        //TODO VALIDATE
         //TODO test this
+        $this->validate($request, [
+            'url' => 'required|max:255',
+            'username' => 'required|max:255',
+            'password' => 'required',
+        ]);
         try {
             $caldavClient = new SimpleCaldavAdapter();
             $caldavClient->connect($request->input('url'), $request->input('username'), $request->input('password'));
