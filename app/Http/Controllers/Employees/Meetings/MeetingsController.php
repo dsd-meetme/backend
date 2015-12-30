@@ -19,12 +19,20 @@ class MeetingsController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request needed for get query to get only current planed meetings (to be planned are all retrieved)
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $employee = \Auth::user();
-        return $employee->meetings;
+        $meetings = $employee->meetings();
+        if ($request->query('current'))
+            $meetings->where(function ($query) { //parenthesis for conditions ...(C1 OR C2)...
+                $query->where('start_time', '=', NULL);//to be planned
+                //datetime to consider timezone, don't use mysql NOW()
+                $query->orWhere('start_time', '>=', new \DateTime());//planned
+            });
+        return $meetings->get();
     }
 
     /**
