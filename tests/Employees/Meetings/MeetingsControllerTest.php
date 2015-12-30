@@ -50,12 +50,15 @@ class MeetingsControllerTest extends \TestCase
     public function testIndexCurrent()
     {
         //one meeting planed new, one meeting planed old, one to be planed
-        $this->group->meetings()->save(factory(\plunner\Meeting::class)->make()); //to be planed
+        $group = factory(\plunner\Group::class)->make();
+        $this->company->groups()->save($group);
+        $this->employee->groups()->attach($group);
+        $group->meetings()->save(factory(\plunner\Meeting::class)->make()); //to be planed
         $new = factory(\plunner\Meeting::class)->make(['start_time' => (new \DateTime())->add(new \DateInterval('PT100S'))]);
-        $this->group->meetings()->save($new); // new planed
+        $group->meetings()->save($new); // new planed
         $this->employee->meetings()->attach($new->id);
         $old = factory(\plunner\Meeting::class)->make(['start_time' => (new \DateTime())->sub(new \DateInterval('PT100S'))]);
-        $this->group->meetings()->save($old); // old planed
+        $group->meetings()->save($old); // old planed
         $this->employee->meetings()->attach($old->id);
 
         //other planner meeting planned to test or condition

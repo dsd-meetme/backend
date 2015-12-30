@@ -40,7 +40,11 @@ class GroupsControllerTest extends \TestCase
     public function testIndexCurrent()
     {
         //one meeting planed new, one meeting planed old, one to be planed
-        $group = $this->planner->GroupsManaged()->firstOrFail();
+        $planner = factory(\plunner\Employee::class)->make();
+        $this->company->employees()->save($planner);
+        $group = factory(\plunner\Group::class)->make(['planner_id' => $planner->id]);
+        $this->company->groups()->save($group);
+        $planner = \plunner\Planner::findOrFail($planner->id); //this to cast to planner type
         $group->meetings()->save(factory(\plunner\Meeting::class)->make()); //to be planed
         $new = factory(\plunner\Meeting::class)->make(['start_time' => (new \DateTime())->add(new \DateInterval('PT100S'))]);
         $group->meetings()->save($new); // new planed
@@ -48,15 +52,15 @@ class GroupsControllerTest extends \TestCase
         $group->meetings()->save($old); // old planed
 
         //other planner meeting planned to test or condition
-        $groupOther = \plunner\Group::where('planner_id', '<>', $this->planner->id)->firstOrFail();
+        $groupOther = \plunner\Group::where('planner_id', '<>', $planner->id)->firstOrFail();
         $other = factory(\plunner\Meeting::class)->make(['start_time' => (new \DateTime())->add(new \DateInterval('PT100S'))]);
         $groupOther->meetings()->save($other);
-        $response = $this->actingAs($this->planner)
+        $response = $this->actingAs($planner)
             ->json('GET', '/employees/planners/groups/?current=1');
 
         $response->assertResponseOk();
-        $this->planner = $this->planner->fresh();
-        $response->seeJsonEquals($this->planner->GroupsManaged()->with(['meetings' => function ($query) {
+        $planner = $planner->fresh();
+        $response->seeJsonEquals($planner->GroupsManaged()->with(['meetings' => function ($query) {
             $query->where(function ($query) {
                 $query->where('start_time', '=', NULL);//to be planned
                 $query->orWhere('start_time', '>=', new \DateTime());//planned

@@ -54,22 +54,24 @@ class PlannersMeetingsTest extends \TestCase
     public function testIndexCurrent()
     {
         //one meeting planed new, one meeting planed old, one to be planed
-        $this->group->meetings()->save(factory(\plunner\Meeting::class)->make()); //to be planed
+        $group = factory(\plunner\Group::class)->make(['planner_id' => $this->planner->id]);
+        $this->company->groups()->save($group);
+        $group->meetings()->save(factory(\plunner\Meeting::class)->make()); //to be planed
         $new = factory(\plunner\Meeting::class)->make(['start_time' => (new \DateTime())->add(new \DateInterval('PT100S'))]);
-        $this->group->meetings()->save($new); // new planed
+        $group->meetings()->save($new); // new planed
         $old = factory(\plunner\Meeting::class)->make(['start_time' => (new \DateTime())->sub(new \DateInterval('PT100S'))]);
-        $this->group->meetings()->save($old); // old planed
+        $group->meetings()->save($old); // old planed
 
         //other planner meeting planned to test or condition
         $groupOther = \plunner\Group::where('planner_id', '<>', $this->planner->id)->firstOrFail();
         $other = factory(\plunner\Meeting::class)->make(['start_time' => (new \DateTime())->add(new \DateInterval('PT100S'))]);
         $groupOther->meetings()->save($other);
         $response = $this->actingAs($this->planner)
-            ->json('GET', '/employees/planners/groups/' . $this->group->id . '/meetings/?current=1');
+            ->json('GET', '/employees/planners/groups/' . $group->id . '/meetings/?current=1');
 
         $response->assertResponseOk();
-        $this->group = $this->group->fresh();
-        $response->seeJsonEquals($this->group->meetings()->where(function ($query) {
+        $group = $group->fresh();
+        $response->seeJsonEquals($group->meetings()->where(function ($query) {
             $query->where('start_time', '=', NULL);//to be planned
             $query->orWhere('start_time', '>=', new \DateTime());//planned
         })->get()->toArray());
