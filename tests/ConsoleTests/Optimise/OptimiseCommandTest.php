@@ -10,16 +10,6 @@ class OptimiseCommandTest extends \TestCase
 
 
     //This is teh same model of SolverTest
-    /**
-     * @param \DateTime $date
-     * @param Int $multiplier
-     * @return \DateTime
-     */
-    static private function addTimeInterval(\DateTime $date, $multiplier = 1)
-    {
-        return $date->add(new \DateInterval('PT' . config('app.timeslots.duration') * $multiplier . 'S'));
-    }
-
     public function testSimpleModel()
     {
         if (!$this->doConsole())
