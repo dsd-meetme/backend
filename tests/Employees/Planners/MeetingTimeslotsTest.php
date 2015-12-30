@@ -23,7 +23,7 @@ class MeetingTimeslotsTest extends \TestCase
         $this->employee = $this->company->employees()->with('groups')->first();
         $this->group = $this->employee->groups->first();
         $this->planner = $this->group->planner;
-        $this->meeting = $this->group->meetings()->with('group')->first();
+        $this->meeting = $this->group->meetings()->has('timeslots')->with('group')->first();
 
         $this->data = [
             'time_start' => '2015-12-17 12:00:00',
@@ -125,6 +125,16 @@ class MeetingTimeslotsTest extends \TestCase
         $response->seeJson($this->data);
     }
 
+    public function testPlannedCreate()
+    {
+        $meeting = factory(\plunner\Meeting::class)->make(['start_time' => new \DateTime()]);
+        $this->group->meetings()->save($meeting);
+        $response = $this->actingAs($this->planner)
+            ->json('POST', 'employees/planners/groups/' . $this->group->id . '/meetings/' . $meeting->id . '/timeslots',
+                $this->data);
+        $response->seeStatusCode(422);
+    }
+
     public function testEmployeeCreate()
     {
         list($test_group, $test_employee) = $this->getNonPlannerInAGroup();
@@ -152,6 +162,22 @@ class MeetingTimeslotsTest extends \TestCase
         $this->timeslot = $this->timeslot->fresh();
         $this->assertEquals($test_data['time_start'], $this->timeslot->time_start);
         $this->assertEquals($test_data['time_end'], $this->timeslot->time_end);
+    }
+
+    public function testPlannedUpdate()
+    {
+        $meeting = factory(\plunner\Meeting::class)->make(['start_time' => new \DateTime()]);
+        $this->group->meetings()->save($meeting);
+        $timeslot = factory(\plunner\MeetingTimeslot::class)->make();
+        $meeting->timeslots()->save($timeslot);
+        $test_data = [
+            'time_start' => '2015-12-17 14:00:00',
+            'time_end' => '2015-12-17 15:00:00',
+        ];
+
+        $response = $this->actingAs($this->planner)
+            ->json('PUT', 'employees/planners/groups/' . $this->group->id . '/meetings/' . $meeting->id . '/timeslots/' . $timeslot->id, $test_data);
+        $response->seeStatusCode(422);
     }
 
     public function testEmployeeUpdate()
@@ -189,6 +215,23 @@ class MeetingTimeslotsTest extends \TestCase
             ->json('DELETE', 'employees/planners/groups/' . $this->group->id . '/meetings/' . $this->meeting->id . '/timeslots/' . $this->timeslot->id);
         $response->seeStatusCode(404);
 
+    }
+
+    public function testPlanedDestroy()
+    {
+        $meeting = factory(\plunner\Meeting::class)->make(['start_time' => new \DateTime()]);
+        $this->group->meetings()->save($meeting);
+        $timeslot = factory(\plunner\MeetingTimeslot::class)->make();
+        $meeting->timeslots()->save($timeslot);
+
+        $response = $this->actingAs($this->planner)
+            ->json('DELETE', 'employees/planners/groups/' . $this->group->id . '/meetings/' . $meeting->id . '/timeslots/' . $timeslot->id);
+        $response->seeStatusCode(422);
+
+        // GET OK
+        $response = $this->actingAs($this->planner)
+            ->json('GET', 'employees/planners/groups/' . $this->group->id . '/meetings/' . $meeting->id . '/timeslots/' . $timeslot->id);
+        $response->assertResponseOk();
     }
 
     public function testEmployeeDestroy()

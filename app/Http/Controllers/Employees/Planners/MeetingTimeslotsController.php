@@ -72,6 +72,8 @@ class MeetingTimeslotsController extends Controller
         $this->authorize($group);
         $meeting = Meeting::findOrFail($meetingId);
         $this->authorize($meeting);
+        if ($meeting->start_time != NULL)
+            return Response::json(['error' => 'the meeting is already planned'], 422);
 
         $input = $request->all();
 
@@ -94,6 +96,8 @@ class MeetingTimeslotsController extends Controller
         $this->authorize($group);
         $meeting = Meeting::findOrFail($meetingId);
         $this->authorize($meeting);
+        if ($meeting->start_time != NULL)
+            return Response::json(['error' => 'the meeting is already planned'], 422);
         $timeslot = MeetingTimeslot::findOrFail($timeslotId);
         $this->authorize($timeslot);
 
@@ -120,6 +124,8 @@ class MeetingTimeslotsController extends Controller
         $this->authorize($group);
         $meeting = Meeting::findOrFail($meetingId);
         $this->authorize($meeting);
+        if ($meeting->start_time != NULL)
+            return Response::json(['error' => 'the meeting is already planned'], 422);
         $timeslot = MeetingTimeslot::findOrFail($timeslotId);
         $this->authorize($timeslot);
 
