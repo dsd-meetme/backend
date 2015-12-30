@@ -44,6 +44,20 @@ return [
     'timezone' => 'UTC',
 
     /*
+     * Optimisation data
+     */
+
+    'timeslots' => [
+        //timeslots to be optimised each time
+        'number' => 672, //one week 4*24*7 = 672
+        //max duartion of a meeting in terms of timeslots, sually this is the same timeslots number
+        'max' => 672,
+        //timeslot duration in seconds
+        'duration' => 900, //15 minutes
+    ],
+
+
+    /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
     |--------------------------------------------------------------------------

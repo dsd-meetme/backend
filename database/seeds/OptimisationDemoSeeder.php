@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use plunner\Console\Commands\Optimise\Optimise;
 
 class OptimisationDemoSeeder extends Seeder
 {
@@ -33,9 +32,9 @@ class OptimisationDemoSeeder extends Seeder
         $employeeNo = $employees->pop();
         $group2->employees()->attach($employees->pluck('id')->toArray());
 
-        $meeting1 = factory(\plunner\Meeting::class)->make(['duration'=>1*Optimise::TIME_SLOT_DURATION]);
+        $meeting1 = factory(\plunner\Meeting::class)->make(['duration' => 1 * config('app.timeslots.duration')]);
         $group1->meetings()->save($meeting1);
-        $meeting2 = factory(\plunner\Meeting::class)->make(['duration'=>3*Optimise::TIME_SLOT_DURATION]);
+        $meeting2 = factory(\plunner\Meeting::class)->make(['duration' => 3 * config('app.timeslots.duration')]);
         $group2->meetings()->save($meeting2);
 
         $now = (new \DateTime())->modify('next monday');
@@ -43,8 +42,10 @@ class OptimisationDemoSeeder extends Seeder
         $timeslots2 = ['time_start' => clone $now, 'time_end'=>self::addTimeInterval(clone $now, 3)];
         $meeting1->timeslots()->create($timeslots1);
         $meeting2->timeslots()->create($timeslots2);
-        $timeslotsE = ['time_start' => self::addTimeInterval(clone $now, 3), 'time_end'=>self::addTimeInterval(clone $now, Optimise::DEFAULT_TIME_SLOTS)];
-        $timeslotsENo = ['time_start' => self::addTimeInterval(clone $now, 1), 'time_end'=>self::addTimeInterval(clone $now, Optimise::DEFAULT_TIME_SLOTS)];
+        $timeslotsE = ['time_start' => self::addTimeInterval(clone $now, 3), 'time_end' => self::addTimeInterval(
+            clone $now, config('app.timeslots.number'))];
+        $timeslotsENo = ['time_start' => self::addTimeInterval(clone $now, 1), 'time_end' => self::addTimeInterval(
+            clone $now, config('app.timeslots.number'))];
         $employees->each(function($employee) use ($timeslotsE){
             $employee->calendars()->first()->timeslots()->create($timeslotsE);
         });
@@ -62,6 +63,6 @@ class OptimisationDemoSeeder extends Seeder
      */
     static private function addTimeInterval(\DateTime $date, $multiplier=1)
     {
-        return $date->add(new \DateInterval('PT'.Optimise::TIME_SLOT_DURATION*$multiplier.'S'));
+        return $date->add(new \DateInterval('PT' . config('app.timeslots.duration') * $multiplier . 'S'));
     }
 }

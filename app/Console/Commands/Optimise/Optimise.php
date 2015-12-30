@@ -22,13 +22,9 @@ use plunner\Events\Optimise\OkEvent;
  */
 class Optimise
 {
-    //TODo max timeslots can be an environment var
-    const TIME_SLOT_DURATION = 900; //seconds -> 15 minutes
-    const DEFAULT_MAX_TIME_SLOTS = 672; //max duration of a meeting in term of timeslots //20
-    const DEFAULT_TIME_SLOTS = 672;  //total amount of timeslots that must be optimised -> one week 4*24*7 = 672
 
-    private $max_time_slots = self::DEFAULT_MAX_TIME_SLOTS;
-    private $time_slots = self::DEFAULT_TIME_SLOTS;
+    private $max_time_slots;
+    private $time_slots;
 
     //TODO timezone
     /**
@@ -74,6 +70,9 @@ class Optimise
         $this->company = $company;
         $this->schedule = $schedule;
         $this->laravel = $laravel;
+        $this->max_time_slots = config('app.timeslots.max');
+        $this->time_slots = config('app.timeslots.number');
+
 
         $this->setStartTime((new \DateTime())->modify('next monday'));
     }
@@ -86,7 +85,8 @@ class Optimise
     {
         $this->startTime = clone $startTime;
         $this->endTime = clone $this->startTime;
-        $this->endTime->add(new \DateInterval('PT' . (($this->max_time_slots + $this->time_slots) * self::TIME_SLOT_DURATION) . 'S'));
+        $this->endTime->add(new \DateInterval('PT' . (($this->max_time_slots + $this->time_slots) *
+                config('app.timeslots.duration')) . 'S'));
     }
 
     /**
@@ -240,7 +240,7 @@ class Optimise
      */
     static private function convertDuration($duration)
     {
-        return (int)ceil($duration / self::TIME_SLOT_DURATION);
+        return (int)ceil($duration / config('app.timeslots.duration'));
     }
 
     /**
@@ -273,7 +273,7 @@ class Optimise
         //TODO fix check
         //TODO check if diff makes sense
         //TODO check upper limit
-        return (int)(round($diff / self::TIME_SLOT_DURATION) + 1); //TODO can round cause overlaps?
+        return (int)(round($diff / config('app.timeslots.duration')) + 1); //TODO can round cause overlaps?
     }
 
     /**
@@ -441,7 +441,7 @@ class Optimise
     private function toDateTime($timeslot)
     {
         $ret = clone $this->startTime;
-        return $ret->add(new \DateInterval('PT' . (($timeslot - 1) * self::TIME_SLOT_DURATION) . 'S'));
+        return $ret->add(new \DateInterval('PT' . (($timeslot - 1) * config('app.timeslots.duration')) . 'S'));
     }
 
     /**
