@@ -19,7 +19,7 @@ class MeetingsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request needed for get query to get only current planed meetings (to be planned are all retrieved)
+     * @param Request $request needed for get query to get only current planed meetings
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)

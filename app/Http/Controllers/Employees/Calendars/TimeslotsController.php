@@ -18,15 +18,16 @@ class TimeslotsController extends Controller
         $this->middleware('jwt.authandrefresh:mode-en');
     }
 
-    //TODO check that the calendar is not a caldav calendar
+    //TODO check that the calendar is not a caldav calendar, maybe future improvement
 
     /**
      * Display a listing of the resource.
      *
      * @param  int $calendarId
+     * @param Request $request needed for get query to get only current timeslots
      * @return \Illuminate\Http\Response
      */
-    public function index($calendarId)
+    public function index($calendarId, Request $request)
     {
         //TODO improvement return small period
         /**
@@ -34,7 +35,10 @@ class TimeslotsController extends Controller
          */
         $calendar = Calendar::findOrFail($calendarId);
         $this->authorize($calendar);
-        return $calendar->timeslots;
+        $timeslots = $calendar->timeslots();
+        if ($request->query('current'))
+            $timeslots->where('time_start', '>=', new \DateTime());
+        return $timeslots->get();
     }
 
     /**

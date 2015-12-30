@@ -16,16 +16,37 @@ class TimeslotsControllerTest extends TestCase
     }
 
 
-    public function testIndex()
+    public function testAllIndex()
     {
         /**
          * @var $employee \plunner\Employee
          */
         $employee = \plunner\Employee::findOrFail(1);
         $calendar = $employee->calendars()->firstOrFail();
+        $old = factory(\plunner\Timeslot::class)->make(['time_start' => (new \DateTime())->add(new \DateInterval('PT100S'))]);
+        $calendar->timeslots()->save($old);
+        $new = factory(\plunner\Timeslot::class)->make(['time_start' => (new \DateTime())->sub(new \DateInterval('PT100S'))]);
+        $calendar->timeslots()->save($new);
         $response = $this->actingAs($employee)->json('GET', '/employees/calendars/' . $calendar->id . '/timeslots');
         $response->assertResponseOk();
         $response->seeJsonEquals($calendar->timeslots->toArray());
+    }
+
+    public function testCurrentIndex()
+    {
+        /**
+         * @var $employee \plunner\Employee
+         */
+        $employee = \plunner\Employee::findOrFail(1);
+        $calendar = $employee->calendars()->firstOrFail();
+        $old = factory(\plunner\Timeslot::class)->make(['time_start' => (new \DateTime())->add(new \DateInterval('PT100S'))]);
+        $calendar->timeslots()->save($old);
+        $new = factory(\plunner\Timeslot::class)->make(['time_start' => (new \DateTime())->sub(new \DateInterval('PT100S'))]);
+        $calendar->timeslots()->save($new);
+        $response = $this->actingAs($employee)->json('GET', '/employees/calendars/' . $calendar->id . '/timeslots/?current=1');
+        $response->assertResponseOk();
+        $response->dontSeeJson($calendar->timeslots->toArray());
+        $response->seeJsonEquals($calendar->timeslots()->where('time_start', '>=', new \DateTime())->get()->toArray());
     }
 
     public function testErrorIndex()
