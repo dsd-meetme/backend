@@ -27,6 +27,7 @@ or simply
 1. this must be installed on the root of the virtual host
 1. configure crontab `* * * * * php /path/to/artisan schedule:run >> /dev/null 2>&1` to optimise and caldav import
 1. install `GLPSOL` `https://en.wikibooks.org/wiki/GLPK/Linux_packages` (needed for optimisation task -> finding perfect meeting slot)
+1. configure additional things like emails, optimisation and so in the config files
 
 # How to develop
 Use phpstorm is one of the best solution, since it has laravel plugin.
