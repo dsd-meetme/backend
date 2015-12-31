@@ -1,1 +1,1 @@
-Click here to reset your password: {{ config('app.frontend_url').'/#/orgpwdreset/'.$token }}
+Click here to reset your password: {{ config('app.frontend_url').'/#/orgreset/'.$token }}
