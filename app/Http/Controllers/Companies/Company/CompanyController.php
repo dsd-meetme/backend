@@ -37,6 +37,8 @@ class CompanyController extends Controller
     {
         $company = \Auth::user();
         $input = $request->only(['name', 'password']);
+        if (isset($input['password']))
+            $input['password'] = bcrypt($input['password']);
         $company->update($input);
         return $company;
     }
