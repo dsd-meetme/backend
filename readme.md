@@ -2,7 +2,7 @@
 Build status: [![Build Status](https://travis-ci.org/dsd-meetme/backend.svg?branch=master)](https://travis-ci.org/dsd-meetme/backend) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dsd-meetme/backend/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dsd-meetme/backend/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/dsd-meetme/backend/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/dsd-meetme/backend/?branch=master) [![Build Status](https://scrutinizer-ci.com/g/dsd-meetme/backend/badges/build.png?b=master)](https://scrutinizer-ci.com/g/dsd-meetme/backend/build-status/master) [![Latest Stable Version](https://poser.pugx.org/dsd-meetme/backend/v/stable)](https://packagist.org/packages/dsd-meetme/backend) [![Total Downloads](https://poser.pugx.org/dsd-meetme/backend/downloads)](https://packagist.org/packages/dsd-meetme/backend) [![Latest Unstable Version](https://poser.pugx.org/dsd-meetme/backend/v/unstable)](https://packagist.org/packages/dsd-meetme/backend) [![License](https://poser.pugx.org/dsd-meetme/backend/license)](https://packagist.org/packages/dsd-meetme/backend)
 
 
-This application uses laravel 5.1.* 
+This application uses laravel 5.1.* (a php framework)
 
 Api example web server: http://api.plunner.com. It is just an example, so we don't guarantee that everything works
 
