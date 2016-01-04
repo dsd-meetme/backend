@@ -6,6 +6,8 @@ This application uses laravel 5.1.* (a php framework)
 
 Api example web server: http://api.plunner.com. It is just an example, so we don't guarantee that everything works
 
+**N.B.** You need also the [frontend application](https://github.com/dsd-meetme/frontend)
+
 # How to install
 
 1. Clone repository
