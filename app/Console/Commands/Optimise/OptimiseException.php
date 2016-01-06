@@ -20,6 +20,51 @@
 namespace plunner\Console\Commands\Optimise;
 
 
+use Exception;
+
 class OptimiseException extends \Exception
 {
+    /**
+     * @var bool
+     */
+    private $empty = false;
+
+    /**
+     * OptimiseException constructor.
+     * @param string $message
+     * @param int $code
+     * @param Exception $previous
+     * @param bool $empty
+     */
+    public function __construct($message =  "", $code = 0, Exception $previous = null, $empty = false)
+    {
+        parent::__construct($message, $code, $previous);
+        $this->empty = $empty;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isEmpty()
+    {
+        return $this->empty;
+    }
+
+    /**
+     * @param boolean $empty
+     */
+    public function setEmpty($empty)
+    {
+        $this->empty = $empty;
+    }
+
+    /**
+     * @param boolean $empty
+     * @return OptimiseException
+     */
+    public function withEmpty($empty)
+    {
+        $this->empty = $empty;
+        return $this;
+    }
 }

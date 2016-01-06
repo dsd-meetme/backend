@@ -88,4 +88,14 @@ class OptimiseTest extends \TestCase
     {
         return $date->add(new \DateInterval('PT' . config('app.timeslots.duration') * $multiplier . 'S'));
     }
+
+    public function testNoData()
+    {
+        if (!$this->doConsole())
+            return;
+        $company = factory(\plunner\Company::class)->create();
+        $optimise = new Optimise($company, new Schedule(), \App::getInstance());
+        $this->setExpectedException('\plunner\Console\Commands\Optimise\OptimiseException');
+        $optimise->optimise();
+    }
 }

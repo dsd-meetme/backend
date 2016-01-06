@@ -400,7 +400,7 @@ class Solver
     {
         foreach ($proprieties as $propriety)
             if (count($this->$propriety) == 0)
-                throw new OptimiseException($propriety . ' is not set correctly');
+                throw new OptimiseException($propriety . ' property is not set correctly');
     }
 
     /**
@@ -411,7 +411,7 @@ class Solver
     {
         foreach ($proprieties as $propriety)
             if (!is_int($this->$propriety) || $this->$propriety <= 0)
-                throw new OptimiseException($propriety . ' is not set correctly');
+                throw new OptimiseException($propriety . ' property is not set correctly');
     }
 
     /**

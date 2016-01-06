@@ -149,6 +149,7 @@ class Optimise
 
     /**
      * @return Optimise
+     * @throws OptimiseException
      */
     public function optimise()
     {
@@ -157,7 +158,9 @@ class Optimise
             $solver = $this->setData($solver);
             $solver = $solver->solve();
             $this->solver = $solver;
-        } catch (\Exception $e) {
+        }catch(OptimiseException $e) {
+            throw $e;
+        }catch (\Exception $e) {
             \Event::fire(new ErrorEvent($this->company, $e->getMessage()));
             throw new OptimiseException('Optimising error', 0, $e);
             //TODO catch specif exception
@@ -195,17 +198,21 @@ class Optimise
     /**
      * @param Solver $solver
      * @return Solver
+     * @throws OptimiseException
      */
     private function setUsers(Solver $solver)
     {
         //since we consider busy timeslots, we need to get all users
         $users = $this->company->employees->pluck('id')->toArray();
+        if(count($users) == 0)
+            throw ((new OptimiseException("No users for this company"))->withEmpty(true));
         return $solver->setUsers($users);
     }
 
     /**
      * @param Solver $solver
      * @return Solver
+     * @throws OptimiseException
      */
     private function setAllMeetingsInfo(Solver $solver)
     {
@@ -213,6 +220,8 @@ class Optimise
          * @var $meetings \Illuminate\Support\Collection
          */
         $meetings = collect($this->company->getMeetingsTimeSlots($this->startTime, $this->endTime));
+        if($meetings->count() == 0)
+            throw ((new OptimiseException("No meetings for this week"))->withEmpty(true));
         $timeslots = $meetings->groupBy('id')->map(function ($item) { //convert timeslots
             return $this->durationConverter($this->timeSlotsConverter($item));
         });
@@ -350,6 +359,8 @@ class Optimise
          * @var $users \Illuminate\Support\Collection
          */
         $users = collect($this->company->getEmployeesTimeSlots($this->startTime, $this->endTime));
+        if($users->count() == 0)
+            throw ((new OptimiseException("No users for this company"))->withEmpty(true));
         $timeslots = $users->groupBy('id')->map(function ($item) { //convert timeslots
             return $this->timeSlotsConverter($item);
         });
@@ -369,6 +380,8 @@ class Optimise
          * @var $usersMeetings \Illuminate\Support\Collection
          */
         $usersMeetings = collect($this->company->getUsersMeetings($users, $meetings))->groupBy('employee_id');
+        if($usersMeetings->count() == 0)
+            throw ((new OptimiseException("No users for any meeting"))->withEmpty(true));
 
         return $solver->setUsersMeetings(self::getUsersMeetingsArray($users, $meetings, $usersMeetings));
     }
@@ -398,6 +411,7 @@ class Optimise
 
     /**
      * @return Optimise
+     * @throws OptimiseException
      */
     public function save()
     {

@@ -71,8 +71,17 @@ class OptimiseCommand extends Command
     private function makeForeground(Company $company)
     {
         $this->info('Optimisation company ' . $company->id . ' started');
-        (new Optimise($company, $this->schedule, $this->laravel))->optimise()->save();
-        $this->info('Optimisation ' . $company->id . ' completed');
+        try {
+            (new Optimise($company, $this->schedule, $this->laravel))->optimise()->save();
+            $this->info('Optimisation ' . $company->id . ' completed');
+        }catch(OptimiseException $e){
+            if($e->isEmpty())
+                $this->warn('Company ' . $company->id . ' has no sufficient data');
+            else
+                $this->error('Error during optimisation of company ' . $company->id .': '. $e->getMessage());
+        }catch(\Exception $e) {
+            $this->error('Error during optimisation of company ' . $company->id .': '. $e->getMessage());
+        }
     }
 
     private function syncAll()
