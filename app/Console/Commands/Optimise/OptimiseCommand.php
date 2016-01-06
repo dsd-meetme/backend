@@ -77,17 +77,17 @@ class OptimiseCommand extends Command
 
     private function syncAll()
     {
-        $calendars = Caldav::all();
+        $companies = Company::all();
         if ($this->option('background')) {
             \Log::debug(self::BACKGROUND_MOD_MEX);
             $this->info(self::BACKGROUND_MOD_MEX);
-            foreach ($calendars as $calendar)
-                $this->makeBackground($calendar);
+            foreach ($companies as $company)
+                $this->makeBackground($company);
             \Log::debug(self::BACKGROUND_COMPLETED_MEX);
             $this->info(self::BACKGROUND_COMPLETED_MEX);
         } else
-            foreach ($calendars as $calendar)
-                $this->makeForeground($calendar);
+            foreach ($companies as $company)
+                $this->makeForeground($company);
     }
 
     /**
