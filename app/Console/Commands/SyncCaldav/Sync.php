@@ -19,6 +19,7 @@
 
 namespace plunner\Console\Commands\SyncCaldav;
 
+use it\thecsea\caldav_client_adapter\CaldavException;
 use it\thecsea\caldav_client_adapter\EventInterface;
 use it\thecsea\caldav_client_adapter\simple_caldav_client\SimpleCaldavAdapter;
 use plunner\Caldav;
@@ -100,7 +101,8 @@ class Sync
     /**
      * @return array|\it\thecsea\caldav_client_adapter\EventInterface[]
      * @throws \it\thecsea\caldav_client_adapter\CaldavException
-     * @thorws \Illuminate\Contracts\Encryption\DecryptException
+     * @throws \Illuminate\Contracts\Encryption\DecryptException
+     * @throws CaldavException
      */
     private function getEvents()
     {
@@ -108,6 +110,8 @@ class Sync
         $caldavClient = new SimpleCaldavAdapter();
         $caldavClient->connect($this->calendar->url, $this->calendar->username, \Crypt::decrypt($this->calendar->password));
         $calendars = $caldavClient->findCalendars();
+        if(!isset($calendars[$this->calendar->calendar_name]))
+            throw new CaldavException("calendar inserted doesn't exist");
         $caldavClient->setCalendar($calendars[$this->calendar->calendar_name]);//TODO error if the calendar name is wrong
         /**
          * 26 hours before to avoid tiemezone problems and dst problems
