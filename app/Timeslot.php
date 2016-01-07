@@ -36,6 +36,11 @@ class Timeslot extends Model
     protected $hidden = ['pivot', 'calendar'];
 
     /**
+     * @var array
+     */
+    protected $touches = ['calendar'];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function calendar()
