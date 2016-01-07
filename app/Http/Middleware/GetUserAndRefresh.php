@@ -20,17 +20,22 @@
 namespace plunner\Http\Middleware;
 
 
+use Tymon\JWTAuth\Exceptions\JWTException;
+
 class GetUserAndRefresh extends \Tymon\JWTAuth\Middleware\GetUserAndRefresh
 {
     public function handle($request, \Closure $next, $custom = '')
     {
         $remember = false;
-        if ($this->auth->setRequest($request)->getToken() && ($remember = $this->auth->getPayload()->get('remember')) &&
-            $remember == 'true'
-        ) {
-            \JWTFactory::setTTL(43200);
-            //config(['jwt.ttl' =>'43200']); //30 days
-        }
+        try {
+            if ($this->auth->setRequest($request)->getToken() && ($remember = $this->auth->getPayload()->get('remember')) &&
+                $remember == 'true'
+            ) {
+                \JWTFactory::setTTL(43200);
+                //config(['jwt.ttl' =>'43200']); //30 days
+            }
+        }catch(JWTException $e)
+        {}
 
         //this to add the remember me mode field in the new token, but we have the custom check that is an useless
         //overhead
