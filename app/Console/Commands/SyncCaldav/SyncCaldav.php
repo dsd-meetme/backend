@@ -73,6 +73,7 @@ class SyncCaldav extends Command
     {
         $this->info('Sync calendar ' . $calendar->calendar_id . ' started');
         (new Sync($calendar))->sync();
+        //TODO show errors as warning
         $this->info('Sync calendar ' . $calendar->calendar_id . ' completed');
     }
 

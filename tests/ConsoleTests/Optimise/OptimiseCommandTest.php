@@ -41,4 +41,14 @@ class OptimiseCommandTest extends \TestCase
         $this->assertEquals(1, $meetingShort->employees->count());
         $this->assertEquals(2, $meetingLong->employees->count());
     }
+
+    public function testAll()
+    {
+        if (!$this->doConsole())
+            return;
+
+        //create data
+        $status = \Artisan::call('optimise:meetings');
+        $this->assertEquals(0, $status);
+    }
 }

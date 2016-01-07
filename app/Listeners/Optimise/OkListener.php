@@ -30,7 +30,9 @@ class OkListener
         //send email to company
         self::sendCompanyEmail($company->email);
         //send emails to employees
-        $employees = $company->employees()->with('meetings')->get();
+        $employees = $company->employees()->with(['meetings'=>function($query){
+            $query->where('start_time', '>=', new \DateTime());
+        }])->get();
         foreach ($employees as $employee)
             self::sendEmployeeEmail($employee->email, $employee->meetings);
     }

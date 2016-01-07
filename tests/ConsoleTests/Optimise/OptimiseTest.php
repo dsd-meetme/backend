@@ -95,7 +95,14 @@ class OptimiseTest extends \TestCase
             return;
         $company = factory(\plunner\Company::class)->create();
         $optimise = new Optimise($company, new Schedule(), \App::getInstance());
-        $this->setExpectedException('\plunner\Console\Commands\Optimise\OptimiseException');
-        $optimise->optimise();
+        $exception = null;
+        try {
+            $optimise->optimise();
+        }catch(\plunner\Console\Commands\Optimise\OptimiseException $e)
+        {
+            $exception = $e;
+        }
+        $this->assertNotNull($exception);
+        $this->assertTrue($exception->isEmpty());
     }
 }

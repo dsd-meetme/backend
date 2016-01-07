@@ -25,7 +25,7 @@ class ErrorListener
     public function handle(ErrorEvent $event)
     {
         //
-        \Log::info('problems during optimise (company id = ' . $event->getCompany()->id . '): ' . $event->getError());
+        \Log::error('problems during optimise (company id = ' . $event->getCompany()->id . '): ' . $event->getError());
         $company = $event->getCompany();
         //$company = $event->getCompany()->fresh();
         self::sendEmail($company->email, $event->getError());

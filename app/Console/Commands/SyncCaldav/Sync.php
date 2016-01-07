@@ -112,7 +112,7 @@ class Sync
         $calendars = $caldavClient->findCalendars();
         if(!isset($calendars[$this->calendar->calendar_name]))
             throw new CaldavException("calendar inserted doesn't exist");
-        $caldavClient->setCalendar($calendars[$this->calendar->calendar_name]);//TODO error if the calendar name is wrong
+        $caldavClient->setCalendar($calendars[$this->calendar->calendar_name]);
         /**
          * 26 hours before to avoid tiemezone problems and dst problems
          * 30 days after

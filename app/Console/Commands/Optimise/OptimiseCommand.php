@@ -74,13 +74,17 @@ class OptimiseCommand extends Command
         try {
             (new Optimise($company, $this->schedule, $this->laravel))->optimise()->save();
             $this->info('Optimisation ' . $company->id . ' completed');
-        }catch(OptimiseException $e){
-            if($e->isEmpty())
-                $this->warn('Company ' . $company->id . ' has no sufficient data');
-            else
-                $this->error('Error during optimisation of company ' . $company->id .': '. $e->getMessage());
-        }catch(\Exception $e) {
-            $this->error('Error during optimisation of company ' . $company->id .': '. $e->getMessage());
+        }catch(OptimiseException $e) {
+            if ($e->isEmpty()) {
+                $mex = 'Company ' . $company->id . ' doesn\'t have sufficient data';
+                $this->warn($mex);
+                \Log::info($mex);
+            } else {
+                $mex = 'Error during optimisation of company ' . $company->id . ': ' . $e->getMessage();
+                $this->error($mex);
+                //TODO log cause, but don't send it to the user
+                //\Log::error($mex); //already logged in listener
+            }
         }
     }
 

@@ -26,6 +26,7 @@ class OkListener
     {
         //
         $calendar = $event->getCalendar();
+        \Log::info('caldav (calendar id = ' . $calendar->calendar_id . ') correctly synchronized');
         //$calendar = $event->getCalendar()->fresh();
         $calendar->sync_errors = '';
         $calendar->save();

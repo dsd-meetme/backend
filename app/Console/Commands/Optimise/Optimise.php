@@ -159,8 +159,11 @@ class Optimise
             $solver = $solver->solve();
             $this->solver = $solver;
         }catch(OptimiseException $e) {
+            if(!$e->isEmpty())
+                \Event::fire(new ErrorEvent($this->company, $e->getMessage()));
             throw $e;
         }catch (\Exception $e) {
+            //TODO use the correct exceptions to avoid to share private data
             \Event::fire(new ErrorEvent($this->company, $e->getMessage()));
             throw new OptimiseException('Optimising error', 0, $e);
             //TODO catch specif exception
@@ -425,6 +428,7 @@ class Optimise
         try {
             $this->saveMeetings($this->solver);
             $this->saveEmployeesMeetings($this->solver);
+            //TODO use the correct exceptions to avoid to share private data
         } catch (\Exception $e) {
             \Event::fire(new ErrorEvent($this->company, $e->getMessage()));
             throw new OptimiseException('Optimising error', 0, $e);
