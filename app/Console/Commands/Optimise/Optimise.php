@@ -85,7 +85,7 @@ class Optimise
     {
         $this->startTime = clone $startTime;
         $this->endTime = clone $this->startTime;
-        $this->endTime->add(new \DateInterval('PT' . (($this->max_time_slots + $this->time_slots) *
+        $this->endTime->add(new \DateInterval('PT' . ($this->time_slots *
                 config('app.timeslots.duration')) . 'S'));
     }
 
@@ -292,15 +292,18 @@ class Optimise
     /**
      * @param \Illuminate\Support\Collection $timeSlots
      * @param bool|true $free if true the array is filled with 1 for timeslots values else with 0 for timeslots values
+     * @param array $ids array of ids that we consider, if they are not present inside timeSlots we fill the entire row
+     *      with the default value
+     * @param int $timeSlotsN number of timeslots
      * @return array
      */
-    static private function getAvailabilityArray(\Illuminate\Support\Collection $timeSlots, $timeslotsN, $ids, $free = true)
+    static private function getAvailabilityArray(\Illuminate\Support\Collection $timeSlots, $timeSlotsN, array $ids, $free = true)
     {
         $ret = [];
         foreach ($ids as $id) {
             if(isset($timeSlots[$id]))
                 $ret = self::fillTimeSlots($ret, $id, $timeSlots[$id], $free ? '1' : '0');
-            $ret = self::fillRow($ret, $id, $timeslotsN, $free ? '0' : '1');
+            $ret = self::fillRow($ret, $id, $timeSlotsN, $free ? '0' : '1');
         }
 
         return $ret;

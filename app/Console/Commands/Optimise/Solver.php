@@ -194,7 +194,7 @@ class Solver
     public function setTimeSlots($timeSlots)
     {
         if (!is_int($timeSlots) || $timeSlots <= 0)
-            throw new OptimiseException('$timeSlots is not integer or it is not >0');
+            throw new OptimiseException($timeSlots . ' is not integer or it is not >0');
 
         $this->timeSlots = $timeSlots;
         return $this;
@@ -216,7 +216,7 @@ class Solver
     public function setMaxTimeSlots($maxTimeSlots)
     {
         if (!is_int($maxTimeSlots) || $maxTimeSlots <= 0)
-            throw new OptimiseException('$maxTimeSlots is not integer or it is not >0');
+            throw new OptimiseException($maxTimeSlots . ' is not integer or it is not >0');
 
         $this->maxTimeSlots = $maxTimeSlots;
         return $this;
@@ -242,6 +242,7 @@ class Solver
             throw new OptimiseException('meetings different from meetings set');
         foreach ($meetingsAvailability as $key => $meetingsAvailabilityS) {
             $timeSlots = array_keys($meetingsAvailabilityS);//TODO this is useless, we can use directly $usersAvailabilityS
+            //TODO check if keys are sequential and the last is the same with $this->timeSlots
             if (count($timeSlots) != $this->timeSlots)
                 throw new OptimiseException('timeSlots different from timeSlots set');
             $meetingsAvailability[$key] = self::arrayPad($meetingsAvailabilityS, $this->timeSlots + $this->maxTimeSlots, 0);
