@@ -433,6 +433,7 @@ class Optimise
             $this->saveEmployeesMeetings($this->solver);
             //TODO use the correct exceptions to avoid to share private data
         } catch (\Exception $e) {
+            //TODO if OptimiseException throw itself
             \Event::fire(new ErrorEvent($this->company, $e->getMessage()));
             throw new OptimiseException('Optimising error', 0, $e);
             //TODO catch specif exception
@@ -462,6 +463,9 @@ class Optimise
     private function toDateTime($timeslot)
     {
         $ret = clone $this->startTime;
+        //TODO check, because the meetings cannot have this date available -> this to avoid errors if we don't have a date for a meeting
+        if ($timeslot <= 1) //false == 0
+            return $ret;
         return $ret->add(new \DateInterval('PT' . (($timeslot - 1) * config('app.timeslots.duration')) . 'S'));
     }
 
