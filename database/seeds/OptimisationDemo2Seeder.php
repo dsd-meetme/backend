@@ -49,10 +49,10 @@ class OptimisationDemo2Seeder extends Seeder
         $meeting2->timeslots()->create($timeslots2);
         $meeting3->timeslots()->create($timeslots1);
         $meeting3->timeslots()->create($timeslots3);
-        $timeslotsAll = ['time_start' => clone $now, 'time_end'=>self::addTimeInterval(clone $now, 4)];
+        /*$timeslotsAll = ['time_start' => clone $now, 'time_end'=>self::addTimeInterval(clone $now, 4)];
         $employees->each(function($employee) use ($timeslotsAll){
             $employee->calendars()->first()->timeslots()->create($timeslotsAll);
-        });
+        });*/
 
         print_r($company->toArray());
         print_r($employees->toArray());

@@ -241,7 +241,7 @@ class Solver
         if (array_diff($meetings, $this->meetings))
             throw new OptimiseException('meetings different from meetings set');
         foreach ($meetingsAvailability as $key => $meetingsAvailabilityS) {
-            $timeSlots = array_keys($meetingsAvailabilityS);
+            $timeSlots = array_keys($meetingsAvailabilityS);//TODO this is useless, we can use directly $usersAvailabilityS
             if (count($timeSlots) != $this->timeSlots)
                 throw new OptimiseException('timeSlots different from timeSlots set');
             $meetingsAvailability[$key] = self::arrayPad($meetingsAvailabilityS, $this->timeSlots + $this->maxTimeSlots, 0);
@@ -314,7 +314,7 @@ class Solver
         if (array_diff($users, $this->users))
             throw new OptimiseException('users different from users set');
         foreach ($usersAvailability as $key => $usersAvailabilityS) {
-            $timeSlots = array_keys($usersAvailabilityS);
+            $timeSlots = array_keys($usersAvailabilityS);//TODO this is useless, we can use directly $usersAvailabilityS
             if (count($timeSlots) != $this->timeSlots)
                 throw new OptimiseException('timeSlots different from timeSlots set');
 
