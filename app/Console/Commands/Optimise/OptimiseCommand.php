@@ -90,6 +90,7 @@ class OptimiseCommand extends Command
 
     private function syncAll()
     {
+        //TODO if are there no companies?
         $companies = Company::all();
         if ($this->option('background')) {
             \Log::debug(self::BACKGROUND_MOD_MEX);

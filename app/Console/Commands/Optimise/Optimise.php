@@ -230,8 +230,9 @@ class Optimise
         });
         return $solver->setMeetings($timeslots->keys()->toArray())
             ->setMeetingsDuration($meetings->pluck('duration', 'id')->toArray())
-            ->setMeetingsAvailability(self::getAvailabilityArray($timeslots, $this->time_slots));
+            ->setMeetingsAvailability(self::getAvailabilityArray($timeslots, $this->time_slots, $solver->getMeetings()));
     }
+
 
     /**
      * @param mixed $item
@@ -293,11 +294,12 @@ class Optimise
      * @param bool|true $free if true the array is filled with 1 for timeslots values else with 0 for timeslots values
      * @return array
      */
-    static private function getAvailabilityArray(\Illuminate\Support\Collection $timeSlots, $timeslotsN, $free = true)
+    static private function getAvailabilityArray(\Illuminate\Support\Collection $timeSlots, $timeslotsN, $ids, $free = true)
     {
         $ret = [];
-        foreach ($timeSlots as $id => $timeSlots2) {
-            $ret = self::fillTimeSlots($ret, $id, $timeSlots2, $free ? '1' : '0');
+        foreach ($ids as $id) {
+            if(isset($timeSlots[$id]))
+                $ret = self::fillTimeSlots($ret, $id, $timeSlots[$id], $free ? '1' : '0');
             $ret = self::fillRow($ret, $id, $timeslotsN, $free ? '0' : '1');
         }
 
@@ -362,12 +364,13 @@ class Optimise
          * @var $users \Illuminate\Support\Collection
          */
         $users = collect($this->company->getEmployeesTimeSlots($this->startTime, $this->endTime));
-        if($users->count() == 0)
-            throw ((new OptimiseException("No users for this company"))->withEmpty(true));
+        //if($users->count() == 0)
+        //    throw ((new OptimiseException("No users for this company"))->withEmpty(true));
         $timeslots = $users->groupBy('id')->map(function ($item) { //convert timeslots
             return $this->timeSlotsConverter($item);
         });
-        return $solver->setUsersAvailability(self::getAvailabilityArray($timeslots, $this->time_slots, false));
+        return $solver->setUsersAvailability(self::getAvailabilityArray($timeslots, $this->time_slots, $solver->getUsers(),
+            false));
     }
 
     /**

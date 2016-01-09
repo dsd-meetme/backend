@@ -79,6 +79,7 @@ class SyncCaldav extends Command
 
     private function syncAll()
     {
+        //TODO if are there no calendars?
         $calendars = Caldav::all();
         if ($this->option('background')) {
             \Log::debug(self::BACKGROUND_MOD_MEX);

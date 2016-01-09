@@ -282,7 +282,6 @@ class Solver
     {
         $meetings = array_keys($meetingsDuration);
         if (array_diff($meetings, $this->meetings)) {
-            print "";
             throw new OptimiseException('meetings different from meetings set');
         }
         foreach ($meetingsDuration as $duration) {
