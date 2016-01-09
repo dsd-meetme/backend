@@ -404,7 +404,7 @@ class Optimise
         foreach ($users as $user) {
             $usersMeetingsTmp = $usersMeetings->get($user);
             foreach ($meetings as $meeting) {
-                if ($usersMeetingsTmp->contains('meeting_id', $meeting)) {
+                if ($usersMeetingsTmp != null && $usersMeetingsTmp->contains('meeting_id', $meeting)) {
                     $ret[$user][$meeting] = 1;
                 } else {
                     $ret[$user][$meeting] = 0;
