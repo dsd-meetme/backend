@@ -44,7 +44,7 @@ class OptimisationDemo2Seeder extends Seeder
         $now = (new \DateTime())->modify('next monday');
         $timeslots1 = ['time_start' => clone $now, 'time_end'=>self::addTimeInterval(clone $now)];
         $timeslots2 = ['time_start' => clone $now, 'time_end'=>self::addTimeInterval(clone $now, 3)];
-        $timeslots3 = ['time_start' => self::addTimeInterval(clone $now, 3), 'time_end'=>clone $now];
+        $timeslots3 = ['time_start' => self::addTimeInterval(clone $now, 3), 'time_end' => self::addTimeInterval(clone $now, 4)];
         $meeting1->timeslots()->create($timeslots1);
         $meeting3->timeslots()->create($timeslots2);
         $meeting2->timeslots()->create($timeslots1);
