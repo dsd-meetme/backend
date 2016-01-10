@@ -3,7 +3,6 @@
 namespace plunner\Http\Controllers\Employees\Auth;
 
 use Illuminate\Http\Request;
-use Log;
 use plunner\Company;
 use plunner\employee;
 use plunner\Http\Controllers\Controller;
@@ -44,6 +43,12 @@ class AuthController extends Controller
      * @var array
      */
     protected $custom = ['mode' => 'en'];
+
+    /**
+     * unique identifiers of the user
+     * @var array
+     */
+    protected $usernames = ['company_id', 'email'];
 
     /**
      * @var company
