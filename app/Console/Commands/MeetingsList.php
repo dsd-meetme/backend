@@ -40,7 +40,7 @@ class MeetingsList extends Command
         //
         $companyId = $this->argument('companyId');
         if (is_numeric($companyId))
-            print_r(Company::findOrFail($companyId)->with(self::withFilter())->get()->toArray());
+            print_r(Company::with(self::withFilter())->findOrFail($companyId)->toArray());
         else
             print_r(Company::with(self::withFilter())->select('id')->get()->toArray());
     }
