@@ -269,7 +269,7 @@ class OptimisationDemo2Seeder extends Seeder
         $meeting2->timeslots()->create($timeslots2);
         $meeting2->timeslots()->create($timeslots3);
         $meeting2->timeslots()->create($timeslots6);
-        $meeting2->timeslots()->create($timeslots1);
+        $meeting2->timeslots()->create($timeslots4);
         $employees[0]->calendars()->first()->timeslots()->create($timeslots2);
         $employees[0]->calendars()->first()->timeslots()->create($timeslots3);
         $employees[0]->calendars()->first()->timeslots()->create($timeslots6);
