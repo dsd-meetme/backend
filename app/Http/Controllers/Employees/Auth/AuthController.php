@@ -48,7 +48,7 @@ class AuthController extends Controller
      * unique identifiers of the user
      * @var array
      */
-    protected $usernames = ['company_id', 'email'];
+    protected $username = ['company_id', 'email'];
 
     /**
      * @var company
