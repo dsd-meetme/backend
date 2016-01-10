@@ -16,6 +16,7 @@ class OptimisationDemo2Seeder extends Seeder
         self::complexModel2();
         self::complexModel3();
         self::complexModel4();
+        self::complexModel5();
     }
 
     static private function  complexModel()
@@ -52,6 +53,7 @@ class OptimisationDemo2Seeder extends Seeder
         $meeting2->timeslots()->create($timeslots1);
         $meeting2->timeslots()->create($timeslots3);
 
+        print '1\n';
         print_r($company->toArray());
         print_r($employees->toArray());
     }
@@ -102,6 +104,7 @@ class OptimisationDemo2Seeder extends Seeder
         $employees[1]->calendars()->first()->timeslots()->create($timeslotsE2);
         $employees[2]->calendars()->first()->timeslots()->create($timeslotsE2);
 
+        print '2\n';
         print_r($company->toArray());
         print_r($employees->toArray());
     }
@@ -144,6 +147,7 @@ class OptimisationDemo2Seeder extends Seeder
         $employees[2]->calendars()->first()->timeslots()->create($timeslots6);
         $employees[3]->calendars()->first()->timeslots()->create($timeslots7);
 
+        print '3\n';
         print_r($company->toArray());
         print_r($employees->toArray());
     }
@@ -186,6 +190,51 @@ class OptimisationDemo2Seeder extends Seeder
         //$employees[2]->calendars()->first()->timeslots()->create($timeslots3);
         $employees[3]->calendars()->first()->timeslots()->create($timeslots6);
 
+        print '4\n';
+        print_r($company->toArray());
+        print_r($employees->toArray());
+    }
+
+    static private function complexModel5()
+    {
+        $company = factory(\plunner\Company::class)->create(['password' => bcrypt('test')]);
+        $employees = factory(\plunner\Employee::class, 4)->make(['password' => bcrypt('test')])->each(function ($employee) use ($company) {
+            $company->employees()->save($employee);
+            $employee->calendars()->save(factory(\plunner\Calendar::class)->make(['enabled' => true]));
+        });
+
+        $group1 = factory(\plunner\Group::class)->make();
+        $company->groups()->save($group1);
+        $group1->employees()->attach([$employees[0]->id, $employees[1]->id, $employees[2]->id, $employees[3]->id]);
+
+
+        $meeting1 = factory(\plunner\Meeting::class)->make(['duration' => 1 * config('app.timeslots.duration')]);
+        $group1->meetings()->save($meeting1);
+        $meeting2 = factory(\plunner\Meeting::class)->make(['duration' => 1 * config('app.timeslots.duration')]);
+        $group1->meetings()->save($meeting2);
+
+        $now = (new \DateTime())->modify('next monday');
+        $timeslots1 = ['time_start' => clone $now, 'time_end' => self::addTimeInterval(clone $now, 1)];
+        $timeslots2 = ['time_start' => self::addTimeInterval(clone $now, 2), 'time_end' => self::addTimeInterval(clone $now, 3)];
+        $timeslots3 = ['time_start' => self::addTimeInterval(clone $now, 96 + 1), 'time_end' => self::addTimeInterval(clone $now, 96 + 2)];
+        $timeslots4 = ['time_start' => self::addTimeInterval(clone $now, 96 + 2), 'time_end' => self::addTimeInterval(clone $now, 96 + 3)];
+        $timeslots5 = ['time_start' => self::addTimeInterval(clone $now, 96 * 2 + 1), 'time_end' => self::addTimeInterval(clone $now, 96 * 2 + 2)];
+        $timeslots6 = ['time_start' => self::addTimeInterval(clone $now, 96 * 2 + 3), 'time_end' => self::addTimeInterval(clone $now, 96 * 2 + 4)];
+        $meeting1->timeslots()->create($timeslots1);
+        $meeting1->timeslots()->create($timeslots4);
+        $meeting1->timeslots()->create($timeslots5);
+        $meeting2->timeslots()->create($timeslots2);
+        $meeting2->timeslots()->create($timeslots3);
+        $meeting2->timeslots()->create($timeslots6);
+        $meeting2->timeslots()->create($timeslots1);
+        $employees[0]->calendars()->first()->timeslots()->create($timeslots2);
+        $employees[0]->calendars()->first()->timeslots()->create($timeslots3);
+        $employees[0]->calendars()->first()->timeslots()->create($timeslots6);
+        $employees[1]->calendars()->first()->timeslots()->create($timeslots2);
+        //$employees[2]->calendars()->first()->timeslots()->create($timeslots3);
+        $employees[3]->calendars()->first()->timeslots()->create($timeslots6);
+
+        print '5\n';
         print_r($company->toArray());
         print_r($employees->toArray());
     }
