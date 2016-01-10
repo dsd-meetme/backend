@@ -53,7 +53,7 @@ class OptimisationDemo2Seeder extends Seeder
         $meeting2->timeslots()->create($timeslots1);
         $meeting2->timeslots()->create($timeslots3);
 
-        print '1\n';
+        print "1\n";
         print_r($company->toArray());
         print_r($employees->toArray());
     }
@@ -104,7 +104,7 @@ class OptimisationDemo2Seeder extends Seeder
         $employees[1]->calendars()->first()->timeslots()->create($timeslotsE2);
         $employees[2]->calendars()->first()->timeslots()->create($timeslotsE2);
 
-        print '2\n';
+        print "2\n";
         print_r($company->toArray());
         print_r($employees->toArray());
     }
@@ -147,7 +147,7 @@ class OptimisationDemo2Seeder extends Seeder
         $employees[2]->calendars()->first()->timeslots()->create($timeslots6);
         $employees[3]->calendars()->first()->timeslots()->create($timeslots7);
 
-        print '3\n';
+        print "3\n";
         print_r($company->toArray());
         print_r($employees->toArray());
     }
@@ -190,7 +190,7 @@ class OptimisationDemo2Seeder extends Seeder
         //$employees[2]->calendars()->first()->timeslots()->create($timeslots3);
         $employees[3]->calendars()->first()->timeslots()->create($timeslots6);
 
-        print '4\n';
+        print "4\n";
         print_r($company->toArray());
         print_r($employees->toArray());
     }
@@ -234,7 +234,7 @@ class OptimisationDemo2Seeder extends Seeder
         //$employees[2]->calendars()->first()->timeslots()->create($timeslots3);
         $employees[3]->calendars()->first()->timeslots()->create($timeslots6);
 
-        print '5\n';
+        print "5\n";
         print_r($company->toArray());
         print_r($employees->toArray());
     }
