@@ -3,6 +3,7 @@
 namespace plunner\Http\Controllers\Employees\Planners;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use plunner\Group;
 use plunner\Http\Controllers\Controller;
 use plunner\Http\Requests;
@@ -90,7 +91,7 @@ class MeetingsController extends Controller
         $meeting = Meeting::findOrFail($meetingId);
         $this->authorize($meeting);
         $input = $request->all();
-        if ($meeting->start_time != NULL && $meeting->duration ==  $input['duration'])
+        if ($meeting->start_time != NULL && $meeting->duration != $input['duration'])
             return Response::json(['error' => 'the meeting is already planned, you cannot change the duration'], 422);
         $meeting->update($input);
         return $meeting;
