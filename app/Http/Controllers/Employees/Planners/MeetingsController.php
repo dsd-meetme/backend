@@ -91,6 +91,7 @@ class MeetingsController extends Controller
         $meeting = Meeting::findOrFail($meetingId);
         $this->authorize($meeting);
         $input = $request->all();
+        //the planner cannot modify the duration of a planed meeting
         if ($meeting->start_time != NULL && $meeting->duration != $input['duration'])
             return Response::json(['error' => 'the meeting is already planned, you cannot change the duration'], 422);
         $meeting->update($input);
