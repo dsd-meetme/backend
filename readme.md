@@ -52,7 +52,7 @@ After cloning and installing repository:
  * exec calls must be enabled in php-cli
  * tmp dir permissions needed
  * The library is tested only on linux, we don't know the behaviour of critical parts (optimisation and caldav sync) on other systems
- * Details about optimisation task [https://docs.google.com/document/d/18vCFEVrd8ENgS80hC-ACjSicDFYXV2QjoFiO3FiGZ5w/edit](https://docs.google.com/document/d/18vCFEVrd8ENgS80hC-ACjSicDFYXV2QjoFiO3FiGZ5w/edit)
+ * Details about application https://docs.google.com/document/d/1BqwZzRVEWS6Hk68mLSufbqHMNTo78aXbwT0a0AFqOFY/edit?usp=sharing
  * after 30 days you have to re-login, this for security reasons to avoid that a malicious guy can use the token to get new tokens and he stays always connected even if you change password 
 
 
