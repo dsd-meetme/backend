@@ -12,6 +12,12 @@ class CreateGcmTokenTable extends Migration
     public function up()
     {
         //
+        Schema::create('gcm_token', function (Blueprint $table) {
+            $table->string('token')->unsigned();
+            $table->primary('token');
+            $table->integer('employee_id')->unsigned();
+            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade')->onUpdate('cascade');
+        });
     }
 
     /**
@@ -22,5 +28,6 @@ class CreateGcmTokenTable extends Migration
     public function down()
     {
         //
+        Schema::drop('gcm_token');
     }
 }
