@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateGcmTokenTable extends Migration
 {
@@ -13,7 +14,7 @@ class CreateGcmTokenTable extends Migration
     {
         //
         Schema::create('gcm_token', function (Blueprint $table) {
-            $table->string('token')->unsigned();
+            $table->string('token');
             $table->primary('token');
             $table->integer('employee_id')->unsigned();
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade')->onUpdate('cascade');
