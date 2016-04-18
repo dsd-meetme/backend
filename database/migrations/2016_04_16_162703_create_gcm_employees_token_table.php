@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateGcmTokenTable extends Migration
+class CreateGcmEmployeesTokenTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateGcmTokenTable extends Migration
     public function up()
     {
         //
-        Schema::create('gcm_token', function (Blueprint $table) {
+        Schema::create('gcm_employees_token', function (Blueprint $table) {
             $table->string('token');
             $table->primary('token');
             $table->integer('employee_id')->unsigned();
@@ -29,6 +29,6 @@ class CreateGcmTokenTable extends Migration
     public function down()
     {
         //
-        Schema::drop('gcm_token');
+        Schema::drop('gcm_employees_token');
     }
 }
