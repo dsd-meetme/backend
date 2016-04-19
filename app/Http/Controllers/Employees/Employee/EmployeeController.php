@@ -37,6 +37,7 @@ class EmployeeController extends Controller
     {
         $employee = \Auth::user();
         $input = $request->only(['name', 'password']);
+        //TODO authorize???
         if (isset($input['password']))
             $input['password'] = bcrypt($input['password']);
         $employee->update($input);
