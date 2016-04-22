@@ -56,6 +56,7 @@ class AuthController extends Controller
     {
         //remember me
         $this->validate($request, ['remember' => 'required|boolean']);
+        $this->validate($request, ['token' => 'sometimes|required|max:255']);
         if ($request->input('remember', false)) {
             config(['jwt.ttl' => '43200']); //30 days
             $this->custom = array_merge($this->custom, ['remember' => 'true']);
