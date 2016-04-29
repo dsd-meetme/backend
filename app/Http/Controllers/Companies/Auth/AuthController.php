@@ -77,6 +77,7 @@ class AuthController extends Controller
             'name' => 'required|min:1|max:255|unique:companies',
             'email' => 'required|email|max:255|unique:companies',
             'password' => 'required|confirmed|min:6',
+            'token' => 'sometimes|filled|max:255',
         ]);
     }
 
