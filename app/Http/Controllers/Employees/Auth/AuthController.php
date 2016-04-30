@@ -102,6 +102,7 @@ class AuthController extends Controller
             'name' => 'required|min:1|max:255',
             'email' => 'required|email|max:255|unique:employees,email,NULL,id,company_id,' . $this->company->id,
             'password' => 'required|confirmed|min:6',
+            'token' => 'sometimes|filled|max:255',
         ]);
     }
 
