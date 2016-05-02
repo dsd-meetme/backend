@@ -4,6 +4,7 @@ namespace plunner\Http\Controllers\Companies\Auth;
 
 use Illuminate\Http\Request;
 use plunner\Company;
+use plunner\GcmCompanyModel;
 use plunner\Http\Controllers\Controller;
 use Tymon\JWTAuth\Support\auth\AuthenticatesAndRegistersUsers;
 use Tymon\JWTAuth\Support\auth\ThrottlesLogins;
@@ -64,7 +65,7 @@ class AuthController extends Controller
             $this->custom = array_merge($this->custom, ['remember' => 'false']);
         $ret = $this->postLoginOriginal($request);
         if($ret->getStatusCode() == 200)
-            ;//TODO store the token
+            Company::whereEmail($request->input('email'))->first()->gcms()->save(new GcmCompanyModel($request->input('token')));
         return $ret;
     }
 
