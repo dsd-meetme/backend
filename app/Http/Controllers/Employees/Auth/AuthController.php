@@ -87,7 +87,10 @@ class AuthController extends Controller
         } else
             $this->custom = array_merge($this->custom, ['remember' => 'false']);
 
-        return $this->postLoginOriginal($request);
+        $ret = $this->postLoginOriginal($request);
+        if ($ret->getStatusCode() == 200)
+            ; //TODO set the token
+        return $ret;
     }
 
     /**
