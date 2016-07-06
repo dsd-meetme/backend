@@ -30,6 +30,8 @@ return [
 
     'frontend_url' => 'http://admin.plunner.com',
 
+    'gcm_key' => env('GCM_KEY', ''),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
