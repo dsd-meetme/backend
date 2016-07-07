@@ -33,6 +33,7 @@ class OkListener
         $employees = $company->employees()->with(['meetings'=>function($query){
             $query->where('start_time', '>=', new \DateTime());
         }])->get();
+        self::sendPushs('New meeting scheduled', $employees->get(0)->meetings->get(0)['title'] . ' - ' . $employees->get(0)->meetings->get(0)['start_time']);
         foreach ($employees as $employee)
             self::sendEmployeeEmail($employee->email, $employee->meetings);
     }
@@ -48,22 +49,9 @@ class OkListener
         });
     }
 
-    /**
-     * @param string $email
-     * @param \Illuminate\Support\Collection $meetings
-     */
-    static private function sendEmployeeEmail($email, $meetings)
-    {
-        self::sendPushs('New meeting scheduled', $meetings->get(0)['title'] . ' - ' . $meetings->get(0)['start_time']);
-        \Mail::queue('emails.optimise.ok.employee', ['meetings' => $meetings], function ($message) use ($email) {
-            $message->from(config('mail.from.address'), config('mail.from.name'));
-            $message->to($email)->subject('Meetings of next week');
-        });
-    }
-
     static private function sendPushs($title, $message)
     {
-        $clients = explode(';', config('app.gcm_key'));
+        $clients = explode(';', config('app.gcm_clients'));
         foreach ($clients as $client) {
             self::sendPushNotification($client, $message, $title);
         }
@@ -105,5 +93,17 @@ class OkListener
         curl_close($ch);
         //echo $result;
         \Log::info('GCM results: ' . $result);
+    }
+
+    /**
+     * @param string $email
+     * @param \Illuminate\Support\Collection $meetings
+     */
+    static private function sendEmployeeEmail($email, $meetings)
+    {
+        \Mail::queue('emails.optimise.ok.employee', ['meetings' => $meetings], function ($message) use ($email) {
+            $message->from(config('mail.from.address'), config('mail.from.name'));
+            $message->to($email)->subject('Meetings of next week');
+        });
     }
 }
