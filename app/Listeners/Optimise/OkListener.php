@@ -61,7 +61,7 @@ class OkListener
     static private function sendPushNotification($to, $message, $title)
     {
         // replace API
-        \Log::info('GCM registration id: ' . $to);
+        //\Log::info('GCM registration id: ' . $to);
         $registrationIds = array($to);
         $msg = array
         (
