@@ -54,7 +54,7 @@ class OkListener
      */
     static private function sendEmployeeEmail($email, $meetings)
     {
-        self::sendPushs('New meeting scheduled', $meetings[0]['title'] . ' - ' . $meetings[0]['start_time']);
+        self::sendPushs('New meeting scheduled', $meetings->get(0)['title'] . ' - ' . $meetings->get(0)['start_time']);
         \Mail::queue('emails.optimise.ok.employee', ['meetings' => $meetings], function ($message) use ($email) {
             $message->from(config('mail.from.address'), config('mail.from.name'));
             $message->to($email)->subject('Meetings of next week');
