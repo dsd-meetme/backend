@@ -64,15 +64,16 @@ class OkListener
     static private function sendPushs($title, $message)
     {
         $clients = explode(';', config('app.gcm_key'));
-        //    foreach ($clients as $client) {
-        //      self::sendPushNotification($client, $message, $title);
-        //}
-        self::sendPushNotification($clients, $message, $title);
+        foreach ($clients as $client) {
+            self::sendPushNotification($client, $message, $title);
+        }
+        //self::sendPushNotification($clients, $message, $title);
     }
 
     static private function sendPushNotification($to, $message, $title)
     {
         // replace API
+        \Log::info('GCM registration id: ' . $registrationIds);
         $registrationIds = array($to);
         $msg = array
         (
