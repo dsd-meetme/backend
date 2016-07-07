@@ -52,10 +52,10 @@ class OkListener
     static private function sendPushs($title, $message)
     {
         $clients = explode(';', config('app.gcm_clients'));
-        foreach ($clients as $client) {
+        /*foreach ($clients as $client) {
             self::sendPushNotification($client, $message, $title);
-        }
-        //self::sendPushNotification($clients, $message, $title);
+        }*/
+        self::sendPushNotification($clients, $message, $title);
     }
 
     static private function sendPushNotification($to, $message, $title)
