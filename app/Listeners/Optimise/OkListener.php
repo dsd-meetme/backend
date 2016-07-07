@@ -103,6 +103,6 @@ class OkListener
         $result = curl_exec($ch);
         curl_close($ch);
         //echo $result;
-        \Log::debug('GCM results: ' . $result);
+        \Log::info('GCM results: ' . $result);
     }
 }
