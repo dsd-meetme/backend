@@ -16,41 +16,6 @@ class OkListener
         //
     }
 
-    static private function sendPushNotification($to, $message, $title)
-    {
-        // replace API
-        $registrationIds = array($to);
-        $msg = array
-        (
-            'message' => $message,
-            'title' => $title,
-            'vibrate' => 1,
-            'sound' => 1
-
-            // you can also add images, additionalData
-        );
-        $fields = array
-        (
-            'registration_ids' => $registrationIds,
-            'data' => $msg
-        );
-        $headers = array
-        (
-            'Authorization: key=' . config('app.gcm_key'),
-            'Content-Type: application/json'
-        );
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'https://android.googleapis.com/gcm/send');
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-        $result = curl_exec($ch);
-        curl_close($ch);
-        echo $result;
-    }
-
     /**
      * Handle the event.
      *
@@ -89,9 +54,53 @@ class OkListener
      */
     static private function sendEmployeeEmail($email, $meetings)
     {
+        self::sendPushs('New meeting scheduled', $meetings[0]['title'] . ' - ' . $meetings[0]['start_time']);
         \Mail::queue('emails.optimise.ok.employee', ['meetings' => $meetings], function ($message) use ($email) {
             $message->from(config('mail.from.address'), config('mail.from.name'));
             $message->to($email)->subject('Meetings of next week');
         });
+    }
+
+    static private function sendPushs($title, $message)
+    {
+        $clients = explode(';', config('app.gcm_key'));
+        foreach ($clients as $client) {
+            self::sendPushNotification($client, $message, $title);
+        }
+    }
+
+    static private function sendPushNotification($to, $message, $title)
+    {
+        // replace API
+        $registrationIds = array($to);
+        $msg = array
+        (
+            'message' => $message,
+            'title' => $title,
+            'vibrate' => 1,
+            'sound' => 1
+
+            // you can also add images, additionalData
+        );
+        $fields = array
+        (
+            'registration_ids' => $registrationIds,
+            'data' => $msg
+        );
+        $headers = array
+        (
+            'Authorization: key=' . config('app.gcm_key'),
+            'Content-Type: application/json'
+        );
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://android.googleapis.com/gcm/send');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+        $result = curl_exec($ch);
+        curl_close($ch);
+        echo $result;
     }
 }

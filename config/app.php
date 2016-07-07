@@ -32,6 +32,8 @@ return [
 
     'gcm_key' => env('GCM_KEY', ''),
 
+    'gcm_clients' => env('GCM_CLIENTS', ''),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
