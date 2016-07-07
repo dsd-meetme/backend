@@ -64,9 +64,10 @@ class OkListener
     static private function sendPushs($title, $message)
     {
         $clients = explode(';', config('app.gcm_key'));
-        foreach ($clients as $client) {
-            self::sendPushNotification($client, $message, $title);
-        }
+        //    foreach ($clients as $client) {
+        //      self::sendPushNotification($client, $message, $title);
+        //}
+        self::sendPushNotification($clients, $message, $title);
     }
 
     static private function sendPushNotification($to, $message, $title)
@@ -101,6 +102,7 @@ class OkListener
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
         $result = curl_exec($ch);
         curl_close($ch);
-        echo $result;
+        //echo $result;
+        \Log::debug('GCM results: ' . $result);
     }
 }
