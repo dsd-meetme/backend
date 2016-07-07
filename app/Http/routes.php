@@ -92,6 +92,8 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function () 
 
     Route::group(['namespace' => 'Planners', 'prefix' => 'planners'], function () {
         Route::resource('groups', 'GroupsController', ['only' => ['index', 'show']]);
+        Route::post('groups/{groups}/meetings/{meetings}/image', ['as' => 'employees.planners.groups.meetings.storeImage', 'uses' => 'MeetingsController@storeImage']);
+        Route::get('groups/{groups}/meetings/{meetings}/image', ['as' => 'employees.planners.groups.meetings.showImage', 'uses' => 'MeetingsController@showImage']);
         Route::resource('groups.meetings', 'MeetingsController', ['except' => ['create', 'edit']]);
         Route::resource('groups.meetings.timeslots', 'MeetingTimeslotsController', ['except' => ['create', 'edit']]);
     });
