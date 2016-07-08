@@ -3,6 +3,7 @@
 namespace plunner\Http\Controllers\Employees\Meetings;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use plunner\Http\Controllers\Controller;
 use plunner\Http\Requests;
 use plunner\Meeting;

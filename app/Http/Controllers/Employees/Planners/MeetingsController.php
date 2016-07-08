@@ -3,7 +3,7 @@
 namespace plunner\Http\Controllers\Employees\Planners;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response;
 use plunner\Group;
 use plunner\Http\Controllers\Controller;
 use plunner\Http\Requests;
