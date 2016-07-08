@@ -80,6 +80,28 @@ class GroupPolicy
      * @param Group $group
      * @return bool
      */
+    public function showImage(PolicyCheckable $policyCheckable, Group $group)
+    {
+        $ret = $this->userCheck($policyCheckable, $group);
+        return $ret;
+    }
+
+    /**
+     * @param PolicyCheckable $policyCheckable
+     * @param Group $group
+     * @return bool
+     */
+    public function storeImage(PolicyCheckable $policyCheckable, Group $group)
+    {
+        $ret = $this->userCheck($policyCheckable, $group);
+        return $ret;
+    }
+
+    /**
+     * @param PolicyCheckable $policyCheckable
+     * @param Group $group
+     * @return bool
+     */
     public function destroy(PolicyCheckable $policyCheckable, Group $group)
     {
         return $this->userCheck($policyCheckable, $group);

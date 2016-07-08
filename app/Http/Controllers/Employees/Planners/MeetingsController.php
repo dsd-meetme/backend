@@ -86,12 +86,12 @@ class MeetingsController extends Controller
      */
     public function storeImage(\Illuminate\Http\Request $request, $groupId, $meetingId)
     {
-        $this->validate($request, ['data' => 'required|image']);
+        $this->validate($request, ['file' => 'required|image']);
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
         $meeting = Meeting::findOrFail($meetingId);
         $this->authorize($meeting);
-        $file = $request->file('data');
+        $file = $request->file('file');
         self::putImg($file, $meeting);
         return $meeting;
     }
