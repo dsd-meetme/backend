@@ -112,7 +112,7 @@ class MeetingsController extends Controller
     {
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
-        $meeting = Group::findOrFail($meetingId);
+        $meeting = Meeting::findOrFail($meetingId);
         $this->authorize($meeting);
         $ret = self::getImg($meeting);
         $blank = storage_path('img/meetings.jpg');

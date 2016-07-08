@@ -4,6 +4,7 @@ namespace plunner\Http\Controllers;
 
 use Illuminate\Http\Request;
 use plunner\Http\Requests;
+use plunner\Meeting;
 
 class NoAuthController extends Controller
 {
@@ -22,7 +23,7 @@ class NoAuthController extends Controller
      */
     public function showImage($meetingId)
     {
-        $meeting = Group::findOrFail($meetingId);
+        $meeting = Meeting::findOrFail($meetingId);
         //$this->authorize($meeting);
         $ret = self::getImg($meeting);
         $blank = storage_path('img/meetings.jpg');

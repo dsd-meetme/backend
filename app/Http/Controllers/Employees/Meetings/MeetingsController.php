@@ -56,7 +56,7 @@ class MeetingsController extends Controller
      */
     public function showImage($meetingId)
     {
-        $meeting = Group::findOrFail($meetingId);
+        $meeting = Meeting::findOrFail($meetingId);
         $this->authorize($meeting);
         $ret = self::getImg($meeting);
         $blank = storage_path('img/meetings.jpg');
