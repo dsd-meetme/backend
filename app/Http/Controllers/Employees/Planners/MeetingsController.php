@@ -79,12 +79,12 @@ class MeetingsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Requests\Request $request
+     * @param \Illuminate\Http\Request $request
      * @param int $groupId
      * @param int $meetingId
      * @return static
      */
-    public function storeImage(Requests\Request $request, $groupId, $meetingId)
+    public function storeImage(\Illuminate\Http\Request $request, $groupId, $meetingId)
     {
         $this->validate($request, ['data' => 'required|image']);
         $group = Group::findOrFail($groupId);
