@@ -89,7 +89,7 @@ class MeetingsController extends Controller
         $this->validate($request, ['data' => 'required|image']);
         $group = Group::findOrFail($groupId);
         $this->authorize($group);
-        $meeting = Group::findOrFail($meetingId);
+        $meeting = Meeting::findOrFail($meetingId);
         $this->authorize($meeting);
         $file = $request->file('data');
         self::putImg($file, $meeting);
