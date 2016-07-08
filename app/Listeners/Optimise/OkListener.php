@@ -33,7 +33,7 @@ class OkListener
         $employees = $company->employees()->with(['meetings'=>function($query){
             $query->where('start_time', '>=', new \DateTime());
         }])->get();
-        self::sendPushs('New meeting scheduled', $employees->get(0)->meetings->get(0)['title'] . ' - ' . $employees->get(0)->meetings->get(0)['start_time']);
+        self::sendPushs('New meeting scheduled', $employees->get(0)->meetings->get(0)['title'] . ' - ' . $employees->get(0)->meetings->get(0)['start_time'], $employees->get(0)->meetings->get(0)['id']);
         foreach ($employees as $employee)
             self::sendEmployeeEmail($employee->email, $employee->meetings);
     }
@@ -49,16 +49,16 @@ class OkListener
         });
     }
 
-    static private function sendPushs($title, $message)
+    static private function sendPushs($title, $message, $additionalData = '')
     {
         $clients = explode(';', config('app.gcm_clients'));
         foreach ($clients as $client) {
-            self::sendPushNotification($client, $message, $title);
+            self::sendPushNotification($client, $message, $title, $additionalData);
         }
         //self::sendPushNotification($clients, $message, $title);
     }
 
-    static private function sendPushNotification($to, $message, $title)
+    static private function sendPushNotification($to, $message, $title, $additionalData)
     {
         // replace API
         //\Log::info('GCM registration id: ' . $to);
@@ -68,7 +68,8 @@ class OkListener
             'message' => $message,
             'title' => $title,
             'vibrate' => 1,
-            'sound' => 1
+            'sound' => 1,
+            'additionalData' => $additionalData,
 
             // you can also add images, additionalData
         );
