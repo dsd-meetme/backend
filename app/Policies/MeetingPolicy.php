@@ -80,6 +80,28 @@ class MeetingPolicy
      * @param Meeting $Meeting
      * @return bool
      */
+    public function showImage(PolicyCheckable $policyCheckable, Meeting $Meeting)
+    {
+        $ret = $this->userCheck($policyCheckable, $Meeting);
+        return $ret;
+    }
+
+    /**
+     * @param PolicyCheckable $policyCheckable
+     * @param Meeting $Meeting
+     * @return bool
+     */
+    public function storeImage(PolicyCheckable $policyCheckable, Meeting $Meeting)
+    {
+        $ret = $this->userCheck($policyCheckable, $Meeting);
+        return $ret;
+    }
+
+    /**
+     * @param PolicyCheckable $policyCheckable
+     * @param Meeting $Meeting
+     * @return bool
+     */
     public function destroy(PolicyCheckable $policyCheckable, Meeting $Meeting)
     {
         return $this->userCheck($policyCheckable, $Meeting);

@@ -47,4 +47,32 @@ class MeetingsController extends Controller
         $this->authorize($meeting);
         return $meeting;
     }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param int $groupId
+     * @param int $meetingId
+     * @return static
+     */
+    public function showImage($groupId, $meetingId)
+    {
+        $group = Group::findOrFail($groupId);
+        $this->authorize($group);
+        $meeting = Group::findOrFail($meetingId);
+        $this->authorize($meeting);
+        $ret = self::getImg($meeting);
+        if ($ret === false)
+            return \Response::json(['error' => 'The file is not uploaded'], 404);
+        return (new Response($ret, 200))
+            ->header('Content-Type', 'image/jpeg');
+    }
+
+    private static function getImg(Meeting $meeting)
+    {
+        $name = 'meetings/' . $meeting->id;
+        if (!\Storage::exists($name))
+            return false;
+        return \Storage::get($name);
+    }
 }

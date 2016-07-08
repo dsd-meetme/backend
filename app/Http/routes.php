@@ -104,6 +104,7 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function () 
 
 
     Route::group(['namespace' => 'Meetings'], function () {
+        Route::get('meetings/{meetings}/image', ['as' => 'employees.meetings.showImage', 'uses' => 'MeetingsController@showImage']);
         Route::resource('meetings', 'MeetingsController', ['only' => ['index', 'show']]);
     });
 
