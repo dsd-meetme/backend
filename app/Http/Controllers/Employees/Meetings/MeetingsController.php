@@ -62,8 +62,10 @@ class MeetingsController extends Controller
         $meeting = Group::findOrFail($meetingId);
         $this->authorize($meeting);
         $ret = self::getImg($meeting);
+        $blank = storage_path('img/meetings.jpg');
         if ($ret === false)
-            return \Response::json(['error' => 'The file is not uploaded'], 404);
+            return (new Response(file_get_contents($blank), 200))
+                ->header('Content-Type', 'image/jpeg');
         return (new Response($ret, 200))
             ->header('Content-Type', 'image/jpeg');
     }
