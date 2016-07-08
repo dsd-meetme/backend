@@ -34,4 +34,11 @@ class NoAuthController extends Controller
             ->header('Content-Type', 'image/jpeg');
     }
 
+    private static function getImg(Meeting $meeting)
+    {
+        $name = 'meetings/' . $meeting->id;
+        if (!\Storage::exists($name))
+            return false;
+        return \Storage::get($name);
+    }
 }
