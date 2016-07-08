@@ -51,14 +51,11 @@ class MeetingsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param int $groupId
      * @param int $meetingId
      * @return static
      */
-    public function showImage($groupId, $meetingId)
+    public function showImage($meetingId)
     {
-        $group = Group::findOrFail($groupId);
-        $this->authorize($group);
         $meeting = Group::findOrFail($meetingId);
         $this->authorize($meeting);
         $ret = self::getImg($meeting);

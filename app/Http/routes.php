@@ -113,3 +113,5 @@ Route::group(['namespace' => 'Employees', 'prefix' => 'employees'], function () 
         Route::put('/', ['as' => 'employees.employee.update', 'uses' => 'EmployeeController@update']);
     });
 });
+
+Route::get('noauth/meetings/{meetings}/image', ['as' => 'noAuth.meetings.showImage', 'uses' => 'NoAuthController@showImage']);
